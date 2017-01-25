@@ -53,7 +53,7 @@ public class Piece {
 			}
 			break;
 		case Q:
-			if (absXDifference != 0) {
+			if (absXDifference != 0 && absYDifference != 0) {
 				if (absYDifference != absXDifference) {
 					validMove = false;
 				}
