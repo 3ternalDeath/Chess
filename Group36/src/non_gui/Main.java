@@ -105,12 +105,19 @@ public class Main {
 
 			// Coordinates must only have length 2
 			if (coordinates.length() != 2) {
-				System.out.println("Coordinates must be only two characters.");
+				System.out.println("Coordinates must be exactly two characters.");
 				valid = false;
 			} else {
 				// Isolates letter and number components
-				inputLetter = coordinates.toLowerCase().charAt(0);
-				inputNumber = coordinates.charAt(1);
+				// in whatever order the user gives it
+				if(Character.isAlphabetic(coordinates.charAt(0)) && Character.isDigit(coordinates.charAt(1))){
+					inputLetter = coordinates.toLowerCase().charAt(0);
+					inputNumber = coordinates.charAt(1);
+				}
+				else{
+					inputNumber = coordinates.toLowerCase().charAt(0);
+					inputLetter = coordinates.charAt(1);
+				}
 
 				// Checks in bound
 				valid = inBound(inputLetter, inputNumber);
