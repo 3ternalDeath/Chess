@@ -1,8 +1,8 @@
-package main;
+package non_gui;
 
 import java.util.Scanner;
 
-public class Chess {
+public class Main {
 
 	public static final int SIZE = 8;
 
