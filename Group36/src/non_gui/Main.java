@@ -43,7 +43,7 @@ public class Main {
 			
 			//Content of Array
 			for (int x = 0; x < SIZE; x++) {
-				System.out.print("|  " + gameboard[x][y-1] + "  ");
+				System.out.print("|  " + gameboard[x][y-1].toString() + "  ");
 			}
 			System.out.print("|  ");
 			
@@ -192,7 +192,7 @@ public class Main {
 	static char pawn = 'P';
 	static char blank = ' ';
 
-	static char gameboard[][] = {
+	static Object gameboard[][] = {
 			{ 'R', 'P', ' ', ' ', ' ', ' ', 'P', 'R' },
 			{ 'N', 'P', ' ', ' ', ' ', ' ', 'P', 'N' },
 			{ 'B', 'P', ' ', ' ', ' ', ' ', 'P', 'B' },
@@ -211,7 +211,7 @@ public class Main {
 			int[] init = errorTrap("Initial");
 			int[] fin = errorTrap("Final");
 
-			char piece = gameboard[init[LETTER]][init[NUMBER]];			
+			char piece = (char) gameboard[init[LETTER]][init[NUMBER]];			
 			gameboard[init[LETTER]][init[NUMBER]] = blank;
 			gameboard[fin[LETTER]][fin[NUMBER]] = piece;
 		

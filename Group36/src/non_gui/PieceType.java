@@ -5,5 +5,6 @@ public enum PieceType {
 	R,
 	N,
 	B,
-	P
+	P,
+	NONE
 }

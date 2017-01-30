@@ -23,6 +23,10 @@ public class Piece {
 		}
 	}
 	
+	public String toString(){
+		return getType()+"";
+	}
+	
 	public int getX() {
 		return x;
 	}
