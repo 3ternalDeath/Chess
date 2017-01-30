@@ -43,7 +43,7 @@ public class Main {
 			
 			//Content of Array
 			for (int x = 0; x < SIZE; x++) {
-				System.out.print("|  " + gameboard[x][y-1].toString() + "  ");
+				System.out.print("| " + gameboard[x][y-1].toString() + "  ");
 			}
 			System.out.print("|  ");
 			
@@ -128,7 +128,7 @@ public class Main {
 					letterCoordinate = inputLetter - 'a';
 
 					// Checks valid movement
-					valid = validMovement(type, numberCoordinate, letterCoordinate);
+					valid = validMovement(type,letterCoordinate,  numberCoordinate);
 				}
 			}
 
@@ -149,7 +149,7 @@ public class Main {
 
 	}
 
-	public static boolean validMovement(String type, int numCoordinate, int letCoordinate) {
+	public static boolean validMovement(String type, int letCoordinate, int numCoordinate) {
 
 		/*
 		 * TODO 1. interaction with other pieces.
@@ -162,22 +162,21 @@ public class Main {
 		// Default return
 		boolean valid = true;
 
-		// There's no piece
-		if (gameboard[letCoordinate][numCoordinate] == blank) {
-			if (type.equals("Initial")) {
-				System.out.println("Coordinates do not match to a piece.");
+		if(type.equals("Initial")){
+			
+			if(gameboard[letCoordinate][numCoordinate] == blank){
 				valid = false;
-			} else {
-
 			}
+			
 		}
-		// There's a piece
-		else {
-			if (type.equals("Final")) {
-				System.out.println("Coordinates are taken.");
+		else if(type.equals("Final")){
+			
+			if(gameboard[letCoordinate][numCoordinate].getColour() == gameboard[init[LETTER]][init[NUMBER]].getColour()){
 				valid = false;
-			} else {
-
+			}
+			
+			if(!gameboard[init[LETTER]][init[NUMBER]].validMove(letCoordinate, numCoordinate)){
+				valid = false;
 			}
 		}
 
@@ -187,6 +186,12 @@ public class Main {
 	
 	
 	static public void mkBoard(){
+		
+		/*
+		 * self explanatory,
+		 * makes the game board
+		 */
+		
 		Piece BKing = 		new Piece(PieceType.K, 	PieceColour.BLACK, 4, 	7);
 		Piece BQueen = 		new Piece(PieceType.Q, 	PieceColour.BLACK, 3, 	7);
 		Piece BBishop1 = 	new Piece(PieceType.B, 	PieceColour.BLACK, 2, 	7);
@@ -195,14 +200,14 @@ public class Main {
 		Piece BNight2 = 	new Piece(PieceType.N, 	PieceColour.BLACK, 6, 	7);
 		Piece BRook1 = 		new Piece(PieceType.R, 	PieceColour.BLACK, 0, 	7);
 		Piece BRook2 = 		new Piece(PieceType.R, 	PieceColour.BLACK, 7, 	7);
-		Piece BPawn0 = 		new Piece(PieceType.N, 	PieceColour.BLACK, 0,	6);
-		Piece BPawn1 = 		new Piece(PieceType.N, 	PieceColour.BLACK, 1,	6);
-		Piece BPawn2 = 		new Piece(PieceType.N, 	PieceColour.BLACK, 2,	6);
-		Piece BPawn3 = 		new Piece(PieceType.N, 	PieceColour.BLACK, 3,	6);
-		Piece BPawn4 = 		new Piece(PieceType.N, 	PieceColour.BLACK, 4,	6);
-		Piece BPawn5 = 		new Piece(PieceType.N, 	PieceColour.BLACK, 5,	6);
-		Piece BPawn6 = 		new Piece(PieceType.N, 	PieceColour.BLACK, 6,	6);
-		Piece BPawn7 = 		new Piece(PieceType.N, 	PieceColour.BLACK, 7,	6);
+		Piece BPawn0 = 		new Piece(PieceType.P, 	PieceColour.BLACK, 0,	6);
+		Piece BPawn1 = 		new Piece(PieceType.P, 	PieceColour.BLACK, 1,	6);
+		Piece BPawn2 = 		new Piece(PieceType.P, 	PieceColour.BLACK, 2,	6);
+		Piece BPawn3 = 		new Piece(PieceType.P, 	PieceColour.BLACK, 3,	6);
+		Piece BPawn4 = 		new Piece(PieceType.P, 	PieceColour.BLACK, 4,	6);
+		Piece BPawn5 = 		new Piece(PieceType.P, 	PieceColour.BLACK, 5,	6);
+		Piece BPawn6 = 		new Piece(PieceType.P, 	PieceColour.BLACK, 6,	6);
+		Piece BPawn7 = 		new Piece(PieceType.P, 	PieceColour.BLACK, 7,	6);
 		
 		Piece WKing = 		new Piece(PieceType.K, 	PieceColour.WHITE, 4, 	0);
 		Piece WQueen = 		new Piece(PieceType.Q, 	PieceColour.WHITE, 3, 	0);
@@ -212,14 +217,14 @@ public class Main {
 		Piece WNight2 = 	new Piece(PieceType.N, 	PieceColour.WHITE, 6, 	0);
 		Piece WRook1 = 		new Piece(PieceType.R, 	PieceColour.WHITE, 0, 	0);
 		Piece WRook2 = 		new Piece(PieceType.R, 	PieceColour.WHITE, 7, 	0);
-		Piece WPawn0 = 		new Piece(PieceType.N, 	PieceColour.WHITE, 0,	1);
-		Piece WPawn1 = 		new Piece(PieceType.N, 	PieceColour.WHITE, 1,	1);
-		Piece WPawn2 = 		new Piece(PieceType.N, 	PieceColour.WHITE, 2,	1);
-		Piece WPawn3 = 		new Piece(PieceType.N, 	PieceColour.WHITE, 3,	1);
-		Piece WPawn4 = 		new Piece(PieceType.N, 	PieceColour.WHITE, 4,	1);
-		Piece WPawn5 = 		new Piece(PieceType.N, 	PieceColour.WHITE, 5,	1);
-		Piece WPawn6 = 		new Piece(PieceType.N, 	PieceColour.WHITE, 6,	1);
-		Piece WPawn7 = 		new Piece(PieceType.N, 	PieceColour.WHITE, 7,	1);
+		Piece WPawn0 = 		new Piece(PieceType.P, 	PieceColour.WHITE, 0,	1);
+		Piece WPawn1 = 		new Piece(PieceType.P, 	PieceColour.WHITE, 1,	1);
+		Piece WPawn2 = 		new Piece(PieceType.P, 	PieceColour.WHITE, 2,	1);
+		Piece WPawn3 = 		new Piece(PieceType.P, 	PieceColour.WHITE, 3,	1);
+		Piece WPawn4 = 		new Piece(PieceType.P, 	PieceColour.WHITE, 4,	1);
+		Piece WPawn5 = 		new Piece(PieceType.P, 	PieceColour.WHITE, 5,	1);
+		Piece WPawn6 = 		new Piece(PieceType.P, 	PieceColour.WHITE, 6,	1);
+		Piece WPawn7 = 		new Piece(PieceType.P, 	PieceColour.WHITE, 7,	1);
 		
 		gameboard = new Piece[][]{
 			{ WRook1, 	WPawn0, blank, blank, blank, blank, BPawn0, BRook1 		},
@@ -240,6 +245,8 @@ public class Main {
 	static char knight = 'N';
 	static char pawn = 'P';
 	static Piece blank = new Piece(PieceType.NONE, PieceColour.NONE, 0, 0);
+	static int[] init;
+	static int[] fin;
 
 	static Piece gameboard[][];
 
@@ -250,8 +257,9 @@ public class Main {
 		boolean valid = true;
 		while (valid == true){
 			display();
-			int[] init = errorTrap("Initial");
-			int[] fin = errorTrap("Final");
+			init = errorTrap("Initial");
+			fin = errorTrap("Final");
+			boolean move = false;
 
 			Piece piece = gameboard[init[LETTER]][init[NUMBER]];			
 			gameboard[init[LETTER]][init[NUMBER]] = blank;

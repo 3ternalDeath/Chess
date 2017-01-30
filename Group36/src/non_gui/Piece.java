@@ -14,17 +14,15 @@ public class Piece {
 	}
 
 	public void move(int newX, int newY) {
-		if (validMove(newX, newY)) {
-			this.x = newX;
-			this.y = newY;
-		}
-		else {
-			//throw an exception?
-		}
+		this.x = newX;
+		this.y = newY;
 	}
 	
 	public String toString(){
-		return getType()+"";
+		if(getColour() != PieceColour.NONE && getType() != PieceType.NONE)
+			return ((getColour()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
+		else
+			return ("  ");
 	}
 	
 	public int getX() {
@@ -43,7 +41,7 @@ public class Piece {
 		return colour;
 	}
 	
-	private boolean validMove(int newX, int newY){
+	public boolean validMove(int newX, int newY){
 		boolean validMove = true;
 		int xDifference = newX - this.x;
 		int yDifference = newY - this.y;
