@@ -14,11 +14,13 @@ public class Piece {
 	}
 
 	public void move(int newY, int newX) {
+		//moves the piece
 		this.x = newX;
 		this.y = newY;
 	}
 	
 	public String toString(){
+		//generates a string to represent a piece as long as it is not blank
 		if(getColour() != PieceColour.NONE && getType() != PieceType.NONE)
 			return ((getColour()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
 		else
@@ -42,6 +44,8 @@ public class Piece {
 	}
 	
 	public boolean validMove(int newY, int newX){
+		//checks based on piece type
+		//if the move is allowed or not
 		boolean validMove = true;
 		int xDifference = newX - this.x;
 		int yDifference = newY - this.y;
@@ -55,6 +59,7 @@ public class Piece {
 			}
 			break;
 		case Q:
+			//can move in a line and diagonally
 			if (absXDifference != 0 && absYDifference != 0) {
 				if (absYDifference != absXDifference) {
 					validMove = false;
@@ -62,11 +67,13 @@ public class Piece {
 			}
 			break;
 		case R:
+			//Straight line only
 			if (absXDifference != 0 && absYDifference != 0) {
 				validMove = false;
 			}
 			break;
 		case N:
+			//2 in one direction and one perpendicular
 			if (absXDifference < 1 || absXDifference > 2 ||
 					absYDifference < 1 || absYDifference > 2) {
 				if (Math.abs(absXDifference - absYDifference) != 1) {
@@ -75,12 +82,14 @@ public class Piece {
 			}
 			break;
 		case B:
+			//diagonal only
 			if (absXDifference != absYDifference) {
 				validMove = false;
 			}
 			break;
 		case P:
-			//allow for 2-space move on first turn
+			//one space only
+			//TODO: allow for 2-space move on first turn
 			if (absXDifference > 1 || absYDifference > 0) {
 				validMove = false;
 			}
