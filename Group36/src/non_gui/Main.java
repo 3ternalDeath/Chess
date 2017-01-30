@@ -32,7 +32,7 @@ public class Main {
 		}
 		System.out.println();
 
-		//Top Boundarx
+		//Top Boundary
 		System.out.print("   ");
 		for (int y = 0; y < SIZE; y++) {
 			System.out.print(" _____");
@@ -113,7 +113,7 @@ public class Main {
 		do {
 			// UserInput
 			System.out.print(type + " Coordinates (Ex. a1):");
-			String coordinates = input.next();
+			String coordinates = input.nextLine();
 
 			// Coordinates must only have length 2
 			if (coordinates.length() != 2) {
@@ -156,7 +156,6 @@ public class Main {
 		validCoordinates[NUMBER] = numberCoordinate;
 		validCoordinates[LETTER] = letterCoordinate;
 		
-		input.close();
 		return validCoordinates;
 
 	}

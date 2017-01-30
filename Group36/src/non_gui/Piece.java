@@ -6,6 +6,7 @@ public class Piece {
 	private int x;
 	private int y;
 	
+	//Constructor
 	public Piece(PieceType type, PieceColour colour, int y, int x) {
 		this.type = type;
 		this.colour = colour;
@@ -13,36 +14,42 @@ public class Piece {
 		this.y = y;
 	}
 
+	//changes x and y values according to parameters
 	public void move(int newY, int newX) {
 		//moves the piece
 		this.x = newX;
 		this.y = newY;
 	}
 	
+	//generates and returns a string to represent a piece as long as it is not blank
 	public String toString(){
-		//generates a string to represent a piece as long as it is not blank
 		if(getColour() != PieceColour.NONE && getType() != PieceType.NONE)
 			return ((getColour()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
 		else
 			return ("  ");
 	}
 	
+	//returns the x value
 	public int getX() {
 		return x;
 	}
-
+	
+	//returns the y value
 	public int getY() {
 		return y;
 	}
-
+	
+	//returns the type of piece
 	public PieceType getType() {
 		return type;
 	}
 	
+	//returns the colour of piece
 	public PieceColour getColour() {
 		return colour;
 	}
 	
+	//returns true if move is valid, false otherwise
 	public boolean validMove(int newY, int newX){
 		//checks based on piece type
 		//if the move is allowed or not
