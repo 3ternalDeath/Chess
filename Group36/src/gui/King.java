@@ -9,8 +9,8 @@ public class King extends GameObject {
 
 	private BufferedImage image;
 
-	public King(int x, int y, ID id, Color color, Image image) {
-		super(x, y, id, color, image);
+	public King(int x, int y, Color color, Image image) {
+		super(x, y, color, image, ID.King);
 	}
 
 	public void tick() {

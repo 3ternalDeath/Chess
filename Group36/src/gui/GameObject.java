@@ -16,7 +16,7 @@ public abstract class GameObject {
 	protected Color color;
 	protected Image image;
 	
-	public GameObject(int x, int y, ID id, Color color, Image image){
+	public GameObject(int x, int y, Color color, Image image, ID id){
 		this.x = x;
 		this.y = y;
 		this.id = id;
