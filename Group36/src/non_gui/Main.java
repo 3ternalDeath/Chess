@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Main {
 
+	//generate all class variables
 	public static final int SIZE = 8;
 
 	static int NUMBER = 0;
@@ -155,7 +156,7 @@ public class Main {
 		validCoordinates[NUMBER] = numberCoordinate;
 		validCoordinates[LETTER] = letterCoordinate;
 		
-		
+		input.close();
 		return validCoordinates;
 
 	}
@@ -173,6 +174,8 @@ public class Main {
 		// Default return
 		boolean valid = true;
 
+		//check if the initial coordinate points to a blank space in the game board
+		//and if so, disallow move
 		if(type.equals("Initial")){
 			
 			if(gameboard[letCoordinate][numCoordinate] == blank){
@@ -180,6 +183,10 @@ public class Main {
 			}
 			
 		}
+		//check if the final coordinate points to a space occupied by a piece
+		//of the same colour, or if this change in x and y coordinates is illegal
+		//for the piece in question
+		//if either is true, disallow move
 		else if(type.equals("Final")){
 			
 			if(gameboard[letCoordinate][numCoordinate].getColour() == gameboard[init[LETTER]][init[NUMBER]].getColour()){
@@ -199,10 +206,11 @@ public class Main {
 	static public void mkBoard(){
 		
 		/*
-		 * self explanatory,
-		 * makes the game board
+		 * generates and populates game board
+		 * with all necessary pieces, in the correct arrangement
 		 */
 		
+		//create every piece
 		Piece BKing = 		new Piece(PieceType.K, 	PieceColour.BLACK, 4, 	7);
 		Piece BQueen = 		new Piece(PieceType.Q, 	PieceColour.BLACK, 3, 	7);
 		Piece BBishop1 = 	new Piece(PieceType.B, 	PieceColour.BLACK, 2, 	7);
@@ -237,6 +245,7 @@ public class Main {
 		Piece WPawn6 = 		new Piece(PieceType.P, 	PieceColour.WHITE, 6,	1);
 		Piece WPawn7 = 		new Piece(PieceType.P, 	PieceColour.WHITE, 7,	1);
 		
+		//place pieces in a 2d array
 		gameboard = new Piece[][]{
 			{ WRook1, 	WPawn0, blank, blank, blank, blank, BPawn0, BRook1 		},
 			{ WNight1, 	WPawn1, blank, blank, blank, blank, BPawn1, BNight1 	},
@@ -254,12 +263,13 @@ public class Main {
 		mkBoard();
 		
 		boolean valid = true;
+		//displays board, takes user input and then adjusts board accordingly
 		while (valid == true){
 			display();
 			init = errorTrap("Initial");
 			fin = errorTrap("Final");
-			boolean move = false;
 
+			//statements for moving a piece
 			Piece piece = gameboard[init[LETTER]][init[NUMBER]];
 			piece.move(fin[LETTER],fin[NUMBER]);
 			gameboard[init[LETTER]][init[NUMBER]] = blank;
