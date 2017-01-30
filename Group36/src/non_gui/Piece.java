@@ -6,14 +6,14 @@ public class Piece {
 	private int x;
 	private int y;
 	
-	public Piece(PieceType type, PieceColour colour, int x, int y) {
+	public Piece(PieceType type, PieceColour colour, int y, int x) {
 		this.type = type;
 		this.colour = colour;
 		this.x = x;
 		this.y = y;
 	}
 
-	public void move(int newX, int newY) {
+	public void move(int newY, int newX) {
 		this.x = newX;
 		this.y = newY;
 	}
@@ -41,7 +41,7 @@ public class Piece {
 		return colour;
 	}
 	
-	public boolean validMove(int newX, int newY){
+	public boolean validMove(int newY, int newX){
 		boolean validMove = true;
 		int xDifference = newX - this.x;
 		int yDifference = newY - this.y;
@@ -67,8 +67,8 @@ public class Piece {
 			}
 			break;
 		case N:
-			if (absXDifference < 2 || absXDifference > 3 ||
-					absYDifference < 2 || absYDifference > 3) {
+			if (absXDifference < 1 || absXDifference > 2 ||
+					absYDifference < 1 || absYDifference > 2) {
 				if (Math.abs(absXDifference - absYDifference) != 1) {
 					validMove = false;
 				}
@@ -81,7 +81,7 @@ public class Piece {
 			break;
 		case P:
 			//allow for 2-space move on first turn
-			if (absXDifference > 1 || xDifference < 0 || absYDifference > 0) {
+			if (absXDifference > 1 || absYDifference > 0) {
 				validMove = false;
 			}
 			break;

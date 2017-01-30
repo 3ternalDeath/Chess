@@ -8,6 +8,17 @@ public class Main {
 
 	static int NUMBER = 0;
 	static int LETTER = 1;
+	static char king = 'K';
+	static char queen = 'Q';
+	static char rook = 'R';
+	static char bishop = 'B';
+	static char knight = 'N';
+	static char pawn = 'P';
+	static Piece blank = new Piece(PieceType.NONE, PieceColour.NONE, 0, 0);
+	static int[] init;
+	static int[] fin;
+
+	static Piece gameboard[][];
 
 	public static void display() {
 		
@@ -238,18 +249,6 @@ public class Main {
 		};
 	}
 
-	static char king = 'K';
-	static char queen = 'Q';
-	static char rook = 'R';
-	static char bishop = 'B';
-	static char knight = 'N';
-	static char pawn = 'P';
-	static Piece blank = new Piece(PieceType.NONE, PieceColour.NONE, 0, 0);
-	static int[] init;
-	static int[] fin;
-
-	static Piece gameboard[][];
-
 	public static void main(String[] args) {
 		
 		mkBoard();
@@ -261,7 +260,8 @@ public class Main {
 			fin = errorTrap("Final");
 			boolean move = false;
 
-			Piece piece = gameboard[init[LETTER]][init[NUMBER]];			
+			Piece piece = gameboard[init[LETTER]][init[NUMBER]];
+			piece.move(fin[LETTER],fin[NUMBER]);
 			gameboard[init[LETTER]][init[NUMBER]] = blank;
 			gameboard[fin[LETTER]][fin[NUMBER]] = piece;
 		
