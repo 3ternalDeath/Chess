@@ -1,3 +1,5 @@
+
+
 package non_gui;
 public class Piece {
 	
@@ -96,17 +98,12 @@ public class Piece {
 			break;
 		case P:
 			//one space only
-			//TODO: allow for 2-space move on first turn
+			//TODO: allow for 2-space move if pawn is being moved for first time
 			if (absXDifference > 1 || absYDifference > 0) {
 				validMove = false;
 			}
 			break;
 		}
-		//need a check that two pieces are not occupying
-		//the same space, and a check that a piece is not
-		//jumping over another piece (unless it's a knight
-		//or a castling rook/king)
-		//these may be better suited for the Board class, however
 		return validMove;
 	}
 	
