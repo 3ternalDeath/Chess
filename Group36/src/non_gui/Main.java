@@ -9,12 +9,6 @@ public class Main {
 
 	static int NUMBER = 0;
 	static int LETTER = 1;
-	static char king = 'K';
-	static char queen = 'Q';
-	static char rook = 'R';
-	static char bishop = 'B';
-	static char knight = 'N';
-	static char pawn = 'P';
 	static Piece blank = new Piece(PieceType.NONE, PieceColour.NONE, 0, 0);
 	static int[] init;
 	static int[] fin;
