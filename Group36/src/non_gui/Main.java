@@ -15,7 +15,8 @@ public class Main {
 		board.populateBoard();
 		
 		//displays board then updates board according to user input
-		while (true) {
+		boolean running = true;
+		while (running) {
 			System.out.println("P1 Score: " + p1.getScore());
 			System.out.println("P2 Score: " + p2.getScore());
 			board.display();
