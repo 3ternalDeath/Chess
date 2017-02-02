@@ -7,7 +7,6 @@ public class Board {
 	private static final int SIZE = 8;
 	private static final int NUMBER = 0;
 	private static final int LETTER = 1;
-	private static final Piece blank = new Piece(PieceType.NONE, PieceColour.NONE, 0, 0);
 	
 	private int[] init;
 	private int[] fin;
@@ -28,44 +27,44 @@ public class Board {
 	 */
 	public void populateBoard(){
 		//create every existent piece and place it in the board
-		gameBoard[4][7] =	new Piece(PieceType.K, 	PieceColour.BLACK, 4, 	7);
-		gameBoard[3][7] = 	new Piece(PieceType.Q, 	PieceColour.BLACK, 3, 	7);
-		gameBoard[2][7] = 	new Piece(PieceType.B, 	PieceColour.BLACK, 2, 	7);
-		gameBoard[5][7] = 	new Piece(PieceType.B, 	PieceColour.BLACK, 5, 	7);
-		gameBoard[1][7] = 	new Piece(PieceType.N, 	PieceColour.BLACK, 1, 	7);
-		gameBoard[6][7] = 	new Piece(PieceType.N, 	PieceColour.BLACK, 6, 	7);
-		gameBoard[0][7] = 	new Piece(PieceType.R, 	PieceColour.BLACK, 0, 	7);
-		gameBoard[7][7] = 	new Piece(PieceType.R, 	PieceColour.BLACK, 7, 	7);
-		gameBoard[0][6] = 	new Piece(PieceType.P, 	PieceColour.BLACK, 0,	6);
-		gameBoard[1][6] = 	new Piece(PieceType.P, 	PieceColour.BLACK, 1,	6);
-		gameBoard[2][6] = 	new Piece(PieceType.P, 	PieceColour.BLACK, 2,	6);
-		gameBoard[3][6] = 	new Piece(PieceType.P, 	PieceColour.BLACK, 3,	6);
-		gameBoard[4][6] = 	new Piece(PieceType.P, 	PieceColour.BLACK, 4,	6);
-		gameBoard[5][6] = 	new Piece(PieceType.P, 	PieceColour.BLACK, 5,	6);
-		gameBoard[6][6] = 	new Piece(PieceType.P, 	PieceColour.BLACK, 6,	6);
-		gameBoard[7][6] = 	new Piece(PieceType.P, 	PieceColour.BLACK, 7,	6);
+		gameBoard[4][7] =	new Piece(PieceType.King, 	PieceColour.Black, 4, 	7);
+		gameBoard[3][7] = 	new Piece(PieceType.Queen, 	PieceColour.Black, 3, 	7);
+		gameBoard[2][7] = 	new Piece(PieceType.Bishop,	PieceColour.Black, 2, 	7);
+		gameBoard[5][7] = 	new Piece(PieceType.Bishop,	PieceColour.Black, 5, 	7);
+		gameBoard[1][7] = 	new Piece(PieceType.Night, 	PieceColour.Black, 1, 	7);
+		gameBoard[6][7] = 	new Piece(PieceType.Night, 	PieceColour.Black, 6, 	7);
+		gameBoard[0][7] = 	new Piece(PieceType.Rook, 	PieceColour.Black, 0, 	7);
+		gameBoard[7][7] = 	new Piece(PieceType.Rook, 	PieceColour.Black, 7, 	7);
+		gameBoard[0][6] = 	new Piece(PieceType.Pawn, 	PieceColour.Black, 0,	6);
+		gameBoard[1][6] = 	new Piece(PieceType.Pawn, 	PieceColour.Black, 1,	6);
+		gameBoard[2][6] = 	new Piece(PieceType.Pawn, 	PieceColour.Black, 2,	6);
+		gameBoard[3][6] = 	new Piece(PieceType.Pawn, 	PieceColour.Black, 3,	6);
+		gameBoard[4][6] = 	new Piece(PieceType.Pawn, 	PieceColour.Black, 4,	6);
+		gameBoard[5][6] = 	new Piece(PieceType.Pawn, 	PieceColour.Black, 5,	6);
+		gameBoard[6][6] = 	new Piece(PieceType.Pawn, 	PieceColour.Black, 6,	6);
+		gameBoard[7][6] = 	new Piece(PieceType.Pawn, 	PieceColour.Black, 7,	6);
 		
-		gameBoard[4][0] = 	new Piece(PieceType.K, 	PieceColour.WHITE, 4, 	0);
-		gameBoard[3][0] = 	new Piece(PieceType.Q, 	PieceColour.WHITE, 3, 	0);
-		gameBoard[2][0] = 	new Piece(PieceType.B, 	PieceColour.WHITE, 2, 	0);
-		gameBoard[5][0] = 	new Piece(PieceType.B, 	PieceColour.WHITE, 5, 	0);
-		gameBoard[1][0] = 	new Piece(PieceType.N, 	PieceColour.WHITE, 1, 	0);
-		gameBoard[6][0] = 	new Piece(PieceType.N, 	PieceColour.WHITE, 6, 	0);
-		gameBoard[0][0] = 	new Piece(PieceType.R, 	PieceColour.WHITE, 0, 	0);
-		gameBoard[7][0] = 	new Piece(PieceType.R, 	PieceColour.WHITE, 7, 	0);
-		gameBoard[0][1] = 	new Piece(PieceType.P, 	PieceColour.WHITE, 0,	1);
-		gameBoard[1][1] = 	new Piece(PieceType.P, 	PieceColour.WHITE, 1,	1);
-		gameBoard[2][1] = 	new Piece(PieceType.P, 	PieceColour.WHITE, 2,	1);
-		gameBoard[3][1] = 	new Piece(PieceType.P, 	PieceColour.WHITE, 3,	1);
-		gameBoard[4][1] = 	new Piece(PieceType.P, 	PieceColour.WHITE, 4,	1);
-		gameBoard[5][1] = 	new Piece(PieceType.P, 	PieceColour.WHITE, 5,	1);
-		gameBoard[6][1] = 	new Piece(PieceType.P, 	PieceColour.WHITE, 6,	1);
-		gameBoard[7][1] = 	new Piece(PieceType.P, 	PieceColour.WHITE, 7,	1);
+		gameBoard[4][0] = 	new Piece(PieceType.King, 	PieceColour.White, 4, 	0);
+		gameBoard[3][0] = 	new Piece(PieceType.Queen, 	PieceColour.White, 3, 	0);
+		gameBoard[2][0] = 	new Piece(PieceType.Bishop, PieceColour.White, 2, 	0);
+		gameBoard[5][0] = 	new Piece(PieceType.Bishop, PieceColour.White, 5, 	0);
+		gameBoard[1][0] = 	new Piece(PieceType.Night, 	PieceColour.White, 1, 	0);
+		gameBoard[6][0] = 	new Piece(PieceType.Night, 	PieceColour.White, 6, 	0);
+		gameBoard[0][0] = 	new Piece(PieceType.Rook, 	PieceColour.White, 0, 	0);
+		gameBoard[7][0] = 	new Piece(PieceType.Rook, 	PieceColour.White, 7, 	0);
+		gameBoard[0][1] = 	new Piece(PieceType.Pawn, 	PieceColour.White, 0,	1);
+		gameBoard[1][1] = 	new Piece(PieceType.Pawn, 	PieceColour.White, 1,	1);
+		gameBoard[2][1] = 	new Piece(PieceType.Pawn, 	PieceColour.White, 2,	1);
+		gameBoard[3][1] = 	new Piece(PieceType.Pawn, 	PieceColour.White, 3,	1);
+		gameBoard[4][1] = 	new Piece(PieceType.Pawn, 	PieceColour.White, 4,	1);
+		gameBoard[5][1] = 	new Piece(PieceType.Pawn, 	PieceColour.White, 5,	1);
+		gameBoard[6][1] = 	new Piece(PieceType.Pawn, 	PieceColour.White, 6,	1);
+		gameBoard[7][1] = 	new Piece(PieceType.Pawn, 	PieceColour.White, 7,	1);
 		
 		//fill the rest of the board with blank pieces
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = SIZE - 3; j > 1; j--) {
-				gameBoard[i][j] = blank;
+				gameBoard[i][j] = new Piece(null, null, i, j);
 			}
 		}
 	}
@@ -140,7 +139,7 @@ public class Board {
 		//move the specified piece to the specified location
 		Piece piece = gameBoard[init[LETTER]][init[NUMBER]];
 		piece.move(fin[LETTER],fin[NUMBER]);
-		gameBoard[init[LETTER]][init[NUMBER]] = blank;
+		gameBoard[init[LETTER]][init[NUMBER]] = null;
 		gameBoard[fin[LETTER]][fin[NUMBER]] = piece;
 		
 		//collision detection needs to adjust scoreChange
@@ -216,7 +215,7 @@ public class Board {
 		//checks concerning initial coordinates
 		if(type.equals("Initial")){
 			//if coordinates point to a blank space then disallow them
-			if(gameBoard[letCoordinate][numCoordinate] == blank){
+			if(gameBoard[letCoordinate][numCoordinate] == null){
 				valid = false;
 			}
 			//if coordinates point to the other player's pieces then disallow them

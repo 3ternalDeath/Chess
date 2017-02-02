@@ -25,7 +25,7 @@ public class Piece {
 	
 	//generates and returns a string to represent a piece as long as it is not blank
 	public String toString(){
-		if(getColour() != PieceColour.NONE && getType() != PieceType.NONE)
+		if(getColour() != null && getType() != null)
 			return ((getColour()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
 		else
 			return ("  ");
@@ -61,13 +61,13 @@ public class Piece {
 		int absXDifference = Math.abs(xDifference);
 		int absYDifference = Math.abs(yDifference);
 		switch (type) {
-		case K:
+		case King:
 			//override this check if castling
 			if (absXDifference > 1 || absYDifference > 1) {
 				validMove = false;
 			}
 			break;
-		case Q:
+		case Queen:
 			//can move in a line and diagonally
 			if (absXDifference != 0 && absYDifference != 0) {
 				if (absYDifference != absXDifference) {
@@ -75,13 +75,13 @@ public class Piece {
 				}
 			}
 			break;
-		case R:
+		case Rook:
 			//Straight line only
 			if (absXDifference != 0 && absYDifference != 0) {
 				validMove = false;
 			}
 			break;
-		case N:
+		case Night:
 			//2 in one direction and one perpendicular
 			if (absXDifference < 1 || absXDifference > 2 ||
 					absYDifference < 1 || absYDifference > 2) {
@@ -90,13 +90,13 @@ public class Piece {
 				}
 			}
 			break;
-		case B:
+		case Bishop:
 			//diagonal only
 			if (absXDifference != absYDifference) {
 				validMove = false;
 			}
 			break;
-		case P:
+		case Pawn:
 			//one space only
 			//TODO: allow for 2-space move if pawn is being moved for first time
 			if (absXDifference > 1 || absYDifference > 0) {

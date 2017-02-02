@@ -1,5 +1,3 @@
-
-
 package non_gui;
 
 public class Main {
@@ -10,8 +8,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		currentTurn = 1;
-		p1 = new Player(PieceColour.WHITE, 0);
-		p2 = new Player(PieceColour.BLACK, 0);
+		p1 = new Player(PieceColour.White, 0);
+		p2 = new Player(PieceColour.Black, 0);
 		//create a board populated with the traditional chess arrangement
 		Board board = new Board();
 		board.populateBoard();
