@@ -1,6 +1,7 @@
 package non_gui;
 
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Board {
 	
@@ -10,6 +11,8 @@ public class Board {
 	private Coordinates fin;
 	private int scoreChange;
 	private Piece[][] gameBoard;
+	private Stack<int[][]> moves;
+	private Stack<Piece> deadPiece;
 	
 	//constructor for the Board object
 	public Board(){
@@ -17,6 +20,8 @@ public class Board {
 		init = new Coordinates(0,0);
 		fin = new Coordinates(0,0);
 		scoreChange = 0;
+		moves = new Stack<int[][]>();
+		deadPiece = new Stack<Piece>();
 	};
 	
 	/*
@@ -137,8 +142,12 @@ public class Board {
 		getInput("Final", currentPlayer);
 
 		//move the specified piece to the specified location
+		//add move to the moves Stack
 		Piece piece = gameBoard[init.getX()][init.getY()];
 		piece.move(fin);
+		int[][] curentMove = {{init.getX(), init.getY()}, {fin.getX(), fin.getY()}};
+		moves.add(curentMove);
+		deadPiece.add(gameBoard[fin.getX()][fin.getY()]);
 		gameBoard[init.getX()][init.getY()] = new Piece(null,null,init.getX(),init.getY());
 		gameBoard[fin.getX()][fin.getY()] = piece;
 		
@@ -321,6 +330,15 @@ public class Board {
 			valid = false;
 		}
 		return valid;
+	}
+	
+	//un-does the latest move
+	private void undoMove(){
+		int[][] move = moves.pop();
+		Piece piece = gameBoard[move[1][0]][move[1][1]];
+		piece.move(new Coordinates(move[0][0], move[0][1]));
+		gameBoard[move[1][0]][move[1][1]] = deadPiece.pop();
+		gameBoard[move[0][0]][move[0][1]] = piece;
 	}
 			
 }
