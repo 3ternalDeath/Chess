@@ -225,16 +225,20 @@ public class Board {
 			}
 		}
 		
-		//check if the final coordinate points to a space occupied by a piece
-		//of the same color, or if this change in x and y coordinates is illegal
-		//for the piece in question
-		//if either is true, disallow move
+		//checks concerning final coordinates
 		else if(type.equals("Final")){
+			//if coordinates point to a piece the current player owns then disallow them
 			if(gameBoard[newCoor.getX()][newCoor.getY()].getColour() == gameBoard[init.getX()][init.getY()].getColour()){
 				System.out.println("Moving into your own piece.");
 				valid = false;
 			}
+			//if coordinates would cause an illegal move for the piece in question then disallow them
 			else if(!gameBoard[init.getX()][init.getY()].validMove(newCoor)){
+				valid = false;
+			}
+			//if coordinates would cause a piece to skip over another piece then disallow them
+			else if(!collisionDetect(init, newCoor)) {
+				System.out.println("There's something in the way.");
 				valid = false;
 			}
 			else{
@@ -242,6 +246,65 @@ public class Board {
 			}
 		}
 		return valid;
+	}
+	
+	private boolean collisionDetect(Coordinates startPos, Coordinates endPos) {
+		boolean pathOpen = true;
+		
+		int xDifference = endPos.getX() - startPos.getX();
+		int yDifference = endPos.getY() - startPos.getY();
+		
+		if (xDifference == 0) {
+			while (yDifference != 0) {
+				if (gameBoard[startPos.getX()][startPos.getY() + yDifference].getType() != null) {
+					pathOpen = false;
+				}
+				if (yDifference < 0) {
+					yDifference++;
+				}
+				else if (yDifference > 0) {
+					yDifference--;
+				}
+			}
+		}
+		else if (yDifference == 0) {
+			while (xDifference != 0) {
+				if (gameBoard[startPos.getX() + xDifference][startPos.getY()].getType() != null) {
+					pathOpen = false;
+				}
+				if (xDifference < 0) {
+					xDifference++;
+				}
+				else if (xDifference > 0) {
+					xDifference--;
+				}
+			}
+		}
+		else {
+			while (xDifference != 0 && yDifference != 0) {
+				if (gameBoard[startPos.getX() + xDifference][startPos.getY() + yDifference].getType() != null) {
+					pathOpen = false;
+				}
+				if (xDifference < 0) {
+					xDifference++;
+				}
+				else if (xDifference > 0) {
+					xDifference--;
+				}
+				if (yDifference < 0) {
+					yDifference++;
+				}
+				else if (yDifference > 0) {
+					yDifference--;
+				}
+			}
+		}
+		
+		if (gameBoard[startPos.getX()][startPos.getY()].getType() == PieceType.Night) {
+			pathOpen = true;
+		}
+		
+		return pathOpen;
 	}
 	
 	private static boolean inBound(char letter, char number) {
