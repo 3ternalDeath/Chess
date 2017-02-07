@@ -1,13 +1,16 @@
 package non_gui;
 
+import java.util.ArrayList;
+
 import javax.swing.plaf.synth.SynthSplitPaneUI;
 
-public class Piece {
+public abstract class Piece {
 	
 	private final PieceType type;
 	private final PieceColour colour;
 	private int x;
 	private int y;
+	private ArrayList<Coordinates> posMoves;
 	
 	//Constructor
 	public Piece(PieceType type, PieceColour colour, int x, int y) {
@@ -15,6 +18,7 @@ public class Piece {
 		this.colour = colour;
 		this.x = x;
 		this.y = y;
+		posMoves = updateMoves();
 	}
 
 	//changes x and y values according to parameters
@@ -22,6 +26,7 @@ public class Piece {
 		//moves the piece
 		this.x = newCoor.getX();
 		this.y = newCoor.getY();
+		posMoves = updateMoves();
 	}
 	
 	//generates and returns a string to represent a piece as long as it is not blank
@@ -119,8 +124,7 @@ public class Piece {
 			break;
 		case Pawn:
 			System.out.println("PAWN SWITCH");
-			//one space only
-			//TODO: allow for 2-space move if pawn is being moved for first time
+			//one space only if not first move
 			if (absXDifference > 0 || absYDifference > 1) {
 				validMove = false;
 			}
@@ -128,5 +132,7 @@ public class Piece {
 		}
 		return validMove;
 	}
+	
+	protected abstract ArrayList<Coordinates> updateMoves();
 	
 }
