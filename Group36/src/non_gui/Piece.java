@@ -1,5 +1,3 @@
-
-
 package non_gui;
 
 import javax.swing.plaf.synth.SynthSplitPaneUI;

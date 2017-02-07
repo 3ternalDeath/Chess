@@ -2,7 +2,7 @@ package non_gui;
 
 public class Main {
 	
-	public static int currentTurn;
+	private static int currentTurn;
 	private static Player p1;
 	private static Player p2;
 
@@ -22,12 +22,12 @@ public class Main {
 			board.display();
 			if (currentTurn % 2 == 1) {
 				System.out.println(p1.getColour());
-				board.update(p1);
+				p1.makeMove(board);
 				p1.adjustScore(board.pushScoreChange());
 			}
 			else {
 				System.out.println(p2.getColour());
-				board.update(p2);
+				p2.makeMove(board);
 				p2.adjustScore(board.pushScoreChange());
 			}
 			currentTurn++;

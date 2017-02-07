@@ -1,14 +1,10 @@
 package non_gui;
 
-import java.util.Scanner;
 import java.util.Stack;
 
 public class Board {
 	
 	private static final int SIZE = 8;
-	
-	private Coordinates init;
-	private Coordinates fin;
 	private int scoreChange;
 	private Piece[][] gameBoard;
 	private Stack<int[][]> moves;
@@ -17,8 +13,6 @@ public class Board {
 	//constructor for the Board object
 	public Board(){
 		gameBoard = new Piece[SIZE][SIZE];
-		init = new Coordinates(0,0);
-		fin = new Coordinates(0,0);
 		scoreChange = 0;
 		moves = new Stack<int[][]>();
 		deadPiece = new Stack<Piece>();
@@ -134,12 +128,9 @@ public class Board {
 		return tempScoreChange;
 	}
 	
-	public void update(Player currentPlayer) {
-		//get validated input from the user on what move should be made
-		getInput("Initial", currentPlayer);
+	public void update(Coordinates init, Coordinates fin, Player currentPlayer) {
 		System.out.println("Selected Piece:" + gameBoard[init.getX()][init.getY()].getType());
 		System.out.println("Piece Colour: " + gameBoard[init.getX()][init.getY()].getColour());
-		getInput("Final", currentPlayer);
 
 		//move the specified piece to the specified location
 		//add move to the moves Stack
@@ -154,105 +145,53 @@ public class Board {
 		//collision detection needs to adjust scoreChange
 	}
 	
-	private void getInput(String type, Player currentPlayer) {
-		Scanner input = new Scanner(System.in);
-
-		char inputLetter = ' ';
-		char inputNumber = ' ';
-
-		Coordinates newCoor = new Coordinates(0,0);
-		
-		boolean valid = true;
-		do {
-			// UserInput
-			System.out.print(type + " Coordinates (Ex. a1):");
-			String coordinates = input.nextLine();
-
-			// Coordinates must only have length 2
-			if (coordinates.length() != 2) {
-				System.out.println("Coordinates must be exactly two characters.");
-				valid = false;
-			} else {
-				// Isolates letter and number components in whatever order the user gives it
-				if(Character.isAlphabetic(coordinates.charAt(0)) && Character.isDigit(coordinates.charAt(1))){
-					inputLetter = coordinates.toLowerCase().charAt(0);
-					inputNumber = coordinates.charAt(1);
-				}
-				else{
-					inputNumber = coordinates.toLowerCase().charAt(0);
-					inputLetter = coordinates.charAt(1);
-				}
-
-				// Checks in bound
-				valid = inBound(inputLetter, inputNumber);
-				if (valid == true) {
-
-					// Changes coordinate char to int(0 to 7) for array
-					newCoor.setX(inputLetter - 'a');
-					newCoor.setY(inputNumber - '1');
-
-					// Checks valid movement
-					valid = validMovement(type, newCoor, currentPlayer);
-				}
-			}
-
-			// Invalid Input: Loop
-			if (!valid) {
-				System.out.println("Please reenter coordinates.");
-			}
-
-		} while (!valid);
-		
-		//Stores coordinates in an array.
-		if (type.equals("Initial"))
-			init = newCoor;
-		else if (type.equals("Final"))
-			fin = newCoor;
-		else
-			System.out.println("Something went wrong with the storing of coordinates...");
-	}
-	
-	private boolean validMovement(String type, Coordinates newCoor, Player currentPlayer) {
-		/*
-		 * TODO are pieces in the way? need a check
-		 */
-
+	public boolean validMovement(Coordinates init, Coordinates fin, Player currentPlayer) {
 		// Default return
 		boolean valid = true;
-
-		//checks concerning initial coordinates
-		if(type.equals("Initial")){
-			//if coordinates point to a blank space then disallow them
-			if(gameBoard[newCoor.getX()][newCoor.getY()].getType() == null){
-				System.out.println("Selecting empty space.");
-				valid = false;
-			}
-			//if coordinates point to the other player's pieces then disallow them
-			else if(gameBoard[newCoor.getX()][newCoor.getY()].getColour() != currentPlayer.getColour()) {
-				System.out.println("Selecting opponent's piece. Your color is " + currentPlayer.getColour() + ".");
-				valid = false;
-			}
-		}
 		
-		//checks concerning final coordinates
-		else if(type.equals("Final")){
-			//if coordinates point to a piece the current player owns then disallow them
-			if(gameBoard[newCoor.getX()][newCoor.getY()].getColour() == gameBoard[init.getX()][init.getY()].getColour()){
-				System.out.println("Moving into your own piece.");
-				valid = false;
-			}
-			//if coordinates would cause an illegal move for the piece in question then disallow them
-			else if(!gameBoard[init.getX()][init.getY()].validMove(newCoor)){
-				valid = false;
-			}
-			//if coordinates would cause a piece to skip over another piece then disallow them
-			else if(!collisionDetect(init, newCoor)) {
-				System.out.println("There's something in the way.");
-				valid = false;
-			}
-			else{
-				System.out.println("idk what's happening :'(");
-			}
+		//if coordinates point to a blank space then disallow them
+		if(gameBoard[init.getX()][init.getY()].getType() == null){
+			System.out.println("Selecting empty space.");
+			valid = false;
+		}
+		//if coordinates point to the other player's pieces then disallow them
+		else if(gameBoard[init.getX()][init.getY()].getColour() != currentPlayer.getColour()) {
+			System.out.println("Selecting opponent's piece. Your color is " + currentPlayer.getColour() + ".");
+			valid = false;
+		}
+		//if coordinates point to a piece the current player owns then disallow them
+		else if(gameBoard[fin.getX()][fin.getY()].getColour() == gameBoard[init.getX()][init.getY()].getColour()){
+			System.out.println("Moving into your own piece.");
+			valid = false;
+		}
+		//if coordinates would cause an illegal move for the piece in question then disallow them
+		else if(!gameBoard[init.getX()][init.getY()].validMove(fin)){
+			System.out.println("The piece can't move there.");
+			valid = false;
+		}
+		//if coordinates would cause a piece to skip over another piece then disallow them
+		else if(!collisionDetect(init, fin)) {
+			System.out.println("There's something in the way.");
+			valid = false;
+		}
+		else{
+			System.out.println("idk what's happening :'(");
+		}
+		return valid;
+	}
+	
+	public static boolean inBound(char letter, char number) {
+		boolean valid = true;
+
+		// Letter is between 'a' and 'h'
+		if (letter < 'a' || letter > 'h') {
+			System.out.println("Letter coordinate is out of range(a-h).");
+			valid = false;
+		}
+		// Number is between '1' and '8'
+		if (number < '1' || number > '8') {
+			System.out.println("Number coordinate is out of range(1-8).");
+			valid = false;
 		}
 		return valid;
 	}
@@ -314,22 +253,6 @@ public class Board {
 		}
 		
 		return pathOpen;
-	}
-	
-	private static boolean inBound(char letter, char number) {
-		boolean valid = true;
-
-		// Letter is between 'a' and 'h'
-		if (letter < 'a' || letter > 'h') {
-			System.out.println("Letter coordinate is out of range(a-h).");
-			valid = false;
-		}
-		// Number is between '1' and '8'
-		if (number < '1' || number > '8') {
-			System.out.println("Number coordinate is out of range(1-8).");
-			valid = false;
-		}
-		return valid;
 	}
 	
 	//un-does the latest move
