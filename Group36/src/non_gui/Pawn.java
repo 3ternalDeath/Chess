@@ -21,12 +21,22 @@ public class Pawn extends Piece {
 	protected void updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		if(firstMove)
-			if(Coordinates.inBound(getX(), getY() + 2))
-				moves.add(new Coordinates(getX(), getY() + 2));
+		if(this.getColour() == PieceColour.White) {
+			if(firstMove)
+				if(Coordinates.inBound(getX(), getY() + 2))
+					moves.add(new Coordinates(getX(), getY() + 2));
 		
-		if(Coordinates.inBound(getX() , getY() + 1))
-			moves.add(new Coordinates(getX(), getY() + 1));
+			if(Coordinates.inBound(getX() , getY() + 1))
+				moves.add(new Coordinates(getX(), getY() + 1));
+		}
+		else {
+			if(firstMove)
+				if(Coordinates.inBound(getX(), getY() - 2))
+					moves.add(new Coordinates(getX(), getY() - 2));
+		
+			if(Coordinates.inBound(getX() , getY() - 1))
+				moves.add(new Coordinates(getX(), getY() - 1));
+		}
 		
 		posMoves = moves;
 	}
