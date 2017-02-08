@@ -174,9 +174,7 @@ public class Board {
 			System.out.println("There's something in the way.");
 			valid = false;
 		}
-		else{
-			System.out.println("idk what's happening :'(");
-		}
+		
 		return valid;
 	}
 	
