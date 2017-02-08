@@ -8,8 +8,8 @@ public class Empty extends Piece {
 		super(null, null, x, y);
 	}
 
-	protected ArrayList<Coordinates> updateMoves() {
-		return null;
+	protected void updateMoves() {
+		
 	}
 
 }

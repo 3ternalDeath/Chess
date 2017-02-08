@@ -8,19 +8,29 @@ public class King extends Piece {
 			super(PieceType.King, colour, x, y);
 		}
 
-		protected ArrayList<Coordinates> updateMoves() {
+		protected void updateMoves() {
 			ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 			
-			moves.add(new Coordinates(getX(), getY() + 1));
-			moves.add(new Coordinates(getX(), getY() - 1));
-			moves.add(new Coordinates(getX() + 1, getY()));
-			moves.add(new Coordinates(getX() - 1, getY()));
-			moves.add(new Coordinates(getX() + 1, getY() + 1));
-			moves.add(new Coordinates(getX() + 1, getY() - 1));
-			moves.add(new Coordinates(getX() - 1, getY() + 1));
-			moves.add(new Coordinates(getX() - 1, getY() - 1));
+			if(Coordinates.inBound(getX(), getY() + 1))
+				moves.add(new Coordinates(getX(), getY() + 1));
+			if(Coordinates.inBound(getX(), getY() - 1))
+				moves.add(new Coordinates(getX(), getY() - 1));
+			if(Coordinates.inBound(getX() + 1, getY()))
+				moves.add(new Coordinates(getX() + 1, getY()));
+			if(Coordinates.inBound(getX() - 1, getY()))
+				moves.add(new Coordinates(getX() - 1, getY()));
 			
-			return moves;
+			
+			if(Coordinates.inBound(getX() + 1, getY() + 1))
+				moves.add(new Coordinates(getX() + 1, getY() + 1));
+			if(Coordinates.inBound(getX() + 1, getY() - 1))
+				moves.add(new Coordinates(getX() + 1, getY() - 1));
+			if(Coordinates.inBound(getX() - 1, getY() + 1))
+				moves.add(new Coordinates(getX() - 1, getY() + 1));
+			if(Coordinates.inBound(getX() - 1, getY() - 1))
+				moves.add(new Coordinates(getX() - 1, getY() - 1));
+			
+			posMoves = moves;
 			
 		}
 }

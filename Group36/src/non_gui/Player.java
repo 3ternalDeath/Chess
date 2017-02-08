@@ -68,7 +68,7 @@ public class Player {
 			}
 			
 			// Checks in bound
-			validLocation = Board.inBound(inputLetter, inputNumber);
+			validLocation = Coordinates.inBoundPlus(inputLetter, inputNumber);
 			if (validLocation == true) {
 
 				// Changes coordinate char to int(0 to 7) for array

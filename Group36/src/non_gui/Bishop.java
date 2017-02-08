@@ -8,7 +8,7 @@ public class Bishop extends Piece {
 		super(PieceType.Bishop, colour, x, y);
 	}
 
-	protected ArrayList<Coordinates> updateMoves() {
+	protected void updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
 		for(int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++){
@@ -24,7 +24,7 @@ public class Bishop extends Piece {
 			moves.add(new Coordinates(getX() - h, getY() - h));
 		}
 		
-		return moves;
+		posMoves = moves;
 	}
 
 }

@@ -180,22 +180,6 @@ public class Board {
 		return valid;
 	}
 	
-	public static boolean inBound(char letter, char number) {
-		boolean valid = true;
-
-		// Letter is between 'a' and 'h'
-		if (letter < 'a' || letter > 'h') {
-			System.out.println("Letter coordinate is out of range(a-h).");
-			valid = false;
-		}
-		// Number is between '1' and '8'
-		if (number < '1' || number > '8') {
-			System.out.println("Number coordinate is out of range(1-8).");
-			valid = false;
-		}
-		return valid;
-	}
-	
 	private boolean collisionDetect(Coordinates startPos, Coordinates endPos) {
 		boolean pathOpen = true;
 		

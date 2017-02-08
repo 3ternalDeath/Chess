@@ -8,7 +8,7 @@ public class Rook extends Piece {
 		super(PieceType.Rook, colour, x, y);
 	}
 
-	protected ArrayList<Coordinates> updateMoves() {
+	protected void updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
 		for(int x = getX()+1; Coordinates.inBound(x); x++){
@@ -23,7 +23,7 @@ public class Rook extends Piece {
 		for(int y = getX()-1; Coordinates.inBound(y); y--){
 			moves.add(new Coordinates(getX(), y));
 		}
-		return moves;
+		posMoves = moves;
 	}
 
 }

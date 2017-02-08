@@ -8,19 +8,30 @@ public class Knight extends Piece {
 		super(PieceType.Night, colour, x, y);
 	}
 
-	protected ArrayList<Coordinates> updateMoves() {
+	protected void updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		moves.add(new Coordinates(getX() + 2, getY() + 1));
-		moves.add(new Coordinates(getX() + 2, getY() - 1));
-		moves.add(new Coordinates(getX() - 2, getY() + 1));
-		moves.add(new Coordinates(getX() - 2, getY() - 1));
-		moves.add(new Coordinates(getX() + 1, getY() + 2));
-		moves.add(new Coordinates(getX() + 1, getY() - 2));
-		moves.add(new Coordinates(getX() - 1, getY() + 2));
-		moves.add(new Coordinates(getX() - 1, getY() - 2));
+		if(Coordinates.inBound(getX() + 2, getY() + 1))
+			moves.add(new Coordinates(getX() + 2, getY() + 1));
+		if(Coordinates.inBound(getX() + 2, getY() - 1))
+			moves.add(new Coordinates(getX() + 2, getY() - 1));
 		
-		return moves;
+		if(Coordinates.inBound(getX() - 2, getY() + 1))
+			moves.add(new Coordinates(getX() - 2, getY() + 1));
+		if(Coordinates.inBound(getX() - 2, getY() - 1))
+			moves.add(new Coordinates(getX() - 2, getY() - 1));
+		
+		if(Coordinates.inBound(getX() + 1, getY() + 2))
+			moves.add(new Coordinates(getX() + 1, getY() + 2));
+		if(Coordinates.inBound(getX() + 1, getY() - 2))
+			moves.add(new Coordinates(getX() + 1, getY() - 2));
+		
+		if(Coordinates.inBound(getX() - 1, getY() + 2))
+			moves.add(new Coordinates(getX() - 1, getY() + 2));
+		if(Coordinates.inBound(getX() - 1, getY() - 2))
+			moves.add(new Coordinates(getX() - 1, getY() - 2));
+		
+		posMoves = moves;
 	}
 
 }

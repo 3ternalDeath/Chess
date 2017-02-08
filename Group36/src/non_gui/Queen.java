@@ -8,7 +8,7 @@ public class Queen extends Piece{
 		super(PieceType.Queen, colour, x, y);
 	}
 
-	protected ArrayList<Coordinates> updateMoves() {
+	protected void updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
 		for(int x = getX()+1; Coordinates.inBound(x); x++){
@@ -38,6 +38,6 @@ public class Queen extends Piece{
 			moves.add(new Coordinates(getX() - h, getY() - h));
 		}
 		
-		return moves;
+		posMoves = moves;
 	}
 }
