@@ -168,6 +168,13 @@ public class Board {
 		else if(!gameBoard[init.getX()][init.getY()].validMove(fin)){
 			System.out.println("The piece can't move there.");
 			valid = false;
+		
+		}
+		else if (gameBoard[init.getX()][init.getY()].getType() == PieceType.Pawn) {
+			if (gameBoard[fin.getX()][fin.getY()].getType() == null && Math.abs(fin.getX() - init.getX()) == 1) {
+				System.out.println("The pawn can only kill like that.");
+				valid = false;
+			}
 		}
 		//if coordinates would cause a piece to skip over another piece then disallow them
 		else if(!collisionDetect(init, fin)) {

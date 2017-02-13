@@ -28,6 +28,11 @@ public class Pawn extends Piece {
 		
 			if(Coordinates.inBound(getX() , getY() + 1))
 				moves.add(new Coordinates(getX(), getY() + 1));
+			
+			if(Coordinates.inBound(getX() + 1, getY() + 1))
+				moves.add(new Coordinates(getX() + 1, getY() + 1));
+			if (Coordinates.inBound(getX() - 1, getY() + 1))
+				moves.add(new Coordinates(getX() - 1, getY() + 1));
 		}
 		else {
 			if(firstMove)
@@ -36,6 +41,11 @@ public class Pawn extends Piece {
 		
 			if(Coordinates.inBound(getX() , getY() - 1))
 				moves.add(new Coordinates(getX(), getY() - 1));
+			
+			if(Coordinates.inBound(getX() + 1, getY() - 1))
+				moves.add(new Coordinates(getX() + 1, getY() - 1));
+			if (Coordinates.inBound(getX() - 1, getY() - 1))
+				moves.add(new Coordinates(getX() - 1, getY() - 1));
 		}
 		
 		posMoves = moves;
