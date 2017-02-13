@@ -184,7 +184,20 @@ public class Board {
 		int xDifference = endPos.getX() - startPos.getX();
 		int yDifference = endPos.getY() - startPos.getY();
 		
-		if (xDifference == 0) {
+		
+		if (gameBoard[startPos.getX()][startPos.getY()].getType() == PieceType.Night) {
+			pathOpen = true;
+		}
+		else if((Math.abs(xDifference) == 1 || Math.abs(yDifference) == 1) && gameBoard[startPos.getX()][startPos.getY()].getType() != PieceType.Pawn){
+			
+		}
+		else if (xDifference == 0) {
+			if (yDifference < 0) {
+				yDifference++;
+			}
+			else if (yDifference > 0) {
+				yDifference--;
+			}
 			while (yDifference != 0) {
 				if (gameBoard[startPos.getX()][startPos.getY() + yDifference].getType() != null) {
 					pathOpen = false;
@@ -198,6 +211,12 @@ public class Board {
 			}
 		}
 		else if (yDifference == 0) {
+			if (xDifference < 0) {
+				xDifference++;
+			}
+			else if (xDifference > 0) {
+				xDifference--;
+			}
 			while (xDifference != 0) {
 				if (gameBoard[startPos.getX() + xDifference][startPos.getY()].getType() != null) {
 					pathOpen = false;
@@ -211,6 +230,18 @@ public class Board {
 			}
 		}
 		else {
+			if (xDifference < 0) {
+				xDifference++;
+			}
+			else if (xDifference > 0) {
+				xDifference--;
+			}
+			if (yDifference < 0) {
+				yDifference++;
+			}
+			else if (yDifference > 0) {
+				yDifference--;
+			}
 			while (xDifference != 0 && yDifference != 0) {
 				if (gameBoard[startPos.getX() + xDifference][startPos.getY() + yDifference].getType() != null) {
 					pathOpen = false;
@@ -230,9 +261,7 @@ public class Board {
 			}
 		}
 		
-		if (gameBoard[startPos.getX()][startPos.getY()].getType() == PieceType.Night) {
-			pathOpen = true;
-		}
+		
 		
 		return pathOpen;
 	}

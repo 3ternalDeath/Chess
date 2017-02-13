@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Player {
 	private PieceColour colour;
 	private int score;
-	
+	 public static Scanner input = new Scanner(System.in);
 	public Player(PieceColour colour, int score) {
 		this.colour = colour;
 		this.score = score;
@@ -38,7 +38,7 @@ public class Player {
 	}
 
 	private Coordinates getInput(String type, Board gameBoard) {
-		Scanner input = new Scanner(System.in);
+		
 
 		char inputLetter = ' ';
 		char inputNumber = ' ';
@@ -49,7 +49,7 @@ public class Player {
 		do {
 			// UserInput
 			System.out.print(type + " Coordinates (Ex. a1):");
-			String coordinates = input.nextLine();
+			String coordinates = input.next().toLowerCase();					/////SWITCH TO NEXT LINE LATER
 
 			// Coordinates must only have length 2
 			if (coordinates.length() != 2) {
@@ -58,11 +58,11 @@ public class Player {
 			} else {
 				// Isolates letter and number components in whatever order the user gives it
 				if(Character.isAlphabetic(coordinates.charAt(0)) && Character.isDigit(coordinates.charAt(1))){
-					inputLetter = coordinates.toLowerCase().charAt(0);
+					inputLetter = coordinates.charAt(0);
 					inputNumber = coordinates.charAt(1);
 				}
 				else{
-					inputNumber = coordinates.toLowerCase().charAt(0);
+					inputNumber = coordinates.charAt(0);
 					inputLetter = coordinates.charAt(1);
 				}
 			}
