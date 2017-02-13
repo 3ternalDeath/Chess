@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Rook extends Piece {
 
-	public Rook(PieceColour colour, int x, int y){
-		super(PieceType.Rook, colour, x, y);
+	public Rook(PieceColor Color, int x, int y){
+		super(PieceType.Rook, Color, x, y);
 	}
 
 	protected void updateMoves() {

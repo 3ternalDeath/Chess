@@ -1,5 +1,5 @@
 package non_gui;
-public enum PieceColour {
+public enum PieceColor {
 	White,
 	Black
 }

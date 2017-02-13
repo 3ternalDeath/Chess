@@ -8,8 +8,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		currentTurn = 1;
-		p1 = new Player(PieceColour.White, 0);
-		p2 = new Player(PieceColour.Black, 0);
+		p1 = new Player(PieceColor.White, 0);
+		p2 = new Player(PieceColor.Black, 0);
 		//create a board populated with the traditional chess arrangement
 		Board board = new Board();
 		board.populateBoard();
@@ -21,12 +21,12 @@ public class Main {
 			System.out.println("P2 Score: " + p2.getScore());
 			board.display();
 			if (currentTurn % 2 == 1) {
-				System.out.println(p1.getColour());
+				System.out.println(p1.getColor());
 				p1.makeMove(board);
 				p1.adjustScore(board.pushScoreChange());
 			}
 			else {
-				System.out.println(p2.getColour());
+				System.out.println(p2.getColor());
 				p2.makeMove(board);
 				p2.adjustScore(board.pushScoreChange());
 			}

@@ -7,15 +7,15 @@ import javax.swing.plaf.synth.SynthSplitPaneUI;
 public abstract class Piece {
 	
 	private final PieceType type;
-	private final PieceColour colour;
+	private final PieceColor Color;
 	private int x;
 	private int y;
 	protected ArrayList<Coordinates> posMoves;
 	
 	//Constructor
-	public Piece(PieceType type, PieceColour colour, int x, int y) {
+	public Piece(PieceType type, PieceColor Color, int x, int y) {
 		this.type = type;
-		this.colour = colour;
+		this.Color = Color;
 		this.x = x;
 		this.y = y;
 		updateMoves();
@@ -31,8 +31,8 @@ public abstract class Piece {
 	
 	//generates and returns a string to represent a piece as long as it is not blank
 	public String toString(){
-		if(getColour() != null && getType() != null)
-			return ((getColour()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
+		if(getColor() != null && getType() != null)
+			return ((getColor()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
 		else
 			return ("  ");
 	}
@@ -52,9 +52,9 @@ public abstract class Piece {
 		return this.type;
 	}
 	
-	//returns the colour of piece
-	public PieceColour getColour() {
-		return this.colour;
+	//returns the Color of piece
+	public PieceColor getColor() {
+		return this.Color;
 	}
 	
 	//returns true if move is valid, false otherwise

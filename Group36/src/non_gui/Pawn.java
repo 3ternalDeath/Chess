@@ -6,8 +6,8 @@ public class Pawn extends Piece {
 	
 	private boolean firstMove;
 
-	public Pawn(PieceColour colour, int x, int y){
-		super(PieceType.Pawn, colour, x, y);
+	public Pawn(PieceColor Color, int x, int y){
+		super(PieceType.Pawn, Color, x, y);
 		firstMove = true;
 		updateMoves();//repeated in this constructor due to being unable to have firstMove = true before it is run in the Piece constructor
 	}
@@ -21,7 +21,7 @@ public class Pawn extends Piece {
 	protected void updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		if(this.getColour() == PieceColour.White) {
+		if(this.getColor() == PieceColor.White) {
 			if(firstMove)
 				if(Coordinates.inBound(getX(), getY() + 2))
 					moves.add(new Coordinates(getX(), getY() + 2));
