@@ -9,6 +9,7 @@ public class Board {
 	private Piece[][] gameBoard;
 	private Stack<int[][]> moves;
 	private Stack<Piece> deadPiece;
+	private int[] castle;
 	
 	//constructor for the Board object
 	public Board(){
@@ -16,6 +17,9 @@ public class Board {
 		scoreChange = 0;
 		moves = new Stack<int[][]>();
 		deadPiece = new Stack<Piece>();
+		castle = new int[2];
+		castle[0] = -1;
+		castle[1] = -1;
 	};
 	
 	/*
@@ -182,8 +186,14 @@ public class Board {
 					System.out.println("Castling can only be done if there is a rook");
 					valid = false;
 				}
-				else if (gameBoard[fin.getX() + 1][fin.getY()].getType() == PieceType.Rook && (fin.getX() - init.getX()) == 2){
+				else if (gameBoard[fin.getX() + 1][fin.getY()].getType() == PieceType.Rook && (fin.getX() - init.getX()) == 2 && gameBoard[fin.getX() + 1][fin.getY()].isFirstMove()){
 					update(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()), currentPlayer);
+					if(castle[0] != -1){
+						castle[1] = moves.size();
+					}
+					else{
+						castle[0] = moves.size();
+					}
 				}
 			}
 		}
@@ -274,12 +284,20 @@ public class Board {
 	}
 	
 	//un-does the latest move
-	private void undoMove(){
+	public void undoMove(){
 		int[][] move = moves.pop();
 		Piece piece = gameBoard[move[1][0]][move[1][1]];
 		piece.move(new Coordinates(move[0][0], move[0][1]));
 		gameBoard[move[1][0]][move[1][1]] = deadPiece.pop();
 		gameBoard[move[0][0]][move[0][1]] = piece;
+		if(castle[0] == moves.size()){
+			castle[0] = -1;
+			undoMove();
+		}
+		else if(castle[1] == moves.size()){
+			castle[1] = -1;
+			undoMove();
+		}
 	}
 			
 }
