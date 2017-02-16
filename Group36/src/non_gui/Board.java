@@ -139,7 +139,7 @@ public class Board {
 		int[][] curentMove = {{init.getX(), init.getY()}, {fin.getX(), fin.getY()}};
 		moves.add(curentMove);
 		deadPiece.add(gameBoard[fin.getX()][fin.getY()]);
-		gameBoard[init.getX()][init.getY()] = new Empty(init.getX(),init.getY());
+		gameBoard[init.getX()][init.getY()] = new Empty(init.getX(), init.getY());
 		gameBoard[fin.getX()][fin.getY()] = piece;
 		
 		//collision detection needs to adjust scoreChange
@@ -176,6 +176,17 @@ public class Board {
 				valid = false;
 			}
 		}
+		else if (gameBoard[init.getX()][init.getY()].getType() == PieceType.King) {
+			if(Coordinates.inBound(fin.getX() + 1)){
+				if (gameBoard[fin.getX() + 1][fin.getY()].getType() != PieceType.Rook && (fin.getX() - init.getX()) == 2) {
+					System.out.println("Castling can only be done if there is a rook");
+					valid = false;
+				}
+				else if (gameBoard[fin.getX() + 1][fin.getY()].getType() == PieceType.Rook && (fin.getX() - init.getX()) == 2){
+					update(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()), currentPlayer);
+				}
+			}
+		}
 		//if coordinates would cause a piece to skip over another piece then disallow them
 		else if(!collisionDetect(init, fin)) {
 			System.out.println("There's something in the way.");
@@ -198,45 +209,7 @@ public class Board {
 		else if((Math.abs(xDifference) == 1 || Math.abs(yDifference) == 1) && gameBoard[startPos.getX()][startPos.getY()].getType() != PieceType.Pawn){
 			
 		}
-		else if (xDifference == 0) {
-			if (yDifference < 0) {
-				yDifference++;
-			}
-			else if (yDifference > 0) {
-				yDifference--;
-			}
-			while (yDifference != 0) {
-				if (gameBoard[startPos.getX()][startPos.getY() + yDifference].getType() != null) {
-					pathOpen = false;
-				}
-				if (yDifference < 0) {
-					yDifference++;
-				}
-				else if (yDifference > 0) {
-					yDifference--;
-				}
-			}
-		}
-		else if (yDifference == 0) {
-			if (xDifference < 0) {
-				xDifference++;
-			}
-			else if (xDifference > 0) {
-				xDifference--;
-			}
-			while (xDifference != 0) {
-				if (gameBoard[startPos.getX() + xDifference][startPos.getY()].getType() != null) {
-					pathOpen = false;
-				}
-				if (xDifference < 0) {
-					xDifference++;
-				}
-				else if (xDifference > 0) {
-					xDifference--;
-				}
-			}
-		}
-		else {
+		else{ 
 			if (xDifference < 0) {
 				xDifference++;
 			}
@@ -249,25 +222,52 @@ public class Board {
 			else if (yDifference > 0) {
 				yDifference--;
 			}
-			while (xDifference != 0 && yDifference != 0) {
-				if (gameBoard[startPos.getX() + xDifference][startPos.getY() + yDifference].getType() != null) {
-					pathOpen = false;
+			if (xDifference == 0) {
+				while (yDifference != 0) {
+					if (gameBoard[startPos.getX()][startPos.getY() + yDifference].getType() != null) {
+						pathOpen = false;
+					}
+					if (yDifference < 0) {
+						yDifference++;
+					}
+					else if (yDifference > 0) {
+						yDifference--;
+					}
 				}
-				if (xDifference < 0) {
-					xDifference++;
+			}
+			else if (yDifference == 0) {
+				while (xDifference != 0) {
+					if (gameBoard[startPos.getX() + xDifference][startPos.getY()].getType() != null) {
+						pathOpen = false;
+					}
+					if (xDifference < 0) {
+						xDifference++;
+					}
+					else if (xDifference > 0) {
+						xDifference--;
+					}
 				}
-				else if (xDifference > 0) {
-					xDifference--;
-				}
-				if (yDifference < 0) {
-					yDifference++;
-				}
-				else if (yDifference > 0) {
-					yDifference--;
+			}
+			else {
+				while (xDifference != 0 && yDifference != 0) {
+					if (gameBoard[startPos.getX() + xDifference][startPos.getY() + yDifference].getType() != null) {
+						pathOpen = false;
+					}
+					if (xDifference < 0) {
+						xDifference++;
+					}
+					else if (xDifference > 0) {
+						xDifference--;
+					}
+					if (yDifference < 0) {
+						yDifference++;
+					}
+					else if (yDifference > 0) {
+						yDifference--;
+					}
 				}
 			}
 		}
-		
 		
 		
 		return pathOpen;

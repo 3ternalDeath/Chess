@@ -11,6 +11,11 @@ public class King extends Piece {
 		protected void updateMoves() {
 			ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 			
+			if(isFirstMove()){
+				if(Coordinates.inBound(getX() + 2, getY()))
+					moves.add(new Coordinates(getX() + 2, getY()));
+			}
+			
 			if(Coordinates.inBound(getX(), getY() + 1))
 				moves.add(new Coordinates(getX(), getY() + 1));
 			if(Coordinates.inBound(getX(), getY() - 1))

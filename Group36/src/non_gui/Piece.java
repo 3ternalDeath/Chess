@@ -8,6 +8,7 @@ public abstract class Piece {
 	
 	private final PieceType type;
 	private final PieceColor Color;
+	private boolean firstMove;
 	private int x;
 	private int y;
 	protected ArrayList<Coordinates> posMoves;
@@ -18,11 +19,23 @@ public abstract class Piece {
 		this.Color = Color;
 		this.x = x;
 		this.y = y;
+		firstMove = true;
+		updateMoves();
+	}
+	
+	public Piece(int x, int y) {
+		this.type = null;
+		this.Color = null;
+		this.x = x;
+		this.y = y;
+		firstMove = false;
 		updateMoves();
 	}
 
 	//changes x and y values according to parameters
 	public void move(Coordinates newCoor) {
+		if(firstMove)
+			firstMove = false;
 		//moves the piece
 		this.x = newCoor.getX();
 		this.y = newCoor.getY();
@@ -59,9 +72,12 @@ public abstract class Piece {
 	
 	//returns true if move is valid, false otherwise
 	public boolean validMove(Coordinates newCoor){
-		for(int index = 0; index < posMoves.size(); index++){
-			if(newCoor.equals(posMoves.get(index))){
-				return true;
+		if(posMoves != null){
+			
+			for(int index = 0; index < posMoves.size(); index++){
+				if(newCoor.equals(posMoves.get(index))){
+					return true;
+				}
 			}
 		}
 		
@@ -69,5 +85,10 @@ public abstract class Piece {
 	}
 	
 	protected abstract void updateMoves();
+
+	public boolean isFirstMove() {
+		return firstMove;
+	}
+
 	
 }
