@@ -285,18 +285,20 @@ public class Board {
 	
 	//un-does the latest move
 	public void undoMove(){
-		int[][] move = moves.pop();
-		Piece piece = gameBoard[move[1][0]][move[1][1]];
-		piece.move(new Coordinates(move[0][0], move[0][1]));
-		gameBoard[move[1][0]][move[1][1]] = deadPiece.pop();
-		gameBoard[move[0][0]][move[0][1]] = piece;
-		if(castle[0] == moves.size()){
-			castle[0] = -1;
-			undoMove();
-		}
-		else if(castle[1] == moves.size()){
-			castle[1] = -1;
-			undoMove();
+		if(moves.size() >0){
+			int[][] move = moves.pop();
+			Piece piece = gameBoard[move[1][0]][move[1][1]];
+			piece.move(new Coordinates(move[0][0], move[0][1]));
+			gameBoard[move[1][0]][move[1][1]] = deadPiece.pop();
+			gameBoard[move[0][0]][move[0][1]] = piece;
+			if(castle[0] == moves.size()){
+				castle[0] = -1;
+				undoMove();
+			}
+			else if(castle[1] == moves.size()){
+				castle[1] = -1;
+				undoMove();
+			}
 		}
 	}
 			
