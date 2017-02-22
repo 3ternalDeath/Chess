@@ -301,5 +301,59 @@ public class Board {
 			}
 		}
 	}
+	
+	/**
+	 * searches through the board to see if an enemy piece can take the piece at the king location
+	 * @param king is the location being checked for safety
+	 * @param color if the color of friendly pieces, null if unknown
+	 * @return true if piece at king location can be taken next move, false otherwise
+	 */
+	public boolean checkCheck(Coordinates king, PieceColor color){
+		if(color == null)
+			color = gameBoard[king.getX()][king.getY()].getColor();
+
+		for(int x = 0; x < SIZE; x++){
+			for(int y = 0; y < SIZE; y++){
+				
+				//returns true when enemy piece can take the king
+				if(gameBoard[x][y].getColor() != color){
+					if(gameBoard[x][y].validMove(king))						//Separate if statements to save processing power
+						if(collisionDetect(new Coordinates(x, y), king))	//only checks for collision if piece can move there
+							return true;
+				}	
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * checks all places AROUND the king, the king it self still must be checked with checkCheck()
+	 * @param king the position of the king
+	 * @return true if ALL positions king can move to are in enemy sights, false otherwise
+	 */
+	public boolean checkCheckMate(Coordinates king){
+		PieceColor color = gameBoard[king.getX()][king.getY()].getColor();
+		
+		for(int x = -1; x <= 1; x++){
+			for(int y = -1; y <= 1; y++){
+				
+				king.incrementX(x);//changes coords of king based on loop variables
+				king.incrementY(y);
+				
+				//in order for check mate to happen king should not be able to move anywhere without dying 
+				if(Coordinates.inBound(king.getX(), king.getY())){
+					if(!checkCheck(king, color)){
+						return false;
+					}
+				}
+				
+				king.incrementX(x*(-1));//puts king coords back the way they were
+				king.incrementY(y*(-1));
+			}
+		}
+		
+		return true;
+	}
 			
 }

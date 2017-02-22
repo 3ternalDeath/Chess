@@ -28,6 +28,14 @@ public class Coordinates {
 		this.y = y;
 	}
 	
+	public void incrementX(int x){
+		setX(this.x + x);
+	}
+	
+	public void incrementY(int y){
+		setY(this.y + y);
+	}
+	
 	public boolean equals(Coordinates compare){
 		if(compare.getX() == x && compare.getY() == y)
 			return true;
