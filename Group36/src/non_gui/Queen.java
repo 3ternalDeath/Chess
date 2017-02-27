@@ -8,6 +8,9 @@ public class Queen extends Piece{
 		super(PieceType.Queen, Color, x, y);
 	}
 
+	/**
+	 * updates the possible moves list based on the piece type
+	 */
 	protected void updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		

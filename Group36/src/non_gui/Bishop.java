@@ -8,6 +8,9 @@ public class Bishop extends Piece {
 		super(PieceType.Bishop, Color, x, y);
 	}
 
+	/**
+	 * updates the possible moves list based on the piece type
+	 */
 	protected void updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		

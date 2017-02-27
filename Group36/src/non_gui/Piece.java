@@ -32,7 +32,11 @@ public abstract class Piece {
 		updateMoves();
 	}
 
-	//changes x and y values according to parameters
+	/**
+	 * moves piece to newCoor
+	 * no error checking is done, ensure validity of move before calling
+	 * @param newCoor the new coordinates of the piece
+	 */
 	public void move(Coordinates newCoor) {
 		if(firstMove)
 			firstMove = false;
@@ -42,7 +46,9 @@ public abstract class Piece {
 		updateMoves();
 	}
 	
-	//generates and returns a string to represent a piece as long as it is not blank
+	/**
+	 * generates and returns a string to represent a piece as long as it is not blank
+	 */
 	public String toString(){
 		if(getColor() != null && getType() != null)
 			return ((getColor()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
@@ -50,27 +56,44 @@ public abstract class Piece {
 			return ("  ");
 	}
 	
-	//returns the x value
+	/**
+	 * returns the x value
+	 * @return the x value
+	 */
 	public int getX() {
 		return this.x;
 	}
 	
-	//returns the y value
+	/**
+	 * returns the y value
+	 * @return the y value
+	 */
 	public int getY() {
 		return this.y;
 	}
 	
-	//returns the type of piece
+	/**
+	 * returns the type of piece
+	 * @return the piece type
+	 */
 	public PieceType getType() {
 		return this.type;
 	}
 	
-	//returns the Color of piece
+	/**
+	 * returns the color of piece
+	 * @return the piece color
+	 */
 	public PieceColor getColor() {
 		return this.Color;
 	}
 	
-	//returns true if move is valid, false otherwise
+	/**
+	 * checks to see if piece can make move in a void
+	 * further validity checks required
+	 * @param newCoor the coordinates of the destination
+	 * @return true if move can can be made, false otherwise
+	 */
 	public boolean validMove(Coordinates newCoor){
 		if(posMoves != null){
 			
@@ -84,8 +107,15 @@ public abstract class Piece {
 		return false;
 	}
 	
+	/**
+	 * updates the possible moves list based on the piece type
+	 */
 	protected abstract void updateMoves();
 
+	/**
+	 * returns if first move
+	 * @return boolean based on if it is first move
+	 */
 	public boolean isFirstMove() {
 		return firstMove;
 	}

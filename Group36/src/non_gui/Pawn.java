@@ -8,7 +8,9 @@ public class Pawn extends Piece {
 		super(PieceType.Pawn, Color, x, y);
 	}
 
-	
+	/**
+	 * updates the possible moves list based on the piece type
+	 */
 	protected void updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		

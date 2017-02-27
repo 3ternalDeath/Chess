@@ -2,6 +2,7 @@ package non_gui;
 
 import java.util.Stack;
 
+
 public class Board {
 	
 	private static final int SIZE = 8;
@@ -22,7 +23,7 @@ public class Board {
 		castle[1] = -1;
 	};
 	
-	/*
+	/**
 	 * populates game board with all necessary pieces, in the standard arrangement
 	 */
 	public void populateBoard(){
@@ -70,6 +71,9 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * prints out the current state of the board on the console
+	 */
 	public void display() {
 		//Labeling top horizontal axis
 		System.out.println();
@@ -132,7 +136,15 @@ public class Board {
 		return tempScoreChange;
 	}
 	
-	public void update(Coordinates init, Coordinates fin, Player currentPlayer) {
+	
+	/**
+	 * moves piece from init to fin
+	 * does not check for valid movement
+	 * only call update after movement has been error-checked
+	 * @param init the coordinates of the piece that is moving
+	 * @param fin  the coordinates of the place piece moving to
+	 */
+	public void update(Coordinates init, Coordinates fin) {
 		System.out.println("Selected Piece:" + gameBoard[init.getX()][init.getY()].getType());
 		System.out.println("Piece Color: " + gameBoard[init.getX()][init.getY()].getColor());
 
@@ -174,20 +186,24 @@ public class Board {
 			valid = false;
 		
 		}
+		//if piece is pawn
 		else if (gameBoard[init.getX()][init.getY()].getType() == PieceType.Pawn) {
+			//diagonal movement for pawn, 
 			if (gameBoard[fin.getX()][fin.getY()].getType() == null && Math.abs(fin.getX() - init.getX()) == 1) {
 				System.out.println("The pawn can only kill like that.");
 				valid = false;
 			}
 		}
+		//if piece is king
 		else if (gameBoard[init.getX()][init.getY()].getType() == PieceType.King) {
+			//checks for castling
 			if(Coordinates.inBound(fin.getX() + 1)){
 				if (gameBoard[fin.getX() + 1][fin.getY()].getType() != PieceType.Rook && (fin.getX() - init.getX()) == 2) {
 					System.out.println("Castling can only be done if there is a rook");
 					valid = false;
 				}
 				else if (gameBoard[fin.getX() + 1][fin.getY()].getType() == PieceType.Rook && (fin.getX() - init.getX()) == 2 && gameBoard[fin.getX() + 1][fin.getY()].isFirstMove()){
-					update(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()), currentPlayer);
+					update(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()));
 					if(castle[0] != -1){
 						castle[1] = moves.size();
 					}
@@ -283,14 +299,19 @@ public class Board {
 		return pathOpen;
 	}
 	
-	//un-does the latest move
+	/**
+	 * undoes the latest move
+	 */
 	public void undoMove(){
-		if(moves.size() >0){
+		if(moves.size() >0){//moves not empty
 			int[][] move = moves.pop();
 			Piece piece = gameBoard[move[1][0]][move[1][1]];
+			
+			//the undoing of the move
 			piece.move(new Coordinates(move[0][0], move[0][1]));
 			gameBoard[move[1][0]][move[1][1]] = deadPiece.pop();
 			gameBoard[move[0][0]][move[0][1]] = piece;
+			
 			if(castle[0] == moves.size()){
 				castle[0] = -1;
 				undoMove();

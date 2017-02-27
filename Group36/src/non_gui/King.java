@@ -7,7 +7,10 @@ public class King extends Piece {
 		public King(PieceColor Color, int x, int y){
 			super(PieceType.King, Color, x, y);
 		}
-
+		
+		/**
+		 * updates the possible moves list based on the piece type
+		 */
 		protected void updateMoves() {
 			ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 			

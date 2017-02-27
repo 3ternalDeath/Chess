@@ -32,7 +32,7 @@ public class Player {
 			// Checks valid movement
 			validMove = gameBoard.validMovement(init, fin, this);
 			if (validMove) {
-				gameBoard.update(init, fin, this);
+				gameBoard.update(init, fin);
 			}
 		} while(!validMove);
 	}
