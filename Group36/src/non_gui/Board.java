@@ -130,11 +130,6 @@ public class Board {
 		System.out.println();
 	}
 	
-	public int pushScoreChange() {
-		int tempScoreChange = scoreChange;
-		scoreChange = 0;
-		return tempScoreChange;
-	}
 	
 	
 	/**

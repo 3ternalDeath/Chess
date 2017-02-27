@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 public class Queen extends Piece{
 	
+	/**
+	 * initialize a queen
+	 * @param Color the color of the queen
+	 * @param x the x position of the queen
+	 * @param y the y position of the queen
+	 */
 	public Queen(PieceColor Color, int x, int y){
 		super(PieceType.Queen, Color, x, y);
 	}

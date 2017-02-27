@@ -4,23 +4,13 @@ import java.util.Scanner;
 
 public class Player {
 	private PieceColor Color;
-	private int score;
 	 public static Scanner input = new Scanner(System.in);
 	public Player(PieceColor Color, int score) {
 		this.Color = Color;
-		this.score = score;
 	}
 	
 	public PieceColor getColor() {
 		return Color;
-	}
-	
-	public int getScore() {
-		return score;
-	}
-	
-	public void adjustScore(int adjustment) {
-		score += adjustment;
 	}
 	
 	public void makeMove(Board gameBoard) {

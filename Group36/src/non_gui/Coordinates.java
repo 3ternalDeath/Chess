@@ -6,24 +6,42 @@ public class Coordinates {
 	private int y;
 	private final static int SIZE = 8;
 
-	//Constructor
+	/**
+	 * constructor for coordinates
+	 * @param x the x value of coordinates
+	 * @param y the y value of coordinates
+	 */
 	public Coordinates(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
 	
-	//Getters
+	/**
+	 * returns the x value
+	 * @return x
+	 */
 	public int getX(){
 		return this.x;
 	}
+	/**
+	 * returns the y value
+	 * @return y
+	 */
 	public int getY(){
 		return this.y;
 	}
 
-	//Setters
+	/**
+	 * gives a new value to x
+	 * @param x the new x value
+	 */
 	public void setX(int x){
 		this.x = x;
 	}
+	/**
+	 * gives a new value to y
+	 * @param y the new y value
+	 */
 	public void setY(int y){
 		this.y = y;
 	}

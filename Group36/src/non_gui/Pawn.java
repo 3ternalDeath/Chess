@@ -3,7 +3,13 @@ package non_gui;
 import java.util.ArrayList;
 
 public class Pawn extends Piece {
-
+	
+	/**
+	 * initialize a pawn
+	 * @param Color the color of the pawn
+	 * @param x the x position of the pawn
+	 * @param y the y position of the pawn
+	 */
 	public Pawn(PieceColor Color, int x, int y){
 		super(PieceType.Pawn, Color, x, y);
 	}

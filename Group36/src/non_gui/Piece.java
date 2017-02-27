@@ -13,7 +13,13 @@ public abstract class Piece {
 	private int y;
 	protected ArrayList<Coordinates> posMoves;
 	
-	//Constructor
+	/**
+	 * initialize a piece
+	 * @param type the type of the piece
+	 * @param Color the color of the piece
+	 * @param x the x position of the piece
+	 * @param y the y position of the piece
+	 */
 	public Piece(PieceType type, PieceColor Color, int x, int y) {
 		this.type = type;
 		this.Color = Color;
@@ -23,6 +29,11 @@ public abstract class Piece {
 		updateMoves();
 	}
 	
+	/**
+	 * initialize a piece with no type or color
+	 * @param x the x position of the piece
+	 * @param y the y position of the piece
+	 */
 	public Piece(int x, int y) {
 		this.type = null;
 		this.Color = null;

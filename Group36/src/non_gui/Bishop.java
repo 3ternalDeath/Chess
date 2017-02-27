@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 public class Bishop extends Piece {
 
+	/**
+	 * initialize a bishop
+	 * @param Color the color of the bishop
+	 * @param x the x position of the bishop
+	 * @param y the y position of the bishop
+	 */
 	public Bishop(PieceColor Color, int x, int y){
 		super(PieceType.Bishop, Color, x, y);
 	}

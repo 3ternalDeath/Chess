@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 public class Knight extends Piece {
 
+	/**
+	 * initialize a knight
+	 * @param Color the color of the knight
+	 * @param x the x position of the knight
+	 * @param y the y position of the knight
+	 */
 	public Knight(PieceColor Color, int x, int y){
 		super(PieceType.Night, Color, x, y);
 	}

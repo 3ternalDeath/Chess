@@ -17,18 +17,14 @@ public class Main {
 		//displays board then updates board according to user input
 		boolean running = true;
 		while (running) {
-			System.out.println("P1 Score: " + p1.getScore());
-			System.out.println("P2 Score: " + p2.getScore());
 			board.display();
 			if (currentTurn % 2 == 1) {
 				System.out.println(p1.getColor());
 				p1.makeMove(board);
-				p1.adjustScore(board.pushScoreChange());
 			}
 			else {
 				System.out.println(p2.getColor());
 				p2.makeMove(board);
-				p2.adjustScore(board.pushScoreChange());
 			}
 			currentTurn++;
 		}
