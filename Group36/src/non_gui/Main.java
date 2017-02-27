@@ -15,8 +15,8 @@ public class Main {
 		board.populateBoard();
 		
 		//displays board then updates board according to user input
-		boolean running = true;
-		while (running) {
+
+		while (!board.blackLose() && !board.whiteLose()) {
 			board.display();
 			if (currentTurn % 2 == 1) {
 				System.out.println(p1.getColor());
@@ -27,6 +27,12 @@ public class Main {
 				p2.makeMove(board);
 			}
 			currentTurn++;
+		}
+		if(board.blackLose()){
+			System.out.println("White has won, Black has lost");
+		}
+		else if(board.whiteLose()){
+			System.out.println("Black has won, White has lost");
 		}
 	}
 }

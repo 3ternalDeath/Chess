@@ -22,7 +22,7 @@ public class Player {
 			// Checks valid movement
 			validMove = gameBoard.validMovement(init, fin, this);
 			if (validMove) {
-				gameBoard.update(init, fin);
+				gameBoard.update(init, fin, this);
 			}
 		} while(!validMove);
 	}

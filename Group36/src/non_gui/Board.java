@@ -11,6 +11,8 @@ public class Board {
 	private Stack<int[][]> moves;
 	private Stack<Piece> deadPiece;
 	private int[] castle;
+	private boolean whiteCheck, blackCheck, whiteMate, blackMate;
+	private Coordinates whiteKing, blackKing;
 	
 	//constructor for the Board object
 	public Board(){
@@ -21,6 +23,10 @@ public class Board {
 		castle = new int[2];
 		castle[0] = -1;
 		castle[1] = -1;
+		whiteCheck = false;
+		blackCheck = false;
+		whiteMate = false;
+		blackMate = false;
 	};
 	
 	/**
@@ -33,6 +39,7 @@ public class Board {
 		gameBoard[2][7] = 	new Bishop(	PieceColor.Black, 2, 7);
 		gameBoard[3][7] = 	new Queen( 	PieceColor.Black, 3, 7);
 		gameBoard[4][7] =	new King( 	PieceColor.Black, 4, 7);
+		blackKing = new Coordinates(4, 7);
 		gameBoard[5][7] = 	new Bishop(	PieceColor.Black, 5, 7);
 		gameBoard[6][7] = 	new Knight( PieceColor.Black, 6, 7);
 		gameBoard[7][7] = 	new Rook( 	PieceColor.Black, 7, 7);
@@ -51,6 +58,7 @@ public class Board {
 		gameBoard[2][0] = 	new Bishop( PieceColor.White, 2, 0);
 		gameBoard[3][0] = 	new Queen( 	PieceColor.White, 3, 0);
 		gameBoard[4][0] = 	new King( 	PieceColor.White, 4, 0);
+		whiteKing = new Coordinates(4, 0);
 		gameBoard[5][0] = 	new Bishop( PieceColor.White, 5, 0);
 		gameBoard[6][0] = 	new Knight( PieceColor.White, 6, 0);
 		gameBoard[7][0] = 	new Rook( 	PieceColor.White, 7, 0);
@@ -139,7 +147,7 @@ public class Board {
 	 * @param init the coordinates of the piece that is moving
 	 * @param fin  the coordinates of the place piece moving to
 	 */
-	public void update(Coordinates init, Coordinates fin) {
+	public void update(Coordinates init, Coordinates fin, Player currentPlayer) {
 		System.out.println("Selected Piece:" + gameBoard[init.getX()][init.getY()].getType());
 		System.out.println("Piece Color: " + gameBoard[init.getX()][init.getY()].getColor());
 
@@ -153,6 +161,7 @@ public class Board {
 		gameBoard[init.getX()][init.getY()] = new Empty(init.getX(), init.getY());
 		gameBoard[fin.getX()][fin.getY()] = piece;
 		
+		updateCheckMate(currentPlayer);
 		//collision detection needs to adjust scoreChange
 	}
 	
@@ -193,12 +202,16 @@ public class Board {
 		else if (gameBoard[init.getX()][init.getY()].getType() == PieceType.King) {
 			//checks for castling
 			if(Coordinates.inBound(fin.getX() + 1)){
-				if (gameBoard[fin.getX() + 1][fin.getY()].getType() != PieceType.Rook && (fin.getX() - init.getX()) == 2) {
+				if(checkCheck(fin, gameBoard[init.getX()][init.getY()].getColor())){
+					System.out.println("Moving into check not posible");
+					valid = false;
+				}
+				else if (gameBoard[fin.getX() + 1][fin.getY()].getType() != PieceType.Rook && (fin.getX() - init.getX()) == 2) {
 					System.out.println("Castling can only be done if there is a rook");
 					valid = false;
 				}
 				else if (gameBoard[fin.getX() + 1][fin.getY()].getType() == PieceType.Rook && (fin.getX() - init.getX()) == 2 && gameBoard[fin.getX() + 1][fin.getY()].isFirstMove()){
-					update(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()));
+					update(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()), currentPlayer);
 					if(castle[0] != -1){
 						castle[1] = moves.size();
 					}
@@ -206,6 +219,27 @@ public class Board {
 						castle[0] = moves.size();
 					}
 				}
+				if(valid){
+					if(currentPlayer.getColor() == PieceColor.Black){
+						blackKing = fin;
+					}
+					else if(currentPlayer.getColor() == PieceColor.White){
+						whiteKing = fin;
+					}
+				}
+			}
+		}
+		//rudimentry move king out of check enforcement MUST BE EDITED LATER
+		else if(currentPlayer.getColor() == PieceColor.Black){
+			if(blackCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){			//ADD TO ALLOW FOR BLOCKING
+				System.out.println("You are in Check, please move King out of check");
+				valid = false;
+			}
+		}
+		else if(currentPlayer.getColor() == PieceColor.White){
+			if(whiteCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){
+				System.out.println("You are in Check, please move King out of check");
+				valid = false;
 			}
 		}
 		//if coordinates would cause a piece to skip over another piece then disallow them
@@ -348,28 +382,71 @@ public class Board {
 	 * @param king the position of the king
 	 * @return true if ALL positions king can move to are in enemy sights, false otherwise
 	 */
-	public boolean checkCheckMate(Coordinates king){
+	public boolean checkCheckMate(Coordinates king, Player currentPlayer){
 		PieceColor color = gameBoard[king.getX()][king.getY()].getColor();
+		Coordinates check = new Coordinates(king.getX(), king.getY());
 		
 		for(int x = -1; x <= 1; x++){
 			for(int y = -1; y <= 1; y++){
 				
-				king.incrementX(x);//changes coords of king based on loop variables
-				king.incrementY(y);
+				check.incrementX(x);//changes coords of check based on loop variables
+				check.incrementY(y);
 				
 				//in order for check mate to happen king should not be able to move anywhere without dying 
 				if(Coordinates.inBound(king.getX(), king.getY())){
-					if(!checkCheck(king, color)){
-						return false;
+					if(gameBoard[check.getX()][check.getY()].getType() == null){
+						if(!checkCheck(king, color)){
+							return false;
+						}
 					}
 				}
 				
-				king.incrementX(x*(-1));//puts king coords back the way they were
-				king.incrementY(y*(-1));
+				check.incrementX(x*(-1));//puts check coords back the way they were
+				check.incrementY(y*(-1));
 			}
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * updates the state of checks and checkmates
+	 * @param color the color of checks and mates being updated
+	 */
+	private void updateCheckMate(Player currentPlayer){
+		if(checkCheck(blackKing, null)){
+			blackCheck = true;
+				
+			if(checkCheckMate(blackKing, currentPlayer))
+				blackMate = true;
+			else
+				blackMate = false;
+		}
+		else{
+			blackCheck = false;
+			blackMate = false;
+		}
+			
+		if(checkCheck(whiteKing, null)){
+			whiteCheck = true;
+				
+			if(checkCheckMate(whiteKing, currentPlayer))
+				whiteMate = true;
+			else
+				whiteMate = false;
+		}
+		else{
+			whiteCheck = false;
+			whiteMate = false;
+		}
+	}
+	
+	public boolean blackLose(){
+		return blackMate;
+	}
+	
+	public boolean whiteLose(){
+		return whiteMate;
 	}
 			
 }
