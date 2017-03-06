@@ -46,14 +46,24 @@ public class Coordinates {
 		this.y = y;
 	}
 	
+	/**
+	 * @param x
+	 */
 	public void incrementX(int x){
 		setX(this.x + x);
 	}
 	
+	/**
+	 * @param y
+	 */
 	public void incrementY(int y){
 		setY(this.y + y);
 	}
 	
+	/**
+	 * @param compare
+	 * @return
+	 */
 	public boolean equals(Coordinates compare){
 		if(compare.getX() == x && compare.getY() == y)
 			return true;
@@ -61,18 +71,32 @@ public class Coordinates {
 			return false;
 	}
 	
+	/**
+	 * @param x
+	 * @return
+	 */
 	public static boolean inBound(int x){
 		if(x < 0 || x >= SIZE)
 			return false;
 		else
 			return true;
 	}
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public static boolean inBound(int x, int y){
 		if(x < 0 || x >= SIZE || y < 0 || y >= SIZE)
 			return false;
 		else
 			return true;
 	}
+	/**
+	 * @param letter
+	 * @param number
+	 * @return
+	 */
 	public static boolean inBoundPlus(char letter, char number) {
 		boolean valid = true;
 

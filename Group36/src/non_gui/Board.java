@@ -72,7 +72,7 @@ public class Board {
 		gameBoard[7][1] = 	new Pawn( 	PieceColor.White, 7, 1);
 		
 		//Fill the rest of the board with blank pieces
-		for (int y = SIZE - 3; y > 1; y--) {
+		for (int y = 2; y < SIZE -2; y++) {
 			for (int x = 0; x < SIZE; x++) {
 				gameBoard[x][y] = new Empty(x, y);
 			}
@@ -393,7 +393,7 @@ public class Board {
 				check.incrementY(y);
 				
 				//in order for check mate to happen king should not be able to move anywhere without dying 
-				if(Coordinates.inBound(king.getX(), king.getY())){
+				if(Coordinates.inBound(check.getX(), check.getY())){
 					if(gameBoard[check.getX()][check.getY()].getType() == null){
 						if(!checkCheck(king, color)){
 							return false;

@@ -28,6 +28,7 @@ public class Main {
 			}
 			currentTurn++;
 		}
+		board.display();
 		if(board.blackLose()){
 			System.out.println("White has won, Black has lost");
 		}
