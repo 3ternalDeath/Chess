@@ -33,13 +33,13 @@ public class Board {
 	public void populateBoard(){
 		//Black pieces at top of board
 		gameBoard[0][7] = 	new Rook( 	PieceColor.Black, 0, 7);
-		gameBoard[1][7] = 	new Knight( PieceColor.Black, 1, 7);
+		gameBoard[1][7] = 	new Night( PieceColor.Black, 1, 7);
 		gameBoard[2][7] = 	new Bishop(	PieceColor.Black, 2, 7);
 		gameBoard[3][7] = 	new Queen( 	PieceColor.Black, 3, 7);
 		gameBoard[4][7] =	new King( 	PieceColor.Black, 4, 7);
 		blackKing = new Coordinates(4, 7);
 		gameBoard[5][7] = 	new Bishop(	PieceColor.Black, 5, 7);
-		gameBoard[6][7] = 	new Knight( PieceColor.Black, 6, 7);
+		gameBoard[6][7] = 	new Night( PieceColor.Black, 6, 7);
 		gameBoard[7][7] = 	new Rook( 	PieceColor.Black, 7, 7);
 		gameBoard[0][6] = 	new Pawn( 	PieceColor.Black, 0, 6);
 		gameBoard[1][6] = 	new Pawn( 	PieceColor.Black, 1, 6);
@@ -52,13 +52,13 @@ public class Board {
 		
 		//White pieces at bottom of board
 		gameBoard[0][0] = 	new Rook( 	PieceColor.White, 0, 0);
-		gameBoard[1][0] = 	new Knight( PieceColor.White, 1, 0);
+		gameBoard[1][0] = 	new Night( PieceColor.White, 1, 0);
 		gameBoard[2][0] = 	new Bishop( PieceColor.White, 2, 0);
 		gameBoard[3][0] = 	new Queen( 	PieceColor.White, 3, 0);
 		gameBoard[4][0] = 	new King( 	PieceColor.White, 4, 0);
 		whiteKing = new Coordinates(4, 0);
 		gameBoard[5][0] = 	new Bishop( PieceColor.White, 5, 0);
-		gameBoard[6][0] = 	new Knight( PieceColor.White, 6, 0);
+		gameBoard[6][0] = 	new Night( PieceColor.White, 6, 0);
 		gameBoard[7][0] = 	new Rook( 	PieceColor.White, 7, 0);
 		gameBoard[0][1] = 	new Pawn( 	PieceColor.White, 0, 1);
 		gameBoard[1][1] = 	new Pawn( 	PieceColor.White, 1, 1);

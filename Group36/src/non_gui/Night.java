@@ -2,7 +2,7 @@ package non_gui;
 
 import java.util.ArrayList;
 
-public class Knight extends Piece {
+public class Night extends Piece {
 
 	/**
 	 * initialize a knight
@@ -10,7 +10,7 @@ public class Knight extends Piece {
 	 * @param x the x position of the knight
 	 * @param y the y position of the knight
 	 */
-	public Knight(PieceColor Color, int x, int y){
+	public Night(PieceColor Color, int x, int y){
 		super(PieceType.Night, Color, x, y);
 	}
 
