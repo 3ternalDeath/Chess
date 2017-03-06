@@ -17,7 +17,7 @@ public class King extends Piece {
 	/**
 	 * updates the possible moves list based on the piece type
 	 */
-	protected void updateMoves() {
+	public ArrayList<Coordinates> updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 			
 		if(isFirstMove()){
@@ -44,7 +44,7 @@ public class King extends Piece {
 		if(Coordinates.inBound(getX() - 1, getY() - 1))
 			moves.add(new Coordinates(getX() - 1, getY() - 1));
 			
-		posMoves = moves;
+		return moves;
 			
 		}
 }

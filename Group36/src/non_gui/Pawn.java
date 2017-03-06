@@ -17,7 +17,7 @@ public class Pawn extends Piece {
 	/**
 	 * updates the possible moves list based on the piece type
 	 */
-	protected void updateMoves() {
+	public ArrayList<Coordinates> updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
 		if(this.getColor() == PieceColor.White) {
@@ -47,7 +47,7 @@ public class Pawn extends Piece {
 				moves.add(new Coordinates(getX() - 1, getY() - 1));
 		}
 		
-		posMoves = moves;
+		return moves;
 	}
 
 }

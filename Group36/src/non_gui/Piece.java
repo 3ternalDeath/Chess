@@ -2,27 +2,25 @@ package non_gui;
 
 import java.util.ArrayList;
 
-import javax.swing.plaf.synth.SynthSplitPaneUI;
-
 public abstract class Piece {
 	
 	private final PieceType type;
-	private final PieceColor Color;
+	private final PieceColor color;
 	private boolean firstMove;
 	private int x;
 	private int y;
-	protected ArrayList<Coordinates> posMoves;
+	private ArrayList<Coordinates> posMoves;
 	
 	/**
 	 * initialize a piece
 	 * @param type the type of the piece
-	 * @param Color the color of the piece
+	 * @param color the color of the piece
 	 * @param x the x position of the piece
 	 * @param y the y position of the piece
 	 */
-	public Piece(PieceType type, PieceColor Color, int x, int y) {
+	public Piece(PieceType type, PieceColor color, int x, int y) {
 		this.type = type;
-		this.Color = Color;
+		this.color = color;
 		this.x = x;
 		this.y = y;
 		firstMove = true;
@@ -35,12 +33,11 @@ public abstract class Piece {
 	 * @param y the y position of the piece
 	 */
 	public Piece(int x, int y) {
-		this.type = null;
-		this.Color = null;
+		type = null;
+		color = null;
 		this.x = x;
 		this.y = y;
 		firstMove = false;
-		updateMoves();
 	}
 
 	/**
@@ -52,9 +49,8 @@ public abstract class Piece {
 		if(firstMove)
 			firstMove = false;
 		//moves the piece
-		this.x = newCoor.getX();
-		this.y = newCoor.getY();
-		updateMoves();
+		x = newCoor.getX();
+		y = newCoor.getY();
 	}
 	
 	/**
@@ -72,7 +68,7 @@ public abstract class Piece {
 	 * @return the x value
 	 */
 	public int getX() {
-		return this.x;
+		return x;
 	}
 	
 	/**
@@ -80,7 +76,7 @@ public abstract class Piece {
 	 * @return the y value
 	 */
 	public int getY() {
-		return this.y;
+		return y;
 	}
 	
 	/**
@@ -88,7 +84,7 @@ public abstract class Piece {
 	 * @return the piece type
 	 */
 	public PieceType getType() {
-		return this.type;
+		return type;
 	}
 	
 	/**
@@ -96,7 +92,7 @@ public abstract class Piece {
 	 * @return the piece color
 	 */
 	public PieceColor getColor() {
-		return this.Color;
+		return color;
 	}
 	
 	/**
@@ -106,6 +102,9 @@ public abstract class Piece {
 	 * @return true if move can can be made, false otherwise
 	 */
 	public boolean validMove(Coordinates newCoor){
+		
+		posMoves = updateMoves();
+		
 		if(posMoves != null){
 			
 			for(int index = 0; index < posMoves.size(); index++){
@@ -120,9 +119,10 @@ public abstract class Piece {
 	
 	/**
 	 * updates the possible moves list based on the piece type
+	 * @return TODO
 	 */
-	protected abstract void updateMoves();
-
+	public abstract ArrayList<Coordinates> updateMoves();
+	
 	/**
 	 * returns if first move
 	 * @return boolean based on if it is first move

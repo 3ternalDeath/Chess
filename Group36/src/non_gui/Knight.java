@@ -17,7 +17,7 @@ public class Knight extends Piece {
 	/**
 	 * updates the possible moves list based on the piece type
 	 */
-	protected void updateMoves() {
+	public ArrayList<Coordinates> updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
 		if(Coordinates.inBound(getX() + 2, getY() + 1))
@@ -40,7 +40,8 @@ public class Knight extends Piece {
 		if(Coordinates.inBound(getX() - 1, getY() - 2))
 			moves.add(new Coordinates(getX() - 1, getY() - 2));
 		
-		posMoves = moves;
+		return moves;
+
 	}
 
 }

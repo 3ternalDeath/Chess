@@ -17,7 +17,7 @@ public class Rook extends Piece {
 	/**
 	 * updates the possible moves list
 	 */
-	protected void updateMoves() {
+	public ArrayList<Coordinates> updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
 		for(int x = getX()+1; Coordinates.inBound(x); x++){
@@ -32,7 +32,7 @@ public class Rook extends Piece {
 		for(int y = getX()-1; Coordinates.inBound(y); y--){
 			moves.add(new Coordinates(getX(), y));
 		}
-		posMoves = moves;
+		return moves;
 	}
 
 }

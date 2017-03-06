@@ -6,7 +6,6 @@ import java.util.Stack;
 public class Board {
 	
 	private static final int SIZE = 8;
-	private int scoreChange;
 	private Piece[][] gameBoard;
 	private Stack<int[][]> moves;
 	private Stack<Piece> deadPiece;
@@ -17,7 +16,6 @@ public class Board {
 	//constructor for the Board object
 	public Board(){
 		gameBoard = new Piece[SIZE][SIZE];
-		scoreChange = 0;
 		moves = new Stack<int[][]>();
 		deadPiece = new Stack<Piece>();
 		castle = new int[2];
@@ -147,7 +145,7 @@ public class Board {
 	 * @param init the coordinates of the piece that is moving
 	 * @param fin  the coordinates of the place piece moving to
 	 */
-	public void update(Coordinates init, Coordinates fin, Player currentPlayer) {
+	public void update(Coordinates init, Coordinates fin, PieceColor color) {
 		System.out.println("Selected Piece:" + gameBoard[init.getX()][init.getY()].getType());
 		System.out.println("Piece Color: " + gameBoard[init.getX()][init.getY()].getColor());
 
@@ -155,17 +153,17 @@ public class Board {
 		//add move to the moves Stack
 		Piece piece = gameBoard[init.getX()][init.getY()];
 		piece.move(fin);
-		int[][] curentMove = {{init.getX(), init.getY()}, {fin.getX(), fin.getY()}};
-		moves.add(curentMove);
+		int[][] currentMove = {{init.getX(), init.getY()}, {fin.getX(), fin.getY()}};
+		moves.add(currentMove);
 		deadPiece.add(gameBoard[fin.getX()][fin.getY()]);
 		gameBoard[init.getX()][init.getY()] = new Empty(init.getX(), init.getY());
 		gameBoard[fin.getX()][fin.getY()] = piece;
 		
-		updateCheckMate(currentPlayer);
+		updateCheckMate(color);
 		//collision detection needs to adjust scoreChange
 	}
 	
-	public boolean validMovement(Coordinates init, Coordinates fin, Player currentPlayer) {
+	public boolean validMovement(Coordinates init, Coordinates fin, PieceColor color) {
 		// Default return
 		boolean valid = true;
 		
@@ -175,8 +173,8 @@ public class Board {
 			valid = false;
 		}
 		//if coordinates point to the other player's pieces then disallow them
-		else if(gameBoard[init.getX()][init.getY()].getColor() != currentPlayer.getColor()) {
-			System.out.println("Selecting opponent's piece. Your color is " + currentPlayer.getColor() + ".");
+		else if(gameBoard[init.getX()][init.getY()].getColor() != color) {
+			System.out.println("Selecting opponent's piece. Your color is " + color + ".");
 			valid = false;
 		}
 		//if coordinates point to a piece the current player owns then disallow them
@@ -211,7 +209,7 @@ public class Board {
 					valid = false;
 				}
 				else if (gameBoard[fin.getX() + 1][fin.getY()].getType() == PieceType.Rook && (fin.getX() - init.getX()) == 2 && gameBoard[fin.getX() + 1][fin.getY()].isFirstMove()){
-					update(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()), currentPlayer);
+					update(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()), color);
 					if(castle[0] != -1){
 						castle[1] = moves.size();
 					}
@@ -220,23 +218,23 @@ public class Board {
 					}
 				}
 				if(valid){
-					if(currentPlayer.getColor() == PieceColor.Black){
+					if(color == PieceColor.Black){
 						blackKing = fin;
 					}
-					else if(currentPlayer.getColor() == PieceColor.White){
+					else if(color == PieceColor.White){
 						whiteKing = fin;
 					}
 				}
 			}
 		}
 		//rudimentry move king out of check enforcement MUST BE EDITED LATER
-		else if(currentPlayer.getColor() == PieceColor.Black){
+		else if(color == PieceColor.Black){
 			if(blackCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){			//ADD TO ALLOW FOR BLOCKING
 				System.out.println("You are in Check, please move King out of check");
 				valid = false;
 			}
 		}
-		else if(currentPlayer.getColor() == PieceColor.White){
+		else if(color == PieceColor.White){
 			if(whiteCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){
 				System.out.println("You are in Check, please move King out of check");
 				valid = false;
@@ -382,7 +380,7 @@ public class Board {
 	 * @param king the position of the king
 	 * @return true if ALL positions king can move to are in enemy sights, false otherwise
 	 */
-	public boolean checkCheckMate(Coordinates king, Player currentPlayer){
+	public boolean checkCheckMate(Coordinates king){
 		PieceColor color = gameBoard[king.getX()][king.getY()].getColor();
 		Coordinates check = new Coordinates(king.getX(), king.getY());
 		
@@ -413,11 +411,11 @@ public class Board {
 	 * updates the state of checks and checkmates
 	 * @param color the color of checks and mates being updated
 	 */
-	private void updateCheckMate(Player currentPlayer){
+	private void updateCheckMate(PieceColor color){
 		if(checkCheck(blackKing, null)){
 			blackCheck = true;
 				
-			if(checkCheckMate(blackKing, currentPlayer))
+			if(checkCheckMate(blackKing))
 				blackMate = true;
 			else
 				blackMate = false;
@@ -430,7 +428,7 @@ public class Board {
 		if(checkCheck(whiteKing, null)){
 			whiteCheck = true;
 				
-			if(checkCheckMate(whiteKing, currentPlayer))
+			if(checkCheckMate(whiteKing))
 				whiteMate = true;
 			else
 				whiteMate = false;

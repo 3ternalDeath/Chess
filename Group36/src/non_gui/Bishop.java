@@ -17,7 +17,7 @@ public class Bishop extends Piece {
 	/**
 	 * updates the possible moves list based on the piece type
 	 */
-	protected void updateMoves() {
+	public ArrayList<Coordinates> updateMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
 		for(int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++){
@@ -33,7 +33,7 @@ public class Bishop extends Piece {
 			moves.add(new Coordinates(getX() - h, getY() - h));
 		}
 		
-		posMoves = moves;
+		return moves;
 	}
 
 }

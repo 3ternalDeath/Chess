@@ -3,14 +3,14 @@ package non_gui;
 import java.util.Scanner;
 
 public class Player {
-	private PieceColor Color;
+	private PieceColor color;
 	 public static Scanner input = new Scanner(System.in);
-	public Player(PieceColor Color, int score) {
-		this.Color = Color;
+	public Player(PieceColor color, int score) {
+		this.color = color;
 	}
 	
 	public PieceColor getColor() {
-		return Color;
+		return color;
 	}
 	
 	public void makeMove(Board gameBoard) {
@@ -20,9 +20,9 @@ public class Player {
 			Coordinates fin = getInput("Final", gameBoard);
 		
 			// Checks valid movement
-			validMove = gameBoard.validMovement(init, fin, this);
+			validMove = gameBoard.validMovement(init, fin, color);
 			if (validMove) {
-				gameBoard.update(init, fin, this);
+				gameBoard.update(init, fin, color);
 			}
 		} while(!validMove);
 	}

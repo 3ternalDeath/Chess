@@ -1,5 +1,7 @@
 package non_gui;
 
+import java.util.ArrayList;
+
 public class Empty extends Piece {
 
 	/**
@@ -11,8 +13,9 @@ public class Empty extends Piece {
 		super(x, y);
 	}
 
-	protected void updateMoves() {
-		
+	public ArrayList<Coordinates> updateMoves() {
+		return null;
+
 	}
 
 }
