@@ -1,5 +1,7 @@
 package non_gui;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Stack;
 
 
@@ -25,7 +27,19 @@ public class Board {
 		blackCheck = false;
 		whiteMate = false;
 		blackMate = false;
-	};
+	}
+	
+	public Board(Board board){
+		this();
+		for(int x = 0; x < SIZE; x++){
+			for(int y = 0; y < SIZE; y++){
+				gameBoard[x][y] = board.getPiece(x, y);
+			}
+		}
+		whiteKing = board.getWhiteKingLoco();
+		blackKing = board.getBlackKingLoco();
+		
+	}
 	
 	/**
 	 * populates game board with all necessary pieces, in the standard arrangement
@@ -159,8 +173,7 @@ public class Board {
 		gameBoard[init.getX()][init.getY()] = new Empty(init.getX(), init.getY());
 		gameBoard[fin.getX()][fin.getY()] = piece;
 		
-		updateCheckMate(color);
-		//collision detection needs to adjust scoreChange
+		updateCheckMate();
 	}
 	
 	public boolean validMovement(Coordinates init, Coordinates fin, PieceColor color) {
@@ -217,6 +230,10 @@ public class Board {
 						castle[0] = moves.size();
 					}
 				}
+				else if(!checkNextMoveCheck(init, fin, color)){
+					System.out.println("You cannot move King into check");
+					valid = false;
+				}
 				if(valid){
 					if(color == PieceColor.Black){
 						blackKing = fin;
@@ -229,15 +246,19 @@ public class Board {
 		}
 		//rudimentry move king out of check enforcement MUST BE EDITED LATER
 		else if(color == PieceColor.Black){
-			if(blackCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){			//ADD TO ALLOW FOR BLOCKING
-				System.out.println("You are in Check, please move King out of check");
-				valid = false;
+			if(blackCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){
+				if(!checkNextMoveCheck(init, fin, color)){
+					System.out.println("You are in Check, please move King out of check");
+					valid = false;
+				}
 			}
 		}
 		else if(color == PieceColor.White){
 			if(whiteCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){
-				System.out.println("You are in Check, please move King out of check");
-				valid = false;
+				if(!checkNextMoveCheck(init, fin, color)){
+					System.out.println("You are in Check, please move King out of check");
+					valid = false;
+				}
 			}
 		}
 		//if coordinates would cause a piece to skip over another piece then disallow them
@@ -409,9 +430,8 @@ public class Board {
 	
 	/**
 	 * updates the state of checks and checkmates
-	 * @param color the color of checks and mates being updated
 	 */
-	private void updateCheckMate(PieceColor color){
+	private void updateCheckMate(){
 		if(checkCheck(blackKing, null)){
 			blackCheck = true;
 				
@@ -439,6 +459,32 @@ public class Board {
 		}
 	}
 	
+	private boolean checkNextMoveCheck(Coordinates init, Coordinates fin, PieceColor color){
+		Board board = new Board(this);
+		board.update(init, fin, color);
+		
+		if(color == PieceColor.Black){
+			if(board.getBlackCheck()){
+				return false;
+			}
+		}
+		else if(color == PieceColor.White){
+			if(board.getWhiteCheck()){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public boolean getWhiteCheck(){
+		return whiteCheck;
+	}
+	
+	public boolean getBlackCheck(){
+		return blackCheck;
+	}
+	
 	public boolean blackLose(){
 		return blackMate;
 	}
@@ -446,5 +492,33 @@ public class Board {
 	public boolean whiteLose(){
 		return whiteMate;
 	}
-			
+	
+	public Coordinates getWhiteKingLoco(){
+		return new Coordinates(whiteKing.getX(), whiteKing.getY());
+	}
+	
+	public Coordinates getBlackKingLoco(){
+		return new Coordinates(blackKing.getX(), blackKing.getY());
+	}
+		
+	public Piece getPiece(int x, int y){
+		//the following code pertaining to Class and Constructor was acquired from: http://stackoverflow.com/questions/6094575/creating-an-instance-using-the-class-name-and-calling-constructor
+		//and edited to meet the needs of this
+		
+		Class<? extends Piece> clazz = gameBoard[x][y].getClass();
+		Constructor<? extends Piece> ctor;
+		try {
+			ctor = clazz.getConstructor(PieceColor.class, int.class, int.class);
+			Piece object = ctor.newInstance(gameBoard[x][y].getColor(), x, y);
+			return object;
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			System.err.println("Something went wrong");
+			e.printStackTrace();
+			System.err.println("It is done going wrong");
+		}
+		
+		return null;
+		
+	}
 }

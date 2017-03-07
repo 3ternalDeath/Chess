@@ -12,6 +12,10 @@ public class Empty extends Piece {
 	public Empty(int x, int y){
 		super(x, y);
 	}
+	
+	public Empty(PieceColor k, int x, int y){
+		super(x, y);
+	}
 
 	public ArrayList<Coordinates> updateMoves() {
 		return null;
