@@ -461,14 +461,17 @@ public class Board {
 	
 	private boolean checkNextMoveCheck(Coordinates init, Coordinates fin, PieceColor color){
 		Board board = new Board(this);
-		board.update(init, fin, color);
 		
 		if(color == PieceColor.Black){
+			board.blackKing = fin;
+			board.update(init, fin, color);
 			if(board.getBlackCheck()){
 				return false;
 			}
 		}
 		else if(color == PieceColor.White){
+			board.whiteKing = fin;
+			board.update(init, fin, color);
 			if(board.getWhiteCheck()){
 				return false;
 			}
