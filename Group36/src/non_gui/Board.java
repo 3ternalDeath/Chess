@@ -388,7 +388,7 @@ public class Board {
 				if(gameBoard[x][y].getColor() != color){
 					if(gameBoard[x][y].validMove(king))						//Separate if statements to save processing power
 						if(collisionDetect(new Coordinates(x, y), king)){	//only checks for collision if piece can move there
-							Game.debugMsg("checkCheck() KingCoordinates: " + king + " ||colorPram: " + color + " ||Piece info: " + gameBoard[x][y] + " " + gameBoard[x][y].getCoordinates());
+							Game.debugMsg("checkCheck() returns true-- KingCoordinates: " + king + " ||colorPram: " + color + " ||Piece info: " + gameBoard[x][y] + " " + gameBoard[x][y].getCoordinates());
 							return true;
 						}
 				}	
