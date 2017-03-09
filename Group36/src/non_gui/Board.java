@@ -387,8 +387,10 @@ public class Board {
 				//returns true when enemy piece can take the king
 				if(gameBoard[x][y].getColor() != color){
 					if(gameBoard[x][y].validMove(king))						//Separate if statements to save processing power
-						if(collisionDetect(new Coordinates(x, y), king))	//only checks for collision if piece can move there
+						if(collisionDetect(new Coordinates(x, y), king)){	//only checks for collision if piece can move there
+							Game.debugMsg("checkCheck() KingCoordinates: " + king + " ||colorPram: " + color + " ||Piece info: " + gameBoard[x][y] + " " + gameBoard[x][y].getCoordinates());
 							return true;
+						}
 				}	
 			}
 		}
@@ -412,10 +414,12 @@ public class Board {
 				check.incrementY(y);
 				
 				//in order for check mate to happen king should not be able to move anywhere without dying 
-				if(Coordinates.inBound(check.getX(), check.getY())){
-					if(gameBoard[check.getX()][check.getY()].getType() == null){
-						if(!checkCheck(king, color)){
-							return false;
+				if( x!= 0 || y != 0){
+					if(Coordinates.inBound(check.getX(), check.getY())){
+						if(gameBoard[check.getX()][check.getY()].getType() == null){
+							if(!checkCheck(check, color)){
+								return false;
+							}
 						}
 					}
 				}

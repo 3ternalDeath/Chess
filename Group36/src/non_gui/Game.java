@@ -5,6 +5,7 @@ public class Game {
 	private Player p1;
 	private Player p2;
 	private Board board;
+	public static boolean DEBUG = true;
 	
 	public Game(GameType type) {
 		currentTurn = 1;
@@ -43,5 +44,10 @@ public class Game {
 		else if(board.whiteLose()){
 			System.out.println("Black has won, White has lost");
 		}
+	}
+	
+	public static void debugMsg(String msg){
+		if(DEBUG)
+			System.out.println(msg);
 	}
 }

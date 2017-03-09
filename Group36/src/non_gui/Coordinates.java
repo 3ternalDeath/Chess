@@ -71,6 +71,10 @@ public class Coordinates {
 			return false;
 	}
 	
+	public String toString(){
+		return("(" + x + ", " + y + ")");
+	}
+	
 	/**
 	 * @param x
 	 * @return

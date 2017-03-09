@@ -7,8 +7,7 @@ public abstract class Piece {
 	private final PieceType type;
 	private final PieceColor color;
 	private boolean firstMove;
-	private int x;
-	private int y;
+	private Coordinates loco;
 	private ArrayList<Coordinates> posMoves;
 	
 	/**
@@ -21,8 +20,7 @@ public abstract class Piece {
 	public Piece(PieceType type, PieceColor color, int x, int y) {
 		this.type = type;
 		this.color = color;
-		this.x = x;
-		this.y = y;
+		loco = new Coordinates(x,y);
 		firstMove = true;
 		updateMoves();
 	}
@@ -35,8 +33,7 @@ public abstract class Piece {
 	public Piece(int x, int y) {
 		type = null;
 		color = null;
-		this.x = x;
-		this.y = y;
+		loco = new Coordinates(x,y);
 		firstMove = false;
 	}
 
@@ -49,8 +46,8 @@ public abstract class Piece {
 		if(firstMove)
 			firstMove = false;
 		//moves the piece
-		x = newCoor.getX();
-		y = newCoor.getY();
+		loco.setX(newCoor.getX());
+		loco.setY(newCoor.getY());
 	}
 	
 	/**
@@ -68,7 +65,7 @@ public abstract class Piece {
 	 * @return the x value
 	 */
 	public int getX() {
-		return x;
+		return loco.getX();
 	}
 	
 	/**
@@ -76,7 +73,11 @@ public abstract class Piece {
 	 * @return the y value
 	 */
 	public int getY() {
-		return y;
+		return loco.getY();
+	}
+	
+	public Coordinates getCoordinates(){
+		return new Coordinates(loco.getX(), loco.getY());
 	}
 	
 	/**
