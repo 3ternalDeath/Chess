@@ -11,10 +11,12 @@ public class Game {
 		currentTurn = 1;
 		switch (type) {
 		case SINGLE:
+			p1 = new Player(PieceColor.White, PlayerType.User);
+			p2 = new Player(PieceColor.Black, PlayerType.Computer);
 			break;
 		case MULTI:
-			p1 = new Player(PieceColor.White, 0);
-			p2 = new Player(PieceColor.Black, 0);
+			p1 = new Player(PieceColor.White, PlayerType.User);
+			p2 = new Player(PieceColor.Black, PlayerType.User);
 			break;
 		}
 		board = new Board();

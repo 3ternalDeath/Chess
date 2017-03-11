@@ -1,12 +1,18 @@
 package non_gui;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Player {
 	private PieceColor color;
-	 public static Scanner input = new Scanner(System.in);
-	public Player(PieceColor color, int score) {
+	private PlayerType type;
+	
+	public static Scanner input = new Scanner(System.in);
+	 
+	public Player(PieceColor color, PlayerType type) {
 		this.color = color;
+		this.type = type;
 	}
 	
 	public PieceColor getColor() {
@@ -14,11 +20,18 @@ public class Player {
 	}
 	
 	public void makeMove(Board gameBoard) {
-		Boolean validMove = false;
+		boolean validMove = false;
 		do {
-			Coordinates init = getInput("Initial", gameBoard);
-			Coordinates fin = getInput("Final", gameBoard);
-		
+			Coordinates init = null;
+			Coordinates fin = null;
+			if(type == PlayerType.User){
+				init = getInput("Initial", gameBoard);
+				fin = getInput("Final", gameBoard);
+			}
+			else{
+				init = pickPiece(gameBoard);
+				fin = pickMove(init, gameBoard);
+			}
 			// Checks valid movement
 			validMove = gameBoard.validMovement(init, fin, color);
 			if (validMove) {
@@ -82,5 +95,29 @@ public class Player {
 		} while (!validLocation);
 		
 		return newCoor;
+	}
+	
+	private Coordinates pickPiece(Board board){
+		
+		Random num = new Random();
+		int x = num.nextInt(8);
+		int y = num.nextInt(8);
+		
+		while(board.getPiece(x, y).getColor() != color){
+			x = num.nextInt(8);
+			y = num.nextInt(8);
+		}
+		
+		return new Coordinates(x, y);
+		
+		
+	}
+	
+	private Coordinates pickMove(Coordinates piece, Board board){
+		
+		ArrayList<Coordinates> moves = board.getPiece(piece.getX(), piece.getY()).getPosibleMoves();
+		int index = new Random().nextInt(moves.size());
+		return  moves.get(index);
+		
 	}
 }

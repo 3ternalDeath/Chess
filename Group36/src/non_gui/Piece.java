@@ -8,7 +8,6 @@ public abstract class Piece {
 	private final PieceColor color;
 	private boolean firstMove;
 	private Coordinates loco;
-	private ArrayList<Coordinates> posMoves;
 	
 	/**
 	 * initialize a piece
@@ -22,7 +21,7 @@ public abstract class Piece {
 		this.color = color;
 		loco = new Coordinates(x,y);
 		firstMove = true;
-		updateMoves();
+		getPosibleMoves();
 	}
 	
 	/**
@@ -104,7 +103,7 @@ public abstract class Piece {
 	 */
 	public boolean validMove(Coordinates newCoor){
 		
-		posMoves = updateMoves();
+		ArrayList<Coordinates> posMoves = getPosibleMoves();
 		
 		if(posMoves != null){
 			
@@ -122,7 +121,7 @@ public abstract class Piece {
 	 * updates the possible moves list based on the piece type
 	 * @return TODO
 	 */
-	public abstract ArrayList<Coordinates> updateMoves();
+	public abstract ArrayList<Coordinates> getPosibleMoves();
 	
 	/**
 	 * returns if first move

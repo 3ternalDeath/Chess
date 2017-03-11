@@ -17,7 +17,7 @@ public class Empty extends Piece {
 		super(x, y);
 	}
 
-	public ArrayList<Coordinates> updateMoves() {
+	public ArrayList<Coordinates> getPosibleMoves() {
 		return null;
 
 	}

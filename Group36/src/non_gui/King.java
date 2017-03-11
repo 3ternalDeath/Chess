@@ -17,7 +17,7 @@ public class King extends Piece {
 	/**
 	 * updates the possible moves list based on the piece type
 	 */
-	public ArrayList<Coordinates> updateMoves() {
+	public ArrayList<Coordinates> getPosibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 			
 		if(isFirstMove()){

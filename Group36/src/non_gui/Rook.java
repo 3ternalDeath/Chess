@@ -17,7 +17,7 @@ public class Rook extends Piece {
 	/**
 	 * updates the possible moves list
 	 */
-	public ArrayList<Coordinates> updateMoves() {
+	public ArrayList<Coordinates> getPosibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
 		for(int x = getX()+1; Coordinates.inBound(x); x++){
