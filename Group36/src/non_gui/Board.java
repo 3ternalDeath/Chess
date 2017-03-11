@@ -244,6 +244,11 @@ public class Board {
 				}
 			}
 		}
+		//if coordinates would cause a piece to skip over another piece then disallow them
+				else if(!collisionDetect(init, fin)) {
+					System.out.println("There's something in the way.");
+					valid = false;
+				}
 		//rudimentry move king out of check enforcement MUST BE EDITED LATER
 		else if(color == PieceColor.Black){
 			if(blackCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){
@@ -261,11 +266,7 @@ public class Board {
 				}
 			}
 		}
-		//if coordinates would cause a piece to skip over another piece then disallow them
-		else if(!collisionDetect(init, fin)) {
-			System.out.println("There's something in the way.");
-			valid = false;
-		}
+		
 		
 		return valid;
 	}
@@ -416,7 +417,7 @@ public class Board {
 				//in order for check mate to happen king should not be able to move anywhere without dying 
 				if( x!= 0 || y != 0){
 					if(Coordinates.inBound(check.getX(), check.getY())){
-						if(gameBoard[check.getX()][check.getY()].getType() == null){
+						if(gameBoard[check.getX()][check.getY()].getColor() != color){
 							if(!checkCheck(check, color)){
 								return false;
 							}
