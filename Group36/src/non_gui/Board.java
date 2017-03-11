@@ -245,11 +245,11 @@ public class Board {
 			}
 		}
 		//if coordinates would cause a piece to skip over another piece then disallow them
-				else if(!collisionDetect(init, fin)) {
-					System.out.println("There's something in the way.");
-					valid = false;
-				}
-		//rudimentry move king out of check enforcement MUST BE EDITED LATER
+		else if(!collisionDetect(init, fin)) {
+			System.out.println("There's something in the way.");
+			valid = false;
+		}
+		//king must be moved out of check
 		else if(color == PieceColor.Black){
 			if(blackCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){
 				if(!checkNextMoveCheck(init, fin, color)){
