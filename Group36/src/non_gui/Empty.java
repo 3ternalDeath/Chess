@@ -2,24 +2,27 @@ package non_gui;
 
 import java.util.ArrayList;
 
+/**
+ * An empty space -- behaves like a piece in some ways, but
+ * is not technically a piece.
+ * @author Group 36
+ */
 public class Empty extends Piece {
 
 	/**
-	 * initialize an empty
-	 * @param x the x position of the empty
-	 * @param y the y position of the empty
+	 * Constructor for the Empty class.
+	 * @param x The starting x position of the empty space.
+	 * @param y The starting y position of the empty space.
 	 */
-	public Empty(int x, int y){
+	public Empty(int x, int y) {
 		super(x, y);
 	}
 	
-	public Empty(PieceColor k, int x, int y){
+	public Empty(PieceColor k, int x, int y) {
 		super(x, y);
 	}
 
-	public ArrayList<Coordinates> getPosibleMoves() {
+	public ArrayList<Coordinates> getPossibleMoves() {
 		return null;
-
 	}
-
 }

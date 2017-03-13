@@ -1,5 +1,9 @@
 package non_gui;
 
+/**
+ * Container for attributes and methods necessary to run a single game of chess.
+ * @author Group 36
+ */
 public class Game {
 	private int currentTurn;
 	private Player p1;
@@ -7,6 +11,10 @@ public class Game {
 	private Board board;
 	public static boolean DEBUG = true;
 	
+	/**
+	 * Constructor for the Game class.
+	 * @param type The type of game; single- or multi-player.	 
+	 */
 	public Game(GameType type) {
 		currentTurn = 1;
 		switch (type) {
@@ -22,6 +30,12 @@ public class Game {
 		board = new Board();
 	}
 	
+	/**
+	 * Handles all functions necessary to play an entire game of chess
+	 * in the selected type of game. Runs in a perpetual loop until
+	 * either player is in a state of checkmate. Exits loop and prints 
+	 * outcome of game when a player has won.
+	 */
 	public void run() {
 		board.populateBoard();
 		
@@ -40,15 +54,19 @@ public class Game {
 		
 		board.display();
 		
-		if(board.blackLose()){
+		if(board.blackLose()) {
 			System.out.println("White has won, Black has lost");
 		}
-		else if(board.whiteLose()){
+		else if(board.whiteLose()) {
 			System.out.println("Black has won, White has lost");
 		}
 	}
 	
-	public static void debugMsg(String msg){
+	/**
+	 * Displays a debugging message, if the debug switch is turned on.
+	 * @param msg The message to display.
+	 */
+	public static void debugMsg(String msg) {
 		if(DEBUG)
 			System.out.println(msg);
 	}

@@ -2,37 +2,37 @@ package non_gui;
 
 import java.util.ArrayList;
 
+/**
+ * A single Rook piece.
+ * @author Group 36
+ */
 public class Rook extends Piece {
 
 	/**
-	 * initialize a rook
-	 * @param Color the color of the rook
-	 * @param x the x position of the rook
-	 * @param y the y position of the rook
+	 * Constructor for the Rook class.
+	 * @param Color The color of the rook.
+	 * @param x The starting x position of the rook.
+	 * @param y The starting y position of the rook.
 	 */
-	public Rook(PieceColor Color, int x, int y){
+	public Rook(PieceColor Color, int x, int y) {
 		super(PieceType.Rook, Color, x, y);
 	}
 
-	/**
-	 * updates the possible moves list
-	 */
-	public ArrayList<Coordinates> getPosibleMoves() {
+	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		for(int x = getX()+1; Coordinates.inBound(x); x++){
+		for(int x = getX()+1; Coordinates.inBound(x); x++) {
 			moves.add(new Coordinates(x, getY()));
 		}
-		for(int x = getX()-1; Coordinates.inBound(x); x--){
+		for(int x = getX()-1; Coordinates.inBound(x); x--) {
 			moves.add(new Coordinates(x, getY()));
 		}
-		for(int y = getX()+1; Coordinates.inBound(y); y++){
+		for(int y = getX()+1; Coordinates.inBound(y); y++) {
 			moves.add(new Coordinates(getX(), y));
 		}
-		for(int y = getX()-1; Coordinates.inBound(y); y--){
+		for(int y = getX()-1; Coordinates.inBound(y); y--) {
 			moves.add(new Coordinates(getX(), y));
 		}
 		return moves;
 	}
-
 }

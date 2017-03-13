@@ -2,38 +2,38 @@ package non_gui;
 
 import java.util.ArrayList;
 
+/**
+ * A single Bishop piece.
+ * @author Group 36
+ */
 public class Bishop extends Piece {
 
 	/**
-	 * initialize a bishop
-	 * @param Color the color of the bishop
-	 * @param x the x position of the bishop
-	 * @param y the y position of the bishop
+	 * Constructor for the Bishop class.
+	 * @param Color The color of the bishop.
+	 * @param x The starting x position of the bishop.
+	 * @param y The starting y position of the bishop.
 	 */
-	public Bishop(PieceColor Color, int x, int y){
+	public Bishop(PieceColor Color, int x, int y) {
 		super(PieceType.Bishop, Color, x, y);
 	}
 
-	/**
-	 * updates the possible moves list based on the piece type
-	 */
-	public ArrayList<Coordinates> getPosibleMoves() {
+	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		for(int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++){
+		for(int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++) {
 			moves.add(new Coordinates(getX() + h, getY() + h));
 		}
-		for(int h = 1; Coordinates.inBound(getX() + h, getY() - h); h++){
+		for(int h = 1; Coordinates.inBound(getX() + h, getY() - h); h++) {
 			moves.add(new Coordinates(getX() + h, getY() - h));
 		}
-		for(int h = 1; Coordinates.inBound(getX() - h, getY() + h); h++){
+		for(int h = 1; Coordinates.inBound(getX() - h, getY() + h); h++) {
 			moves.add(new Coordinates(getX() - h, getY() + h));
 		}
-		for(int h = 1; Coordinates.inBound(getX() - h, getY() - h); h++){
+		for(int h = 1; Coordinates.inBound(getX() - h, getY() - h); h++) {
 			moves.add(new Coordinates(getX() - h, getY() - h));
 		}
 		
 		return moves;
 	}
-
 }

@@ -2,32 +2,36 @@ package non_gui;
 
 import java.util.ArrayList;
 
+/**
+ * Handles all the attributes and actions of a generic
+ * piece on the chessboard.
+ * @author Group 36
+ */
 public abstract class Piece {
-	
 	private final PieceType type;
 	private final PieceColor color;
 	private boolean firstMove;
 	private Coordinates loco;
 	
 	/**
-	 * initialize a piece
-	 * @param type the type of the piece
-	 * @param color the color of the piece
-	 * @param x the x position of the piece
-	 * @param y the y position of the piece
+	 * Constructor for the Piece class.
+	 * @param type The type of the piece.
+	 * @param color The color of the piece.
+	 * @param x The starting x position of the piece.
+	 * @param y The starting y position of the piece.
 	 */
 	public Piece(PieceType type, PieceColor color, int x, int y) {
 		this.type = type;
 		this.color = color;
 		loco = new Coordinates(x,y);
 		firstMove = true;
-		getPosibleMoves();
+		getPossibleMoves();
 	}
 	
 	/**
-	 * initialize a piece with no type or color
-	 * @param x the x position of the piece
-	 * @param y the y position of the piece
+	 * Initializes a piece with no type or color.
+	 * @param x The starting x position of the piece.
+	 * @param y The starting y position of the piece.
 	 */
 	public Piece(int x, int y) {
 		type = null;
@@ -37,9 +41,9 @@ public abstract class Piece {
 	}
 
 	/**
-	 * moves piece to newCoor
-	 * no error checking is done, ensure validity of move before calling
-	 * @param newCoor the new coordinates of the piece
+	 * Moves piece to a given set of coordinates.
+	 * No error checking is done; user must ensure validity of move before calling.
+	 * @param newCoor The new coordinates of the piece.
 	 */
 	public void move(Coordinates newCoor) {
 		if(firstMove)
@@ -50,9 +54,9 @@ public abstract class Piece {
 	}
 	
 	/**
-	 * generates and returns a string to represent a piece as long as it is not blank
+	 * Generates and returns a string to represent a piece, as long as it is not blank.
 	 */
-	public String toString(){
+	public String toString() {
 		if(getColor() != null && getType() != null)
 			return ((getColor()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
 		else
@@ -60,55 +64,58 @@ public abstract class Piece {
 	}
 	
 	/**
-	 * returns the x value
-	 * @return the x value
+	 * Returns the piece's current x value.
+	 * @return The current x value.
 	 */
 	public int getX() {
 		return loco.getX();
 	}
 	
 	/**
-	 * returns the y value
-	 * @return the y value
+	 * Returns the piece's current y value.
+	 * @return The current y value.
 	 */
 	public int getY() {
 		return loco.getY();
 	}
 	
-	public Coordinates getCoordinates(){
+	/**
+	 * Returns the piece's current coordinates.
+	 * @return The current coordinates.
+	 */
+	public Coordinates getCoordinates() {
 		return new Coordinates(loco.getX(), loco.getY());
 	}
 	
 	/**
-	 * returns the type of piece
-	 * @return the piece type
+	 * Returns the type of piece.
+	 * @return The piece type.
 	 */
 	public PieceType getType() {
 		return type;
 	}
 	
 	/**
-	 * returns the color of piece
-	 * @return the piece color
+	 * Returns the color of the piece.
+	 * @return The piece color.
 	 */
 	public PieceColor getColor() {
 		return color;
 	}
 	
 	/**
-	 * checks to see if piece can make move in a void
-	 * further validity checks required
-	 * @param newCoor the coordinates of the destination
-	 * @return true if move can can be made, false otherwise
+	 * Checks to see if piece can make move in a void.
+	 * User must still check whether move is valid in practice.
+	 * @param newCoor The coordinates of the destination.
+	 * @return True if move can can be made, false otherwise.
 	 */
-	public boolean validMove(Coordinates newCoor){
+	public boolean validMove(Coordinates newCoor) {
+		ArrayList<Coordinates> posMoves = getPossibleMoves();
 		
-		ArrayList<Coordinates> posMoves = getPosibleMoves();
-		
-		if(posMoves != null){
+		if(posMoves != null) {
 			
-			for(int index = 0; index < posMoves.size(); index++){
-				if(newCoor.equals(posMoves.get(index))){
+			for(int index = 0; index < posMoves.size(); index++) {
+				if(newCoor.equals(posMoves.get(index))) {
 					return true;
 				}
 			}
@@ -118,18 +125,16 @@ public abstract class Piece {
 	}
 	
 	/**
-	 * updates the possible moves list based on the piece type
-	 * @return TODO
+	 * Updates the list of possible moves, based on the piece's type.
+	 * @return All moves the piece can theoretically make from its current location.
 	 */
-	public abstract ArrayList<Coordinates> getPosibleMoves();
+	public abstract ArrayList<Coordinates> getPossibleMoves();
 	
 	/**
-	 * returns if first move
-	 * @return boolean based on if it is first move
+	 * Returns whether piece has made first move.
+	 * @return True is piece has not moved, false otherwise.
 	 */
 	public boolean isFirstMove() {
 		return firstMove;
 	}
-
-	
 }
