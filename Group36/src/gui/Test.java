@@ -17,7 +17,7 @@ public class Test extends JPanel implements ActionListener {
 	private static final long serialVersionUID = -3433959957442938842L;
 	
 	final static int SIZE = 8;
-	final static int WINDOW = SIZE*105;
+	final static int WINDOW = SIZE*100;
 	GridBagConstraints gbc = new GridBagConstraints();
 	JButton button;
 	boolean hi= true;
@@ -28,9 +28,9 @@ public class Test extends JPanel implements ActionListener {
 			for(int y = 0; y < SIZE; y++)
 			{
 				
-				button = new JButton("("+x+", "+y+ ")");
+				button = new JButton(x+", "+y);
 				button.addActionListener(this);
-				button.setPreferredSize(new Dimension(100,100));
+				button.setPreferredSize(new Dimension(70,70));
 				if ((x+y)%2 == 0){
 					button.setBackground(Color.BLACK);
 					button.setForeground(Color.WHITE);

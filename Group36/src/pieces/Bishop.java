@@ -1,6 +1,8 @@
-package non_gui;
+package pieces;
 
 import java.util.ArrayList;
+
+import non_gui.Coordinates;
 
 /**
  * A single Bishop piece.

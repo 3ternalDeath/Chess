@@ -4,6 +4,17 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Stack;
 
+import pieces.Bishop;
+import pieces.Empty;
+import pieces.King;
+import pieces.Night;
+import pieces.Pawn;
+import pieces.Piece;
+import pieces.PieceColor;
+import pieces.PieceType;
+import pieces.Queen;
+import pieces.Rook;
+
 /**
  * Holds a chessboard-sized of array of pieces, and updates the
  * array's contents based on player input.

@@ -1,5 +1,7 @@
 package non_gui;
 
+import pieces.PieceColor;
+
 /**
  * Container for attributes and methods necessary to run a single game of chess.
  * @author Group 36

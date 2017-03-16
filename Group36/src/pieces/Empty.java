@@ -1,6 +1,8 @@
-package non_gui;
+package pieces;
 
 import java.util.ArrayList;
+
+import non_gui.Coordinates;
 
 /**
  * An empty space -- behaves like a piece in some ways, but

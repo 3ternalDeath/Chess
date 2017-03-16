@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import pieces.PieceColor;
+
 /**
  * Allows user to interact with and move pieces on board,
  * or to have pieces be moved by an AI.
