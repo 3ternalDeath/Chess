@@ -1,4 +1,4 @@
-package non_gui;
+package pieces;
 public enum PieceColor {
 	White,
 	Black

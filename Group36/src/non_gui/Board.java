@@ -4,9 +4,23 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Stack;
 
+import pieces.Bishop;
+import pieces.Empty;
+import pieces.King;
+import pieces.Night;
+import pieces.Pawn;
+import pieces.Piece;
+import pieces.PieceColor;
+import pieces.PieceType;
+import pieces.Queen;
+import pieces.Rook;
 
+/**
+ * Holds a chessboard-sized of array of pieces, and updates the
+ * array's contents based on player input.
+ * @author Group 36
+ */
 public class Board {
-	
 	private static final int SIZE = 8;
 	private Piece[][] gameBoard;
 	private Stack<int[][]> moves;
@@ -15,8 +29,11 @@ public class Board {
 	private boolean whiteCheck, blackCheck, whiteMate, blackMate;
 	private Coordinates whiteKing, blackKing;
 	
-	//constructor for the Board object
-	public Board(){
+	/**
+	 * Constructor for the Board class.
+	 * Initializes all instance variables to default values.
+	 */
+	public Board() {
 		gameBoard = new Piece[SIZE][SIZE];
 		moves = new Stack<int[][]>();
 		deadPiece = new Stack<Piece>();
@@ -29,31 +46,39 @@ public class Board {
 		blackMate = false;
 	}
 	
-	public Board(Board board){
+	/**
+	 * Copy constructor for Board class.
+	 * Creates new Board object with same attributes as argument.
+	 * @param board The Board object to copy.
+	 */
+	public Board(Board board) {
 		this();
+		
 		for(int x = 0; x < SIZE; x++){
 			for(int y = 0; y < SIZE; y++){
 				gameBoard[x][y] = board.getPiece(x, y);
 			}
 		}
+		
 		whiteKing = board.getWhiteKingLoco();
 		blackKing = board.getBlackKingLoco();
-		
 	}
 	
 	/**
-	 * populates game board with all necessary pieces, in the standard arrangement
+	 * Populates game board with all necessary pieces, 
+	 * in the standard arrangement. Must be run in conjunction
+	 * with constructor, or game board will be empty.
 	 */
 	public void populateBoard(){
 		//Black pieces at top of board
 		gameBoard[0][7] = 	new Rook( 	PieceColor.Black, 0, 7);
-		gameBoard[1][7] = 	new Night( PieceColor.Black, 1, 7);
+		gameBoard[1][7] = 	new Night(  PieceColor.Black, 1, 7);
 		gameBoard[2][7] = 	new Bishop(	PieceColor.Black, 2, 7);
 		gameBoard[3][7] = 	new Queen( 	PieceColor.Black, 3, 7);
 		gameBoard[4][7] =	new King( 	PieceColor.Black, 4, 7);
 		blackKing = new Coordinates(4, 7);
 		gameBoard[5][7] = 	new Bishop(	PieceColor.Black, 5, 7);
-		gameBoard[6][7] = 	new Night( PieceColor.Black, 6, 7);
+		gameBoard[6][7] = 	new Night(  PieceColor.Black, 6, 7);
 		gameBoard[7][7] = 	new Rook( 	PieceColor.Black, 7, 7);
 		gameBoard[0][6] = 	new Pawn( 	PieceColor.Black, 0, 6);
 		gameBoard[1][6] = 	new Pawn( 	PieceColor.Black, 1, 6);
@@ -66,13 +91,13 @@ public class Board {
 		
 		//White pieces at bottom of board
 		gameBoard[0][0] = 	new Rook( 	PieceColor.White, 0, 0);
-		gameBoard[1][0] = 	new Night( PieceColor.White, 1, 0);
+		gameBoard[1][0] = 	new Night(  PieceColor.White, 1, 0);
 		gameBoard[2][0] = 	new Bishop( PieceColor.White, 2, 0);
 		gameBoard[3][0] = 	new Queen( 	PieceColor.White, 3, 0);
 		gameBoard[4][0] = 	new King( 	PieceColor.White, 4, 0);
 		whiteKing = new Coordinates(4, 0);
 		gameBoard[5][0] = 	new Bishop( PieceColor.White, 5, 0);
-		gameBoard[6][0] = 	new Night( PieceColor.White, 6, 0);
+		gameBoard[6][0] = 	new Night(  PieceColor.White, 6, 0);
 		gameBoard[7][0] = 	new Rook( 	PieceColor.White, 7, 0);
 		gameBoard[0][1] = 	new Pawn( 	PieceColor.White, 0, 1);
 		gameBoard[1][1] = 	new Pawn( 	PieceColor.White, 1, 1);
@@ -92,7 +117,7 @@ public class Board {
 	}
 	
 	/**
-	 * prints out the current state of the board on the console
+	 * Prints a text-based representation of the entire game board.
 	 */
 	public void display() {
 		//Labeling top horizontal axis
@@ -150,14 +175,13 @@ public class Board {
 		System.out.println();
 	}
 	
-	
-	
 	/**
-	 * moves piece from init to fin
-	 * does not check for valid movement
-	 * only call update after movement has been error-checked
-	 * @param init the coordinates of the piece that is moving
-	 * @param fin  the coordinates of the place piece moving to
+	 * Updates the entire board based on user input.
+	 * Takes the piece at initial coordinates, and moves it to final coordinates.
+	 * Does not check for valid movement;
+	 * user must only call update after movement has been error-checked.
+	 * @param init The coordinates of the piece that is moving.
+	 * @param fin The coordinates that the piece is moving to.
 	 */
 	public void update(Coordinates init, Coordinates fin, PieceColor color) {
 		System.out.println("Selected Piece:" + gameBoard[init.getX()][init.getY()].getType());
@@ -176,12 +200,20 @@ public class Board {
 		updateCheckMate();
 	}
 	
+	/**
+	 * Checks whether a given combination of coordinates will create a legal move.
+	 * If not, prints a message informing player of why this move is illegal.
+	 * @param init The player's initial coordinates.
+	 * @param fin The player's final coordinates.
+	 * @param color The color of the current player.
+	 * @return True if the coordinates creates a legal move, false otherwise.
+	 */
 	public boolean validMovement(Coordinates init, Coordinates fin, PieceColor color) {
 		// Default return
 		boolean valid = true;
 		
 		//if coordinates point to a blank space then disallow them
-		if(gameBoard[init.getX()][init.getY()].getType() == null){
+		if(gameBoard[init.getX()][init.getY()].getType() == null) {
 			System.out.println("Selecting empty space.");
 			valid = false;
 		}
@@ -191,12 +223,12 @@ public class Board {
 			valid = false;
 		}
 		//if coordinates point to a piece the current player owns then disallow them
-		else if(gameBoard[fin.getX()][fin.getY()].getColor() == gameBoard[init.getX()][init.getY()].getColor()){
+		else if(gameBoard[fin.getX()][fin.getY()].getColor() == gameBoard[init.getX()][init.getY()].getColor()) {
 			System.out.println("Moving into your own piece.");
 			valid = false;
 		}
 		//if coordinates would cause an illegal move for the piece in question then disallow them
-		else if(!gameBoard[init.getX()][init.getY()].validMove(fin)){
+		else if(!gameBoard[init.getX()][init.getY()].validMove(fin)) {
 			System.out.println("The piece can't move there.");
 			valid = false;
 		
@@ -212,8 +244,8 @@ public class Board {
 		//if piece is king
 		else if (gameBoard[init.getX()][init.getY()].getType() == PieceType.King) {
 			//checks for castling
-			if(Coordinates.inBound(fin.getX() + 1)){
-				if(checkCheck(fin, gameBoard[init.getX()][init.getY()].getColor())){
+			if(Coordinates.inBound(fin.getX() + 1)) {
+				if(checkCheck(fin, gameBoard[init.getX()][init.getY()].getColor())) {
 					System.out.println("Moving into check not posible");
 					valid = false;
 				}
@@ -221,24 +253,24 @@ public class Board {
 					System.out.println("Castling can only be done if there is a rook");
 					valid = false;
 				}
-				else if (gameBoard[fin.getX() + 1][fin.getY()].getType() == PieceType.Rook && (fin.getX() - init.getX()) == 2 && gameBoard[fin.getX() + 1][fin.getY()].isFirstMove()){
+				else if (gameBoard[fin.getX() + 1][fin.getY()].getType() == PieceType.Rook && (fin.getX() - init.getX()) == 2 && gameBoard[fin.getX() + 1][fin.getY()].isFirstMove()) {
 					update(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()), color);
-					if(castle[0] != -1){
+					if(castle[0] != -1) {
 						castle[1] = moves.size();
 					}
-					else{
+					else {
 						castle[0] = moves.size();
 					}
 				}
-				else if(!checkNextMoveCheck(init, fin, color)){
+				else if(!checkNextMoveCheck(init, fin, color)) {
 					System.out.println("You cannot move King into check");
 					valid = false;
 				}
-				if(valid){
-					if(color == PieceColor.Black){
+				if(valid) {
+					if(color == PieceColor.Black) {
 						blackKing = fin;
 					}
-					else if(color == PieceColor.White){
+					else if(color == PieceColor.White) {
 						whiteKing = fin;
 					}
 				}
@@ -250,23 +282,22 @@ public class Board {
 			valid = false;
 		}
 		//king must be moved out of check
-		else if(color == PieceColor.Black){
-			if(blackCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){
-				if(!checkNextMoveCheck(init, fin, color)){
+		else if(color == PieceColor.Black) {
+			if(blackCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King) {
+				if(!checkNextMoveCheck(init, fin, color)) {
 					System.out.println("You are in Check, please move King out of check");
 					valid = false;
 				}
 			}
 		}
-		else if(color == PieceColor.White){
-			if(whiteCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King){
-				if(!checkNextMoveCheck(init, fin, color)){
+		else if(color == PieceColor.White) {
+			if(whiteCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King) {
+				if(!checkNextMoveCheck(init, fin, color)) {
 					System.out.println("You are in Check, please move King out of check");
 					valid = false;
 				}
 			}
 		}
-		
 		
 		return valid;
 	}
@@ -349,10 +380,10 @@ public class Board {
 	}
 	
 	/**
-	 * undoes the latest move
+	 * Undoes the last move the player made.
 	 */
-	public void undoMove(){
-		if(moves.size() >0){//moves not empty
+	public void undoMove() {
+		if(moves.size() >0) {//moves not empty
 			int[][] move = moves.pop();
 			Piece piece = gameBoard[move[1][0]][move[1][1]];
 			
@@ -361,11 +392,11 @@ public class Board {
 			gameBoard[move[1][0]][move[1][1]] = deadPiece.pop();
 			gameBoard[move[0][0]][move[0][1]] = piece;
 			
-			if(castle[0] == moves.size()){
+			if(castle[0] == moves.size()) {
 				castle[0] = -1;
 				undoMove();
 			}
-			else if(castle[1] == moves.size()){
+			else if(castle[1] == moves.size()) {
 				castle[1] = -1;
 				undoMove();
 			}
@@ -373,25 +404,27 @@ public class Board {
 	}
 	
 	/**
-	 * searches through the board to see if an enemy piece can take the piece at the king location
-	 * @param king is the location being checked for safety
-	 * @param color if the color of friendly pieces, null if unknown
+	 * Checks through entire board to see if an enemy piece 
+	 * can take the King piece.
+	 * @param king The coordinates of the King piece.
+	 * @param color The color of friendly pieces; can be left null if unknown.
 	 * @return true if piece at king location can be taken next move, false otherwise
 	 */
-	public boolean checkCheck(Coordinates king, PieceColor color){
+	public boolean checkCheck(Coordinates king, PieceColor color) {
 		if(color == null)
 			color = gameBoard[king.getX()][king.getY()].getColor();
 
-		for(int x = 0; x < SIZE; x++){
-			for(int y = 0; y < SIZE; y++){
+		for(int x = 0; x < SIZE; x++) {
+			for(int y = 0; y < SIZE; y++) {
 				
 				//returns true when enemy piece can take the king
-				if(gameBoard[x][y].getColor() != color){
-					if(gameBoard[x][y].validMove(king))						//Separate if statements to save processing power
-						if(collisionDetect(new Coordinates(x, y), king)){	//only checks for collision if piece can move there
+				if(gameBoard[x][y].getColor() != color) {
+					if(gameBoard[x][y].validMove(king)) {						//Separate if statements to save processing power
+						if(collisionDetect(new Coordinates(x, y), king)) {	//only checks for collision if piece can move there
 							Game.debugMsg("checkCheck() returns true-- KingCoordinates: " + king + " ||colorPram: " + color + " ||Piece info: " + gameBoard[x][y] + " " + gameBoard[x][y].getCoordinates());
 							return true;
 						}
+					}
 				}	
 			}
 		}
@@ -400,25 +433,25 @@ public class Board {
 	}
 	
 	/**
-	 * checks all places AROUND the king, the king it self still must be checked with checkCheck()
-	 * @param king the position of the king
-	 * @return true if ALL positions king can move to are in enemy sights, false otherwise
+	 * Checks all places around a given King piece to see whether an enemy piece
+	 * could move to that location. Should only be run if King is already in check.
+	 * @param king The coordinates of the King piece.
+	 * @return true If all positions King piece can move to are in enemy sights, false otherwise.
 	 */
-	public boolean checkCheckMate(Coordinates king){
+	public boolean checkCheckMate(Coordinates king) {
 		PieceColor color = gameBoard[king.getX()][king.getY()].getColor();
 		Coordinates check = new Coordinates(king.getX(), king.getY());
 		
-		for(int x = -1; x <= 1; x++){
-			for(int y = -1; y <= 1; y++){
-				
-				check.incrementX(x);//changes coords of check based on loop variables
+		for(int x = -1; x <= 1; x++) {
+			for(int y = -1; y <= 1; y++) {
+				check.incrementX(x); //changes coords of check based on loop variables
 				check.incrementY(y);
 				
 				//in order for check mate to happen king should not be able to move anywhere without dying 
-				if( x!= 0 || y != 0){
-					if(Coordinates.inBound(check.getX(), check.getY())){
-						if(gameBoard[check.getX()][check.getY()].getColor() != color){
-							if(!checkCheck(check, color)){
+				if( x!= 0 || y != 0) {
+					if(Coordinates.inBound(check.getX(), check.getY())) {
+						if(gameBoard[check.getX()][check.getY()].getColor() != color) {
+							if(!checkCheck(check, color)) {
 								return false;
 							}
 						}
@@ -433,11 +466,8 @@ public class Board {
 		return true;
 	}
 	
-	/**
-	 * updates the state of checks and checkmates
-	 */
-	private void updateCheckMate(){
-		if(checkCheck(blackKing, null)){
+	private void updateCheckMate() {
+		if(checkCheck(blackKing, null)) {
 			blackCheck = true;
 				
 			if(checkCheckMate(blackKing))
@@ -485,30 +515,61 @@ public class Board {
 		return true;
 	}
 	
+	/**
+	 * Returns the current check state of the white King piece.
+	 * @return True if the white King piece is currently in check, false otherwise.
+	 */
 	public boolean getWhiteCheck(){
 		return whiteCheck;
 	}
 	
+	/**
+	 * Returns the current check state of the black King piece.
+	 * @return True if the black King piece is currently in check, false otherwise.
+	 */
 	public boolean getBlackCheck(){
 		return blackCheck;
 	}
 	
-	public boolean blackLose(){
-		return blackMate;
-	}
-	
+	/**
+	 * Returns whether the white King piece is in checkmate.
+	 * @return True if the white King piece is in checkmate, false otherwise.
+	 */
 	public boolean whiteLose(){
 		return whiteMate;
 	}
 	
+	/**
+	 * Returns whether the black King piece is in checkmate.
+	 * @return True if the black King piece is in checkmate, false otherwise.
+	 */
+	public boolean blackLose(){
+		return blackMate;
+	}
+	
+	/**
+	 * Returns current location of the white King piece.
+	 * @return The coordinates of the white King piece.
+	 */
 	public Coordinates getWhiteKingLoco(){
 		return new Coordinates(whiteKing.getX(), whiteKing.getY());
 	}
 	
+	/**
+	 * Returns cuurent location of the black King piece.
+	 * @return The coordinates of the black King piece.
+	 */
 	public Coordinates getBlackKingLoco(){
 		return new Coordinates(blackKing.getX(), blackKing.getY());
 	}
 		
+	/**
+	 * Returns the piece at a given location on the game board,
+	 * or null if no piece is at that location.
+	 * @param x The x position of the piece.
+	 * @param y The y position of the piece.
+	 * @return The piece if there is one at the user's location, or null if there is not.
+	 */
 	public Piece getPiece(int x, int y){
 		//the following code pertaining to Class and Constructor was acquired from: http://stackoverflow.com/questions/6094575/creating-an-instance-using-the-class-name-and-calling-constructor
 		//and edited to meet the needs of this
@@ -527,6 +588,5 @@ public class Board {
 		}
 		
 		return null;
-		
 	}
 }

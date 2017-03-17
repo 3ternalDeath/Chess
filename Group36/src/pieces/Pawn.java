@@ -1,23 +1,26 @@
-package non_gui;
+package pieces;
 
 import java.util.ArrayList;
 
+import non_gui.Coordinates;
+
+/**
+ * A single Pawn piece.
+ * @author Group 36
+ */
 public class Pawn extends Piece {
 	
 	/**
-	 * initialize a pawn
-	 * @param Color the color of the pawn
-	 * @param x the x position of the pawn
-	 * @param y the y position of the pawn
+	 * Constructor for the Pawn class.
+	 * @param Color The color of the pawn.
+	 * @param x The starting x position of the pawn.
+	 * @param y The starting y position of the pawn.
 	 */
-	public Pawn(PieceColor Color, int x, int y){
+	public Pawn(PieceColor Color, int x, int y) {
 		super(PieceType.Pawn, Color, x, y);
 	}
 
-	/**
-	 * updates the possible moves list based on the piece type
-	 */
-	public ArrayList<Coordinates> getPosibleMoves() {
+	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
 		if(this.getColor() == PieceColor.White) {
@@ -49,5 +52,4 @@ public class Pawn extends Piece {
 		
 		return moves;
 	}
-
 }
