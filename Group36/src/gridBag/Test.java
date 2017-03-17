@@ -4,12 +4,20 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-import javax.swing.JButton;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import non_gui.Coordinates;
 
 
 public class Test extends JPanel implements ActionListener {
@@ -17,38 +25,44 @@ public class Test extends JPanel implements ActionListener {
 	private static final long serialVersionUID = -3433959957442938842L;
 	
 	final static int SIZE = 8;
-	final static int WINDOW = SIZE*105;
+	final static int WINDOW = SIZE*75;
 	GridBagConstraints gbc = new GridBagConstraints();
-	JButton button;
 	boolean hi= true;
 	
-	public Test() {
+	Button[][] button= new Button[SIZE][SIZE];
+	
+	public Test() throws FileNotFoundException {
 		setLayout(new GridBagLayout());
-		for(int x = 0; x < SIZE; x++)
-			for(int y = 0; y < SIZE; y++)
+		Scanner file = new Scanner(new File("src/gridBag/standard.txt"));	
+		for(int y = 0; y < SIZE; y++)
+			for(int x = 0; x < SIZE; x++)
 			{
-				
-				button = new JButton("("+x+", "+y+ ")");
-				button.addActionListener(this);
-				button.setPreferredSize(new Dimension(100,100));
+				Coordinates coor = new Coordinates(x,y);
+				button[x][y] = new Button(coor);
+				String type = file.next();
+				System.out.println(type);
+				try {
+					ImageIcon img = new ImageIcon("src/Images/"+ type +".png");
+					button[x][y].setIcon(img);
+				} catch (Exception ex) {
+					System.out.println(ex);
+				}
+				button[x][y].addActionListener(this);
+				button[x][y].setPreferredSize(new Dimension(70,70));
 				if ((x+y)%2 == 0){
-					button.setBackground(Color.BLACK);
-					button.setForeground(Color.WHITE);
+					button[x][y].setBackground(Color.BLACK);
 				}
 				else{
-					button.setBackground(Color.WHITE);
-					button.setForeground(Color.BLACK);
+					button[x][y].setBackground(Color.WHITE);
 				}
-				
-				
 				gbc.gridx = x;
 				gbc.gridy = SIZE-y;
-				button.setActionCommand(x+" "+y);
-				add(button,gbc);
+				button[x][y].setActionCommand(x+" "+y);
+				add(button[x][y],gbc);
 			}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		Test t = new Test();
 		JFrame f = new JFrame();
 
