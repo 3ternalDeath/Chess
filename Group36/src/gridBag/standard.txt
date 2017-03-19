@@ -1,8 +1,8 @@
-Rook   Night  Bishop Queen  King   Bishop Night  Rook
-Pawn   Pawn   Pawn   Pawn   Pawn   Pawn   Pawn   Pawn
-Empty  Empty  Empty  Empty  Empty  Empty  Empty  Empty
-Empty  Empty  Empty  Empty  Empty  Empty  Empty  Empty
-Empty  Empty  Empty  Empty  Empty  Empty  Empty  Empty
-Empty  Empty  Empty  Empty  Empty  Empty  Empty  Empty
-Pawn   Pawn   Pawn   Pawn   Pawn   Pawn   Pawn   Pawn
-Rook   Night  Bishop Queen  King   Bishop Night  Rook
+wr wn wb wq wk wb wn wr
+wp wp wp wp wp wp wp wp
+ee ee ee ee ee ee ee ee
+ee ee ee ee ee ee ee ee
+ee ee ee ee ee ee ee ee
+ee ee ee ee ee ee ee ee
+bp bp bp bp bp bp bp bp
+br bn bb bq bk bb bn br
