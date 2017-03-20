@@ -16,8 +16,8 @@ public class Bishop extends Piece {
 	 * @param x The starting x position of the bishop.
 	 * @param y The starting y position of the bishop.
 	 */
-	public Bishop(PieceColor Color, int x, int y) {
-		super(PieceType.Bishop, Color, x, y);
+	public Bishop(Coordinates coor,PieceColor Color) {
+		super(coor, PieceType.Bishop, Color);
 	}
 
 	public ArrayList<Coordinates> getPossibleMoves() {

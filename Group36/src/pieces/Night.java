@@ -16,8 +16,8 @@ public class Night extends Piece {
 	 * @param x The starting x position of the knight.
 	 * @param y The starting y position of the knight.
 	 */
-	public Night(PieceColor Color, int x, int y) {
-		super(PieceType.Night, Color, x, y);
+	public Night(Coordinates coor, PieceColor Color) {
+		super(coor, PieceType.Night, Color);
 	}
 
 	public ArrayList<Coordinates> getPossibleMoves() {

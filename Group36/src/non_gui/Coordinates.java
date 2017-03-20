@@ -81,7 +81,7 @@ public class Coordinates {
 	}
 	
 	public String toString() {
-		return("(" + x + ", " + y + ")");
+		return("(" + x + "," + y + ")");
 	}
 	
 	/**

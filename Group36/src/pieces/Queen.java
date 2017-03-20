@@ -16,8 +16,8 @@ public class Queen extends Piece {
 	 * @param x The starting x position of the queen.
 	 * @param y The starting y position of the queen.
 	 */
-	public Queen(PieceColor Color, int x, int y) {
-		super(PieceType.Queen, Color, x, y);
+	public Queen(Coordinates coor, PieceColor Color) {
+		super(coor, PieceType.Queen, Color);
 	}
 
 	public ArrayList<Coordinates> getPossibleMoves() {

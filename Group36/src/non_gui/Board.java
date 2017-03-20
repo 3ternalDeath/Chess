@@ -70,43 +70,46 @@ public class Board {
 	 * with constructor, or game board will be empty.
 	 */
 	public void populateBoard(){
+		PieceColor color;
 		//Black pieces at top of board
-		gameBoard[0][7] = 	new Rook( 	PieceColor.Black, 0, 7);
-		gameBoard[1][7] = 	new Night(  PieceColor.Black, 1, 7);
-		gameBoard[2][7] = 	new Bishop(	PieceColor.Black, 2, 7);
-		gameBoard[3][7] = 	new Queen( 	PieceColor.Black, 3, 7);
-		gameBoard[4][7] =	new King( 	PieceColor.Black, 4, 7);
+		color = PieceColor.Black;
+		gameBoard[0][7] = 	new Rook   (new Coordinates(0,7), color);
+		gameBoard[1][7] = 	new Night  (new Coordinates(1,7), color);
+		gameBoard[2][7] = 	new Bishop (new Coordinates(2,7), color);
+		gameBoard[3][7] = 	new Queen  (new Coordinates(3,7), color);
+		gameBoard[4][7] =	new King   (new Coordinates(4,7), color);
 		blackKing = new Coordinates(4, 7);
-		gameBoard[5][7] = 	new Bishop(	PieceColor.Black, 5, 7);
-		gameBoard[6][7] = 	new Night(  PieceColor.Black, 6, 7);
-		gameBoard[7][7] = 	new Rook( 	PieceColor.Black, 7, 7);
-		gameBoard[0][6] = 	new Pawn( 	PieceColor.Black, 0, 6);
-		gameBoard[1][6] = 	new Pawn( 	PieceColor.Black, 1, 6);
-		gameBoard[2][6] = 	new Pawn( 	PieceColor.Black, 2, 6);
-		gameBoard[3][6] = 	new Pawn( 	PieceColor.Black, 3, 6);
-		gameBoard[4][6] = 	new Pawn( 	PieceColor.Black, 4, 6);
-		gameBoard[5][6] = 	new Pawn( 	PieceColor.Black, 5, 6);
-		gameBoard[6][6] = 	new Pawn( 	PieceColor.Black, 6, 6);
-		gameBoard[7][6] = 	new Pawn( 	PieceColor.Black, 7, 6);
+		gameBoard[5][7] = 	new Bishop (new Coordinates(5,7), color);
+		gameBoard[6][7] = 	new Night  (new Coordinates(6,7), color);
+		gameBoard[7][7] = 	new Rook   (new Coordinates(7,7), color);
+		gameBoard[0][6] = 	new Pawn   (new Coordinates(0,6), color);
+		gameBoard[1][6] = 	new Pawn   (new Coordinates(1,6), color);
+		gameBoard[2][6] = 	new Pawn   (new Coordinates(2,6), color);
+		gameBoard[3][6] = 	new Pawn   (new Coordinates(3,6), color);
+		gameBoard[4][6] = 	new Pawn   (new Coordinates(4,6), color);
+		gameBoard[5][6] = 	new Pawn   (new Coordinates(5,6), color);
+		gameBoard[6][6] = 	new Pawn   (new Coordinates(6,6), color);
+		gameBoard[7][6] = 	new Pawn   (new Coordinates(7,6), color);
 		
 		//White pieces at bottom of board
-		gameBoard[0][0] = 	new Rook( 	PieceColor.White, 0, 0);
-		gameBoard[1][0] = 	new Night(  PieceColor.White, 1, 0);
-		gameBoard[2][0] = 	new Bishop( PieceColor.White, 2, 0);
-		gameBoard[3][0] = 	new Queen( 	PieceColor.White, 3, 0);
-		gameBoard[4][0] = 	new King( 	PieceColor.White, 4, 0);
+		color = PieceColor.White;
+		gameBoard[0][0] = 	new Rook   (new Coordinates(0,0), color);
+		gameBoard[1][0] = 	new Night  (new Coordinates(1,0), color);
+		gameBoard[2][0] = 	new Bishop (new Coordinates(2,0), color);
+		gameBoard[3][0] = 	new Queen  (new Coordinates(3,0), color);
+		gameBoard[4][0] = 	new King   (new Coordinates(4,0), color);
 		whiteKing = new Coordinates(4, 0);
-		gameBoard[5][0] = 	new Bishop( PieceColor.White, 5, 0);
-		gameBoard[6][0] = 	new Night(  PieceColor.White, 6, 0);
-		gameBoard[7][0] = 	new Rook( 	PieceColor.White, 7, 0);
-		gameBoard[0][1] = 	new Pawn( 	PieceColor.White, 0, 1);
-		gameBoard[1][1] = 	new Pawn( 	PieceColor.White, 1, 1);
-		gameBoard[2][1] = 	new Pawn( 	PieceColor.White, 2, 1);
-		gameBoard[3][1] = 	new Pawn( 	PieceColor.White, 3, 1);
-		gameBoard[4][1] = 	new Pawn( 	PieceColor.White, 4, 1);
-		gameBoard[5][1] = 	new Pawn( 	PieceColor.White, 5, 1);
-		gameBoard[6][1] = 	new Pawn( 	PieceColor.White, 6, 1);
-		gameBoard[7][1] = 	new Pawn( 	PieceColor.White, 7, 1);
+		gameBoard[5][0] = 	new Bishop (new Coordinates(5,0), color);
+		gameBoard[6][0] = 	new Night  (new Coordinates(6,0), color);
+		gameBoard[7][0] = 	new Rook   (new Coordinates(7,0), color);
+		gameBoard[0][1] = 	new Pawn   (new Coordinates(0,1), color);
+		gameBoard[1][1] = 	new Pawn   (new Coordinates(1,1), color);
+		gameBoard[2][1] = 	new Pawn   (new Coordinates(2,1), color);
+		gameBoard[3][1] = 	new Pawn   (new Coordinates(3,1), color);
+		gameBoard[4][1] = 	new Pawn   (new Coordinates(4,1), color);
+		gameBoard[5][1] = 	new Pawn   (new Coordinates(5,1), color);
+		gameBoard[6][1] = 	new Pawn   (new Coordinates(6,1), color);
+		gameBoard[7][1] = 	new Pawn   (new Coordinates(7,1), color);
 		
 		//Fill the rest of the board with blank pieces
 		for (int y = 2; y < SIZE -2; y++) {

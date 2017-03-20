@@ -16,8 +16,8 @@ public class Pawn extends Piece {
 	 * @param x The starting x position of the pawn.
 	 * @param y The starting y position of the pawn.
 	 */
-	public Pawn(PieceColor Color, int x, int y) {
-		super(PieceType.Pawn, Color, x, y);
+	public Pawn(Coordinates coor, PieceColor Color) {
+		super(coor, PieceType.Pawn, Color);
 	}
 
 	public ArrayList<Coordinates> getPossibleMoves() {

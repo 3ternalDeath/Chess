@@ -12,23 +12,25 @@ import non_gui.Coordinates;
  * @author Group 36
  */
 public abstract class Piece {
+	
+	
 	private final PieceType type;
 	private final PieceColor color;
 	private boolean firstMove;
-	private Coordinates loco;
+	
+	private Coordinates coor;
 	private ImageIcon img;
 	
 	/**
 	 * Constructor for the Piece class.
+	 * @param coor TODO
 	 * @param type The type of the piece.
 	 * @param color The color of the piece.
-	 * @param x The starting x position of the piece.
-	 * @param y The starting y position of the piece.
 	 */
-	public Piece(PieceType type, PieceColor color, int x, int y) {
+	public Piece(Coordinates coor, PieceType type, PieceColor color) {
 		this.type = type;
 		this.color = color;
-		loco = new Coordinates(x,y);
+		this.coor = new Coordinates(coor.getX(), coor.getY());
 		firstMove = true;
 		if(type!=null)
 		img = new ImageIcon("src/Images/"+ Character.toLowerCase(color.toString().charAt(0)) + "" + Character.toLowerCase(type.toString().charAt(0)) +".png");
@@ -42,7 +44,7 @@ public abstract class Piece {
 	public Piece(int x, int y) {
 		type = null;
 		color = null;
-		loco = new Coordinates(x,y);
+		coor = new Coordinates(x,y);
 		firstMove = false;
 		img = null;
 	}
@@ -56,8 +58,8 @@ public abstract class Piece {
 		if(firstMove)
 			firstMove = false;
 		//moves the piece
-		loco.setX(newCoor.getX());
-		loco.setY(newCoor.getY());
+		coor.setX(newCoor.getX());
+		coor.setY(newCoor.getY());
 	}
 	
 	/**
@@ -75,7 +77,7 @@ public abstract class Piece {
 	 * @return The current x value.
 	 */
 	public int getX() {
-		return loco.getX();
+		return coor.getX();
 	}
 	
 	/**
@@ -83,7 +85,7 @@ public abstract class Piece {
 	 * @return The current y value.
 	 */
 	public int getY() {
-		return loco.getY();
+		return coor.getY();
 	}
 	
 	/**
@@ -91,7 +93,7 @@ public abstract class Piece {
 	 * @return The current coordinates.
 	 */
 	public Coordinates getCoordinates() {
-		return new Coordinates(loco.getX(), loco.getY());
+		return new Coordinates(coor.getX(), coor.getY());
 	}
 	
 	/**
@@ -149,23 +151,21 @@ public abstract class Piece {
 		return img;
 	}
 	
-	public static Piece createPiece(Coordinates coor, PieceColor color, PieceType type){
+	public static Piece createPiece(Coordinates coor, PieceType type, PieceColor color){
 		Piece piece;
-		if (type != null){
-		switch(type){
-		case King: piece = new King(color, coor.getX(), coor.getY()); break;
-		case Night: piece = new Night(color, coor.getX(), coor.getY()); break;
-		case Rook: piece = new Rook(color, coor.getX(), coor.getY()); break;
-		case Bishop: piece = new Bishop(color, coor.getX(), coor.getY()); break;
-		case Queen: piece = new Queen(color, coor.getX(), coor.getY()); break;
-		case Pawn: piece = new Pawn(color, coor.getX(), coor.getY()); break;
-		default: piece = null;
-		}
-	}
-		else{
+		if (type != null)
+			switch(type){
+			case King:   piece = new King   (coor, color); break;
+			case Night:  piece = new Night  (coor, color); break;
+			case Rook: 	 piece = new Rook   (coor, color); break;
+			case Bishop: piece = new Bishop (coor, color); break;
+			case Queen:  piece = new Queen  (coor, color); break;
+			case Pawn: 	 piece = new Pawn   (coor, color); break;
+			default:     piece = null;
+			}
+		else
 			piece = null;
-		}
-		
+
 		return piece;
 	}
 }

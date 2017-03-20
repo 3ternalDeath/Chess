@@ -16,8 +16,8 @@ public class King extends Piece {
 	 * @param x The starting x position of the king.
 	 * @param y The starting y position of the king.
 	 */
-	public King(PieceColor Color, int x, int y) {
-		super(PieceType.King, Color, x, y);
+	public King(Coordinates coor, PieceColor Color) {
+		super(coor, PieceType.King, Color);
 	}
 		
 	public ArrayList<Coordinates> getPossibleMoves() {

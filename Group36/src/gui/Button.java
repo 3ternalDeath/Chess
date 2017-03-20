@@ -1,6 +1,5 @@
 package gui;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import pieces.Piece;
@@ -19,31 +18,27 @@ public class Button extends JButton{
 	
 	//public Button(Coordinates coor, PieceColor color, PieceType type){}
 	
-	public Button(Coordinates coor, String string){
+	public Button(Coordinates coor, String creation){
 		super();
 		PieceColor color;
 		PieceType type;
-		switch(string.charAt(0)){
+		switch(creation.charAt(0)){
 		case'b': color = PieceColor.Black; break;
 		case'w': color = PieceColor.White; break;
 		default: color = null;
 		}
-		switch(string.charAt(1)){
-		case'k': type = PieceType.King; break;
-		case'n': type = PieceType.Night; break;
-		case'r': type = PieceType.Rook; break;
-		case'b': type = PieceType.Bishop; break;
-		case'p': type = PieceType.Pawn; break;
-		case'q': type = PieceType.Queen; break;
+		switch(creation.charAt(1)){
+		case'k': type = PieceType.King;    break;
+		case'q': type = PieceType.Queen;   break;
+		case'r': type = PieceType.Rook;    break;
+		case'n': type = PieceType.Night;   break;
+		case'b': type = PieceType.Bishop;  break;
+		case'p': type = PieceType.Pawn;    break;
 		default: type = null;
 		}
 		
-		System.out.println(coor);
-		System.out.println("Color: " + color);
-		System.out.println("Type: " + type);
-		
-		
-		piece = Piece.createPiece(coor, color, type);
+		System.out.println(color + " " + type + " at " + coor);
+		piece = Piece.createPiece(coor, type, color);
 	}
 	
 //	public Button(Coordinates coor, Icon icon){
@@ -51,7 +46,7 @@ public class Button extends JButton{
 //		
 //		this.coor = new Coordinates(coor.getX(),coor.getY());
 //	}
-//	
+
 	public Coordinates getCoor(){
 		return piece.getCoordinates();
 	}
