@@ -39,19 +39,22 @@ public class Test extends JPanel implements ActionListener {
 			{
 				//new Button
 				Coordinates coor = new Coordinates(x,y);
-				button[x][y] = new Button(coor);
+				String type = file.next();
+				
+				
+				button[x][y] = new Button(coor,type);
 				button[x][y].setPreferredSize(new Dimension(70,70));
 				
-				//Setting Icons
-				String type = file.next();
-				ImageIcon img;
-				if (!type.equals("ee")){
-					img = new ImageIcon("src/Images/"+ type +".png");
-				}
-				else{
-					img = null;
-				}
-				button[x][y].setIcon(img);
+//				//Setting Icons
+//				String type = file.next();
+//				ImageIcon img;
+//				if (!type.equals("ee")){
+//					img = new ImageIcon("src/Images/"+ type +".png");
+//				}
+//				else{
+//					img = null;
+//				}
+				button[x][y].setIcon(button[x][y].getImage());
 				
 				//ActionListener
 				button[x][y].addActionListener(this);

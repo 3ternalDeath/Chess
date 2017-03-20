@@ -30,6 +30,7 @@ public abstract class Piece {
 		this.color = color;
 		loco = new Coordinates(x,y);
 		firstMove = true;
+		if(type!=null)
 		img = new ImageIcon("src/Images/"+ Character.toLowerCase(color.toString().charAt(0)) + "" + Character.toLowerCase(type.toString().charAt(0)) +".png");
 	}
 	
@@ -146,5 +147,25 @@ public abstract class Piece {
 	
 	public ImageIcon getImage(){
 		return img;
+	}
+	
+	public static Piece createPiece(Coordinates coor, PieceColor color, PieceType type){
+		Piece piece;
+		if (type != null){
+		switch(type){
+		case King: piece = new King(color, coor.getX(), coor.getY()); break;
+		case Night: piece = new Night(color, coor.getX(), coor.getY()); break;
+		case Rook: piece = new Rook(color, coor.getX(), coor.getY()); break;
+		case Bishop: piece = new Bishop(color, coor.getX(), coor.getY()); break;
+		case Queen: piece = new Queen(color, coor.getX(), coor.getY()); break;
+		case Pawn: piece = new Pawn(color, coor.getX(), coor.getY()); break;
+		default: piece = null;
+		}
+	}
+		else{
+			piece = null;
+		}
+		
+		return piece;
 	}
 }
