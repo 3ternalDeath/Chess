@@ -33,7 +33,7 @@ public class Test extends JPanel implements ActionListener {
 	
 	public Test() throws FileNotFoundException {
 		setLayout(new GridBagLayout());
-		Scanner file = new Scanner(new File("src/gridBag/standard.txt"));
+		Scanner file = new Scanner(new File("src/gui/standard.txt"));
 		for(int y = 0; y < SIZE; y++)
 			for(int x = 0; x < SIZE; x++)
 			{
