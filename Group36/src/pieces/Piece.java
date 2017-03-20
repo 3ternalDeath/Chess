@@ -2,6 +2,8 @@ package pieces;
 
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 import non_gui.Coordinates;
 
 /**
@@ -14,6 +16,7 @@ public abstract class Piece {
 	private final PieceColor color;
 	private boolean firstMove;
 	private Coordinates loco;
+	private ImageIcon img;
 	
 	/**
 	 * Constructor for the Piece class.
@@ -27,7 +30,7 @@ public abstract class Piece {
 		this.color = color;
 		loco = new Coordinates(x,y);
 		firstMove = true;
-		getPossibleMoves();
+		img = new ImageIcon("src/Images/"+ Character.toLowerCase(color.toString().charAt(0)) + "" + Character.toLowerCase(type.toString().charAt(0)) +".png");
 	}
 	
 	/**
@@ -40,6 +43,7 @@ public abstract class Piece {
 		color = null;
 		loco = new Coordinates(x,y);
 		firstMove = false;
+		img = null;
 	}
 
 	/**
@@ -138,5 +142,9 @@ public abstract class Piece {
 	 */
 	public boolean isFirstMove() {
 		return firstMove;
+	}
+	
+	public ImageIcon getImage(){
+		return img;
 	}
 }
