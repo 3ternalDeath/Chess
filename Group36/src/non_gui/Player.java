@@ -124,7 +124,7 @@ public class Player {
 		int x = num.nextInt(8);
 		int y = num.nextInt(8);
 		
-		while(board.getPiece(x, y).getColor() != color) {
+		while(board.getPiece(new Coordinates(x, y)).getColor() != color) {
 			x = num.nextInt(8);
 			y = num.nextInt(8);
 		}
@@ -133,7 +133,7 @@ public class Player {
 	}
 	
 	private Coordinates pickMove(Coordinates piece, Board board) {
-		ArrayList<Coordinates> moves = board.getPiece(piece.getX(), piece.getY()).getPossibleMoves();
+		ArrayList<Coordinates> moves = board.getPiece(piece).getPossibleMoves();
 		int index = new Random().nextInt(moves.size());
 		return moves.get(index);
 	}

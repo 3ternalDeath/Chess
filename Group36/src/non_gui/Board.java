@@ -56,7 +56,7 @@ public class Board {
 		
 		for(int x = 0; x < SIZE; x++){
 			for(int y = 0; y < SIZE; y++){
-				gameBoard[x][y] = board.getPiece(x, y);
+				gameBoard[x][y] = board.getPiece(new Coordinates(x, y));
 			}
 		}
 		
@@ -114,7 +114,7 @@ public class Board {
 		//Fill the rest of the board with blank pieces
 		for (int y = 2; y < SIZE -2; y++) {
 			for (int x = 0; x < SIZE; x++) {
-				gameBoard[x][y] = new Empty(x, y);
+				gameBoard[x][y] = new Empty(new Coordinates(x, y));
 			}
 		}
 	}
@@ -127,8 +127,9 @@ public class Board {
 		System.out.println();
 		System.out.print("   ");
 		for (int y = 0; y < SIZE; y++) {
-			char x = (char) ((int) ('a') + y);
-			System.out.print("   " + x + "  ");
+			//char x = (char) ((int) ('a') + y);
+			//System.out.print("   " + x + "  ");
+			System.out.print("   " + (y) + "  ");
 		}
 		System.out.println();
 
@@ -148,7 +149,7 @@ public class Board {
 			System.out.println("|");
 
 			//Labeling left vertical axis
-			System.out.print(y);
+			System.out.print(y-1);
 			System.out.print("  ");
 			
 			//Content of Array
@@ -158,7 +159,7 @@ public class Board {
 			System.out.print("|  ");
 			
 			//Labeling right vertical axis
-			System.out.println(y);
+			System.out.println(y-1);
 			
 			//Bottom of each boy
 			System.out.print("   ");
@@ -172,8 +173,9 @@ public class Board {
 		//Labeling bottom horizontal axis
 		System.out.print("   ");
 		for (int y = 0; y < SIZE; y++) {
-			char x = (char) ((int) ('a') + y);
-			System.out.print("   " + x + "  ");
+			//char x = (char) ((int) ('a') + y);
+			//System.out.print("   " + x + "  ");
+			System.out.print("   " + (y) + "  ");
 		}
 		System.out.println();
 	}
@@ -189,15 +191,27 @@ public class Board {
 	public void update(Coordinates init, Coordinates fin, PieceColor color) {
 		System.out.println("Selected Piece:" + gameBoard[init.getX()][init.getY()].getType());
 		System.out.println("Piece Color: " + gameBoard[init.getX()][init.getY()].getColor());
+		
+		if(gameBoard[init.getX()][init.getY()].getType() == PieceType.King){
+			if(gameBoard[init.getX()][init.getY()].getColor() == PieceColor.White){
+				whiteKing = new Coordinates(fin.getX(), fin.getY());
+			}
+			else{
+				blackKing = new Coordinates(fin.getX(), fin.getY());
+			}
+		}
 
 		//move the specified piece to the specified location
 		//add move to the moves Stack
-		Piece piece = gameBoard[init.getX()][init.getY()];
+		Piece piece = getPiece(init);
 		piece.move(fin);
+		
+		//undo moves
 		int[][] currentMove = {{init.getX(), init.getY()}, {fin.getX(), fin.getY()}};
 		moves.add(currentMove);
 		deadPiece.add(gameBoard[fin.getX()][fin.getY()]);
-		gameBoard[init.getX()][init.getY()] = new Empty(init.getX(), init.getY());
+		
+		gameBoard[init.getX()][init.getY()] = new Empty(init);
 		gameBoard[fin.getX()][fin.getY()] = piece;
 		
 		updateCheckMate();
@@ -244,10 +258,29 @@ public class Board {
 				valid = false;
 			}
 		}
+
+
+		//king must be moved out of check
+		else if(color == PieceColor.Black) {
+			if(blackCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King) {
+				if(!checkNextMoveCheck(init, fin, color)) {
+					System.out.println("You are in Check, please move King out of check");
+					valid = false;
+				}
+			}
+		}
+		else if(color == PieceColor.White) {
+			if(whiteCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King) {
+				if(!checkNextMoveCheck(init, fin, color)) {
+					System.out.println("You are in Check, please move King out of check");
+					valid = false;
+				}
+			}
+		}
 		//if piece is king
 		else if (gameBoard[init.getX()][init.getY()].getType() == PieceType.King) {
-			//checks for castling
 			if(Coordinates.inBound(fin.getX() + 1)) {
+				//checks for castling
 				if(checkCheck(fin, gameBoard[init.getX()][init.getY()].getColor())) {
 					System.out.println("Moving into check not posible");
 					valid = false;
@@ -265,17 +298,10 @@ public class Board {
 						castle[0] = moves.size();
 					}
 				}
+				
 				else if(!checkNextMoveCheck(init, fin, color)) {
 					System.out.println("You cannot move King into check");
 					valid = false;
-				}
-				if(valid) {
-					if(color == PieceColor.Black) {
-						blackKing = fin;
-					}
-					else if(color == PieceColor.White) {
-						whiteKing = fin;
-					}
 				}
 			}
 		}
@@ -283,23 +309,6 @@ public class Board {
 		else if(!collisionDetect(init, fin)) {
 			System.out.println("There's something in the way.");
 			valid = false;
-		}
-		//king must be moved out of check
-		else if(color == PieceColor.Black) {
-			if(blackCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King) {
-				if(!checkNextMoveCheck(init, fin, color)) {
-					System.out.println("You are in Check, please move King out of check");
-					valid = false;
-				}
-			}
-		}
-		else if(color == PieceColor.White) {
-			if(whiteCheck && gameBoard[init.getX()][init.getY()].getType() != PieceType.King) {
-				if(!checkNextMoveCheck(init, fin, color)) {
-					System.out.println("You are in Check, please move King out of check");
-					valid = false;
-				}
-			}
 		}
 		
 		return valid;
@@ -455,7 +464,8 @@ public class Board {
 					if(Coordinates.inBound(check.getX(), check.getY())) {
 						if(gameBoard[check.getX()][check.getY()].getColor() != color) {
 							if(!checkCheck(check, color)) {
-								return false;
+								if(checkNextMoveCheck(king, check, color))
+									return false;
 							}
 						}
 					}
@@ -472,9 +482,10 @@ public class Board {
 	private void updateCheckMate() {
 		if(checkCheck(blackKing, null)) {
 			blackCheck = true;
-				
-			if(checkCheckMate(blackKing))
+
+			if(checkCheckMate(blackKing)){
 				blackMate = true;
+			}
 			else
 				blackMate = false;
 		}
@@ -573,15 +584,15 @@ public class Board {
 	 * @param y The y position of the piece.
 	 * @return The piece if there is one at the user's location, or null if there is not.
 	 */
-	public Piece getPiece(int x, int y){
+	public Piece getPiece(Coordinates coor){
 		//the following code pertaining to Class and Constructor was acquired from: http://stackoverflow.com/questions/6094575/creating-an-instance-using-the-class-name-and-calling-constructor
 		//and edited to meet the needs of this
 		
-		Class<? extends Piece> clazz = gameBoard[x][y].getClass();
+		Class<? extends Piece> clazz = gameBoard[coor.getX()][coor.getY()].getClass();
 		Constructor<? extends Piece> ctor;
 		try {
-			ctor = clazz.getConstructor(PieceColor.class, int.class, int.class);
-			Piece object = ctor.newInstance(gameBoard[x][y].getColor(), x, y);
+			ctor = clazz.getConstructor(Coordinates.class, PieceColor.class);
+			Piece object = ctor.newInstance(coor, gameBoard[coor.getX()][coor.getY()].getColor());
 			return object;
 		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block

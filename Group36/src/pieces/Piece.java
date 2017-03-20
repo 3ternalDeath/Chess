@@ -41,10 +41,10 @@ public abstract class Piece {
 	 * @param x The starting x position of the piece.
 	 * @param y The starting y position of the piece.
 	 */
-	public Piece(int x, int y) {
+	public Piece(Coordinates coor) {
 		type = null;
 		color = null;
-		coor = new Coordinates(x,y);
+		this.coor = new Coordinates(coor.getX(), coor.getY());
 		firstMove = false;
 		img = null;
 	}
@@ -123,13 +123,17 @@ public abstract class Piece {
 		
 		if(posMoves != null) {
 			
+//			for(Coordinates move : posMoves) {
+//				System.out.print(move + ", ");
+//			}
+//			System.out.println();
+			
 			for(int index = 0; index < posMoves.size(); index++) {
 				if(newCoor.equals(posMoves.get(index))) {
 					return true;
 				}
 			}
 		}
-		
 		return false;
 	}
 	

@@ -13,17 +13,16 @@ public class Empty extends Piece {
 
 	/**
 	 * Constructor for the Empty class.
-	 * @param x The starting x position of the empty space.
-	 * @param y The starting y position of the empty space.
+	 * @param coor The starting coordinates of the empty space.
 	 */
-	public Empty(int x, int y) {
-		super(x, y);
-	}
-	
-	public Empty(PieceColor k, int x, int y) {
-		super(x, y);
+	public Empty(Coordinates coor, PieceColor color) {
+		super(coor);
 	}
 
+	public Empty(Coordinates coor) {
+		super(coor);
+	}
+	
 	public ArrayList<Coordinates> getPossibleMoves() {
 		return null;
 	}
