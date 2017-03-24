@@ -14,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import non_gui.Coordinates;
+import non_gui.PlayerType;
+import pieces.PieceColor;
 
 
 public class Test extends JPanel implements ActionListener {
@@ -24,7 +26,12 @@ public class Test extends JPanel implements ActionListener {
 	final static int WINDOW = SIZE*76;
 	GridBagConstraints gbc = new GridBagConstraints();
 	String fileName = "standard";
-	boolean hi= true;
+	private boolean firstSec= true;
+	private Logic logic;
+	private Player p1, p2;
+	private Coordinates init;
+	private Coordinates fin;
+	private boolean valid;
 	
 	Button[][] button= new Button[SIZE][SIZE];
 	
@@ -63,7 +70,60 @@ public class Test extends JPanel implements ActionListener {
 				add(button[x][y],gbc);
 			}
 		file.close();
+		logic = new Logic(button);//Purposeful privacy leak
+		p1 = new Player(PieceColor.White, PlayerType.User, true);
+		p2 = new Player(PieceColor.Black, PlayerType.User, false);
 	}
+	
+	public void actionPerformed(ActionEvent e) {
+		
+		int x = e.getActionCommand().charAt(0) - '0';
+		int y = e.getActionCommand().charAt(1) - '0';
+		
+		if (firstSec){
+			init = new Coordinates(x,y);
+			System.out.println("Piece at:" + init);
+			firstSec = false;
+		}
+		else{
+			fin = new Coordinates(x,y);
+			System.out.println("Moved to:" + fin);
+			firstSec = true;
+			if(p1.isMyTurn()){
+				if(logic.validMove(init, fin, p1.getColor())){
+					valid = true;
+				}
+			}
+			else if(p2.isMyTurn()){
+				if(logic.validMove(init, fin, p2.getColor())){
+					valid = true;
+				}
+			}
+		}
+		//Change Icon if valid
+		if (valid) {
+			p1.switchTurn();
+			p2.switchTurn();
+			logic.updateBoard(init, fin);
+			logic.updateButton();
+			updateIcons();
+			valid = false;
+		}
+	}
+	
+	public void updateIcons(){
+		for(Button[] a : button){
+			for(Button i : a){
+				i.updateIcon();
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) throws FileNotFoundException{
 		Test t = new Test();
 		JFrame f = new JFrame();
@@ -74,35 +134,5 @@ public class Test extends JPanel implements ActionListener {
 		f.setVisible(true);
 		f.add(t);
 		
-	}
-	
-	Coordinates init;
-	Coordinates fin;
-	boolean valid;
-	public void actionPerformed(ActionEvent e) {
-		
-		int x = e.getActionCommand().charAt(0) - '0';
-		int y = e.getActionCommand().charAt(1) - '0';
-		
-		if (hi){
-			init = new Coordinates(x,y);
-			System.out.println("Piece at:" + init);
-			hi = false;
-		}
-		else{
-			fin = new Coordinates(x,y);
-			System.out.println("Moved to:" + fin);
-			hi = true;
-			
-			//TODO: CHECK VALID
-			
-			valid = true;
-		}
-		//Change Icon if valid
-		if (valid) {
-			button[fin.getX()][fin.getY()].setIcon(button[init.getX()][init.getY()].getIcon());
-			button[init.getX()][init.getY()].setIcon(null);
-			valid = false;
-		}
 	}
 }

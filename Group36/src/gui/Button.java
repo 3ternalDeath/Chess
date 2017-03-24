@@ -1,5 +1,8 @@
 package gui;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import pieces.Piece;
@@ -56,6 +59,40 @@ public class Button extends JButton{
 			return piece.getImage();
 		else
 			return null;
+	}
+	
+	public Piece getPieceRef(){
+		return piece;
+	}
+	
+	public Piece getPiece(){
+		//the following code pertaining to Class and Constructor was acquired from: http://stackoverflow.com/questions/6094575/creating-an-instance-using-the-class-name-and-calling-constructor
+		//and edited to meet the needs of this
+		
+		Class<? extends Piece> clazz = piece.getClass();
+		Constructor<? extends Piece> ctor;
+		try {
+			ctor = clazz.getConstructor(Coordinates.class, PieceColor.class);
+			Piece object = ctor.newInstance(piece.getCoordinates(), piece.getColor());
+			return object;
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			System.err.println("Something went wrong");
+			e.printStackTrace();
+			System.err.println("It is done going wrong");
+		}
+		
+		return null;
+	}
+	
+	public void setPieceRef(Piece piece){
+		this.piece = piece;
+	}
+	
+	public void updateIcon(){
+		if(piece != null)
+			setIcon(piece.getImage());
+		else
+			setIcon(null);
 	}
 	
 }
