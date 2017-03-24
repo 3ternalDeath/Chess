@@ -23,7 +23,7 @@ public class Test extends JPanel implements ActionListener {
 	private static final long serialVersionUID = -3433959957442938842L;
 	
 	final static int SIZE = 8;
-	final static int WINDOW = SIZE*76;
+	final static int WINDOW = SIZE*78;
 	GridBagConstraints gbc = new GridBagConstraints();
 	String fileName = "standard";
 	private boolean firstSec= true;

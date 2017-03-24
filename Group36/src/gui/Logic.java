@@ -151,6 +151,10 @@ public class Logic {
 				System.out.println("The pawn can only kill like that.");
 				return false;
 			}
+			else if(gameBoard[fin.getX()][fin.getY()] != null && Math.abs(fin.getX() - init.getX()) == 0){
+				System.out.println("The pawn can't kill like that.");
+				return false;
+			}
 		}
 		return true;
 	}
