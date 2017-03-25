@@ -18,6 +18,7 @@ public class Player {
 	private PieceColor color;
 	private PlayerType type;
 	private boolean myTurn;
+	private Coordinates kingCoor;
 	private boolean inCheck;
 	private boolean lost;
 	 
@@ -26,12 +27,17 @@ public class Player {
 	 * @param color The color of the player.
 	 * @param type The type of the player.
 	 */
-	public Player(PieceColor color, PlayerType type, boolean first) {
+	public Player(PieceColor color, PlayerType type, boolean first, Coordinates king) {
 		this.color = color;
 		this.type = type;
 		myTurn = first;
-		inCheck = false;
-		lost = false;
+		setInCheck(false);
+		setLost(false);
+		setKingCoor(new Coordinates(king.getX(), king.getY()));
+	}
+	
+	public Player(Player player){
+		this(player.color, player.type, player.myTurn, player.kingCoor);
 	}
 	
 	/**
@@ -84,5 +90,29 @@ public class Player {
 			myTurn = false;
 		else
 			myTurn = true;
+	}
+
+	public Coordinates getKingCoor() {
+		return new Coordinates(kingCoor.getX(), kingCoor.getY());
+	}
+
+	public void setKingCoor(Coordinates kingCoor) {
+		this.kingCoor = new Coordinates(kingCoor.getX(), kingCoor.getY());
+	}
+
+	public boolean isInCheck() {
+		return inCheck;
+	}
+
+	public void setInCheck(boolean inCheck) {
+		this.inCheck = inCheck;
+	}
+
+	public boolean isLost() {
+		return lost;
+	}
+
+	public void setLost(boolean lost) {
+		this.lost = lost;
 	}
 }
