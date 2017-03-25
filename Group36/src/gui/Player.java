@@ -42,23 +42,33 @@ public class Player {
 		return color;
 	}
 	
-	private Coordinates pickPiece(Piece[][] board) {
+	public Coordinates pickPiece(Piece[][] board) {
 		Random num = new Random();
-		int x = num.nextInt(8);
-		int y = num.nextInt(8);
+		boolean ok = false;
+		int x;
+		int y;
 		
-		while(board[x][y].getColor() != color) {
+		 do{
 			x = num.nextInt(8);
 			y = num.nextInt(8);
-		}
+			if(board[x][y] != null)
+				if(board[x][y].getColor() == color)
+					ok = true;
+			
+		}while(!ok);
 		
 		return new Coordinates(x, y);
 	}
 	
-	private Coordinates pickMove(Coordinates piece, Piece[][] board) {
+	public Coordinates pickMove(Coordinates piece, Piece[][] board) {
 		ArrayList<Coordinates> moves = board[piece.getX()][piece.getY()].getPossibleMoves();
-		int index = new Random().nextInt(moves.size());
-		return moves.get(index);
+		if(moves.size() != 0){
+			int index = new Random().nextInt(moves.size());
+			return moves.get(index);
+		}
+		else{
+			return piece;
+		}
 	}
 	
 	public PlayerType getType(){

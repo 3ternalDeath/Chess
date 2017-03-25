@@ -7,7 +7,7 @@ import pieces.Piece;
 import pieces.PieceColor;
 import pieces.PieceType;
 
-public class Logic {
+public class ChessLogic {
 
 	Button[][] buttons;
 	Piece[][] gameBoard;
@@ -16,7 +16,7 @@ public class Logic {
 	private int[] castle;
 	private boolean castleNow;
 	
-	public Logic(){
+	public ChessLogic(){
 		moves = new Stack<int[][]>();
 		deadPiece = new Stack<Piece>();
 		castle = new int[2];
@@ -25,7 +25,7 @@ public class Logic {
 		gameBoard = new Piece[Test.SIZE][Test.SIZE];
 	}
 
-	public Logic(Button[][] grid) {
+	public ChessLogic(Button[][] grid) {
 		this();
 		buttons = grid;
 
@@ -33,6 +33,14 @@ public class Logic {
 			for (int j = 0; j < Test.SIZE; j++)
 				gameBoard[i][j] = buttons[i][j].getPieceRef();
 
+	}
+	
+	public Coordinates compGetInit(Player comp){
+		return comp.pickPiece(gameBoard);
+	}
+	
+	public Coordinates comGetFin(Player comp, Coordinates init){
+		return comp.pickMove(init, gameBoard);
 	}
 	
 	public void updateButton(){
@@ -161,7 +169,7 @@ public class Logic {
 
 	private int castleValid(Coordinates init, Coordinates fin, PieceColor color){
 		if (gameBoard[init.getX()][init.getY()].getType() == PieceType.King) {
-			if(Coordinates.inBound(fin.getX() + 1)) {
+			if(Coordinates.inBound(fin.getX() + 1) && gameBoard[fin.getX() + 1][fin.getY()] != null) {
 				//checks for castling
 				if (gameBoard[fin.getX() + 1][fin.getY()].getType() != PieceType.Rook && (fin.getX() - init.getX()) == 2) {
 					System.out.println("Castling can only be done if there is a rook");

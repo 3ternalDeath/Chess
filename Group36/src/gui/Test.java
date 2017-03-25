@@ -27,7 +27,7 @@ public class Test extends JPanel implements ActionListener {
 	GridBagConstraints gbc = new GridBagConstraints();
 	String fileName = "standard";
 	private boolean firstSec= true;
-	private Logic logic;
+	private ChessLogic logic;
 	private Player p1, p2;
 	private Coordinates init;
 	private Coordinates fin;
@@ -70,9 +70,9 @@ public class Test extends JPanel implements ActionListener {
 				add(button[x][y],gbc);
 			}
 		file.close();
-		logic = new Logic(button);//Purposeful privacy leak
-		p1 = new Player(PieceColor.White, PlayerType.User, true);
-		p2 = new Player(PieceColor.Black, PlayerType.User, false);
+		logic = new ChessLogic(button);//Purposeful privacy leak
+		p1 = new Player(PieceColor.White, PlayerType.Computer, true);
+		p2 = new Player(PieceColor.Black, PlayerType.Computer, false);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -102,13 +102,41 @@ public class Test extends JPanel implements ActionListener {
 		}
 		//Change Icon if valid
 		if (valid) {
-			p1.switchTurn();
-			p2.switchTurn();
-			logic.updateBoard(init, fin);
-			logic.updateButton();
-			updateIcons();
+			moveStuff(init, fin);
+			nextTurn();
 			valid = false;
 		}
+	}
+	
+	private void moveStuff(Coordinates init, Coordinates fin){
+		logic.updateBoard(init, fin);
+		logic.updateButton();
+		updateIcons();
+	}
+	
+	private void nextTurn(){
+		p1.switchTurn();
+		p2.switchTurn();
+		
+		if(p1.getType() == PlayerType.Computer && p1.isMyTurn())
+			compMove(p1);
+		else if(p2.getType() == PlayerType.Computer && p2.isMyTurn())
+			compMove(p2);
+		
+	}
+	
+	private void compMove(Player comp){
+		do{
+			Coordinates init = logic.compGetInit(comp);
+			Coordinates fin = logic.comGetFin(comp, init);
+			
+			if(logic.validMove(init, fin, comp.getColor())){
+				moveStuff(init, fin);
+				nextTurn();
+			}
+		
+		}while (comp.isMyTurn());
+		
 	}
 	
 	public void updateIcons(){
