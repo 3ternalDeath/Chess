@@ -212,7 +212,7 @@ public class ChessLogic {
 			castleNow = false;
 		}
 		makeMove(init, fin);
-		updateCheckMate(p1, p2);
+		//updateCheckMate(p1, p2);
 	}
 
 	/**
@@ -262,9 +262,9 @@ public class ChessLogic {
 		if(!collisionDetect(init, fin)) {
 			return false;
 		}
-		if(!checkNextMoveCheck(init, fin, player)){
-			return false;
-		}
+	//	if(!checkNextMoveCheck(init, fin, player)){
+		//	return false;
+	//	}
 	
 		if(temp==1){//MUST BE LAST IF STATEMENT!!!!!
 			castleNow = true;
