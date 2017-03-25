@@ -1,5 +1,6 @@
 package gui;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import non_gui.Board;
@@ -25,23 +26,23 @@ public class ChessLogic {
 		castle = new int[2];
 		castle[0] = -1;
 		castle[1] = -1;
-		gameBoard = new Piece[Test.SIZE][Test.SIZE];
+		gameBoard = new Piece[ChessGame.SIZE][ChessGame.SIZE];
 	}
 
 	public ChessLogic(Button[][] grid) {
 		this();
 		buttons = grid;
 
-		for (int i = 0; i < Test.SIZE; i++)
-			for (int j = 0; j < Test.SIZE; j++)
+		for (int i = 0; i < ChessGame.SIZE; i++)
+			for (int j = 0; j < ChessGame.SIZE; j++)
 				gameBoard[i][j] = buttons[i][j].getPieceRef();
 
 	}
 	
 	public ChessLogic(ChessLogic logik){
-		gameBoard = new Piece[Test.SIZE][Test.SIZE];
-		for (int i = 0; i < Test.SIZE; i++)
-			for (int j = 0; j < Test.SIZE; j++)
+		gameBoard = new Piece[ChessGame.SIZE][ChessGame.SIZE];
+		for (int i = 0; i < ChessGame.SIZE; i++)
+			for (int j = 0; j < ChessGame.SIZE; j++)
 				if(logik.buttons[i][j].getPieceRef() != null)
 					gameBoard[i][j] = logik.buttons[i][j].getPiece();
 	}
@@ -57,20 +58,22 @@ public class ChessLogic {
 		if(color == null)
 			color = gameBoard[king.getX()][king.getY()].getColor();
 
-		for (int x = 0; x < Test.SIZE; x++) {
-			for (int y = 0; y < Test.SIZE; y++) {
+		for (int x = 0; x < ChessGame.SIZE; x++) {
+			for (int y = 0; y < ChessGame.SIZE; y++) {
 
 				// returns true when enemy piece can take the king
 				if (gameBoard[x][y] != null) {
 					if (gameBoard[x][y].getColor() != color) {
-						if (gameBoard[x][y].validMove(king)) {					//Separate if statements to save processing power
-							if(collisionDetect(new Coordinates(x, y), king)) {	//only checks for collision if piece can move there
+						if (gameBoard[x][y].validMove(king)) {	
+							if(pawnCheckValid(new Coordinates(x, y), king)){
+								if(collisionDetect(new Coordinates(x, y), king)) {	//only checks for collision if piece can move there
 								
-								Game.debugMsg("checkCheck() returns true-- KingCoordinates: " + king + " ||colorPram: "
+									Game.debugMsg("checkCheck() returns true-- KingCoordinates: " + king + " ||colorPram: "
 									+ color + " ||Piece info: " + gameBoard[x][y] + " "
 									+ gameBoard[x][y].getCoordinates());
 								
-								return true;
+									return true;
+								}
 							}
 						}
 					}
@@ -94,25 +97,20 @@ public class ChessLogic {
 		
 		for(int x = -1; x <= 1; x++) {
 			for(int y = -1; y <= 1; y++) {
-				check.incrementX(x); //changes coords of check based on loop variables
+				check.incrementX(x); // changes coords of check based on loop
+										// variables
 				check.incrementY(y);
-				
-				//in order for check mate to happen king should not be able to move anywhere without dying 
-				if( x!= 0 || y != 0) {
-					if(Coordinates.inBound(check.getX(), check.getY())) {
-						if (gameBoard[check.getX()][check.getY()] != null) {
-							if (gameBoard[check.getX()][check.getY()].getColor() != color) {
-								if (!checkCheck(check, color)) {
-									if (checkNextMoveCheck(king, check, player))
-										return false;
-								}
-							}
-						}
+
+				// in order for check mate to happen king should not be able to
+				// move anywhere without dying
+				if(Coordinates.inBound(check.getX(), check.getY()))
+					if (!checkNextMoveCheck(king, check, player)) {
+						return false;
 					}
-				}
-				
-				check.incrementX(x*(-1));//puts check coords back the way they were
-				check.incrementY(y*(-1));
+
+				check.incrementX(x * (-1));// puts check coords back the way
+											// they were
+				check.incrementY(y * (-1));
 			}
 		}
 		
@@ -129,11 +127,10 @@ public class ChessLogic {
 		nextMove.makeTestMove(init, fin);
 		nextMove.updateCheck(testPlayer);
 
-		if (testPlayer.isInCheck()) {
+		if (testPlayer.isInCheck())
 			return false;
-		}
-
-		return true;
+		else
+			return true;
 	}
 	
 	private void updateCheckMate(Player p1, Player p2) {
@@ -141,11 +138,32 @@ public class ChessLogic {
 		updateCheckMate(p2);
 	}
 	
+	private boolean checkAllMoves(Player p){
+		for(int x = 0; x < ChessGame.SIZE; x++)
+			for(int y = 0; y < ChessGame.SIZE; y++){
+				if(gameBoard[x][y] != null){
+					if(gameBoard[x][y].getColor() == p.getColor()){
+						Coordinates piece = new Coordinates(x,y);
+						ArrayList<Coordinates> moves = gameBoard[x][y].getPossibleMoves();
+						for(Coordinates move : moves){
+							if(checkNextMoveCheck(piece, move, p)){
+								return true;
+							}
+						}
+					}
+				}
+			}
+		
+		
+		return false;
+	}
+	
 	private void updateCheckMate(Player player){
 		if(checkCheck(player.getKingCoor(), null)) {
 			player.setInCheck(true);
 
-			if(checkCheckMate(player)){
+			if(checkCheckMate(player))
+			if(!checkAllMoves(player)){
 				player.setLost(true);;
 			}
 			else
@@ -158,7 +176,7 @@ public class ChessLogic {
 	}
 	
 	private void updateCheck(Player player){
-		if(checkCheck(player.getKingCoor(), null)) {
+		if(checkCheck(player.getKingCoor(), player.getColor())) {
 			player.setInCheck(true);
 		}
 		else{
@@ -176,8 +194,8 @@ public class ChessLogic {
 	}
 	
 	public void updateButton(){
-		for(int x = 0; x < Test.SIZE; x++){
-			for(int y = 0; y < Test.SIZE; y++){
+		for(int x = 0; x < ChessGame.SIZE; x++){
+			for(int y = 0; y < ChessGame.SIZE; y++){
 				buttons[x][y].setPieceRef(gameBoard[x][y]);
 			}
 		}
@@ -296,6 +314,12 @@ public class ChessLogic {
 			}
 		}
 		return true;
+	}
+	
+	private boolean pawnCheckValid(Coordinates init, Coordinates fin){
+		if(Math.abs(fin.getX() - init.getX()) == 1)
+			return true;
+		return false;
 	}
 
 	private int castleValid(Coordinates init, Coordinates fin, PieceColor color){

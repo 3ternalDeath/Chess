@@ -18,7 +18,7 @@ import non_gui.PlayerType;
 import pieces.PieceColor;
 import pieces.PieceType;
 
-public class Test extends JPanel implements ActionListener {
+public class ChessGame extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = -3433959957442938842L;
 
@@ -35,7 +35,7 @@ public class Test extends JPanel implements ActionListener {
 
 	Button[][] button = new Button[SIZE][SIZE];
 
-	public Test() throws FileNotFoundException {
+	public ChessGame() throws FileNotFoundException {
 		setLayout(new GridBagLayout());
 		Scanner file = new Scanner(new File("src/gui/" + fileName + ".txt"));
 		for (int y = SIZE - 1; y >= 0; y--)
@@ -82,17 +82,23 @@ public class Test extends JPanel implements ActionListener {
 		file.close();
 		logic = new ChessLogic(button);// Purposeful privacy leak
 	}
+	
+	private void stop(){
+		for (int y = SIZE - 1; y >= 0; y--)
+			for (int x = 0; x < SIZE; x++) 
+				button[x][y].removeActionListener(this);
+	}
 
 	public void actionPerformed(ActionEvent e) {
 
 		int x = e.getActionCommand().charAt(0) - '0';
 		int y = e.getActionCommand().charAt(1) - '0';
 
-		if (firstSec) {
+		if (firstSec && !p1.isLost() && !p2.isLost()) {
 			init = new Coordinates(x, y);
 			System.out.println("Piece at:" + init);
 			firstSec = false;
-		} else {
+		} else if(!p1.isLost() && !p2.isLost()){
 			fin = new Coordinates(x, y);
 			System.out.println("Moved to:" + fin);
 			firstSec = true;
@@ -106,6 +112,13 @@ public class Test extends JPanel implements ActionListener {
 				}
 			}
 		}
+		else{
+			if(p1.isLost())
+				System.out.println(p2.getColor() + " Won!!");
+			else if(p2.isLost())
+				System.out.println(p1.getColor() + " Won!!");
+			stop();
+		}
 		// Change Icon if valid
 		if (valid) {
 			moveStuff(init, fin);
@@ -113,7 +126,7 @@ public class Test extends JPanel implements ActionListener {
 			valid = false;
 		}
 	}
-
+	
 	private void moveStuff(Coordinates init, Coordinates fin) {
 		if (logic.getType(init) == PieceType.King) {
 			if (p1.isMyTurn())
@@ -130,11 +143,11 @@ public class Test extends JPanel implements ActionListener {
 		p1.switchTurn();
 		p2.switchTurn();
 
-		if (p1.getType() == PlayerType.Computer && p1.isMyTurn()){
+		if (p1.getType() == PlayerType.Computer && p1.isMyTurn() && !p1.isLost()){
 			compMove(p1);
 			nextTurn();
 		}
-		else if (p2.getType() == PlayerType.Computer && p2.isMyTurn()){
+		else if (p2.getType() == PlayerType.Computer && p2.isMyTurn() && !p2.isLost()){
 			compMove(p2);
 			nextTurn();
 		}
@@ -163,15 +176,4 @@ public class Test extends JPanel implements ActionListener {
 		}
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
-		Test t = new Test();
-		JFrame f = new JFrame();
-
-		f.setTitle("Hello");
-		f.setSize(WINDOW - 36, WINDOW);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setVisible(true);
-		f.add(t);
-
-	}
 }
