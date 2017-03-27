@@ -12,9 +12,8 @@ public class Queen extends Piece {
 	
 	/**
 	 * Constructor for the Queen class.
+	 * @param coor The starting coordinates of the queen.
 	 * @param Color The color of the queen.
-	 * @param x The starting x position of the queen.
-	 * @param y The starting y position of the queen.
 	 */
 	public Queen(Coordinates coor, PieceColor Color) {
 		super(coor, PieceType.Queen, Color);

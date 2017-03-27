@@ -12,9 +12,8 @@ public class Rook extends Piece {
 
 	/**
 	 * Constructor for the Rook class.
+	 * @param coor The starting coordinates of the rook.
 	 * @param Color The color of the rook.
-	 * @param x The starting x position of the rook.
-	 * @param y The starting y position of the rook.
 	 */
 	public Rook(Coordinates coor, PieceColor Color) {
 		super(coor, PieceType.Rook, Color);

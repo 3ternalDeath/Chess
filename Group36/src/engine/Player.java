@@ -24,6 +24,8 @@ public class Player {
 	 * Constructor for the Player class.
 	 * @param color The color of the player.
 	 * @param type The type of the player.
+	 * @param first The player's turn status.
+	 * @param king The coordinates of the player's king piece.
 	 */
 	public Player(PieceColor color, PlayerType type, boolean first, Coordinates king) {
 		this.color = color;

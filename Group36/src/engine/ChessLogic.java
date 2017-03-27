@@ -34,8 +34,8 @@ public class ChessLogic {
 	}
 
 	/**
-	 * Constructor for the ChessLogic class that copies a grid of chessboard buttons.
-	 * @param grid
+	 * Constructor for the ChessLogic class that copies a 2d array of chessboard buttons.
+	 * @param grid The array of buttons to copy.
 	 */
 	public ChessLogic(Button[][] grid) {
 		this();
@@ -221,9 +221,9 @@ public class ChessLogic {
 	}
 	
 	/**
-	 * Checks all places around a given King piece to see whether an enemy piece
+	 * Checks all places around a given player's King piece to see whether an enemy piece
 	 * could move to that location. Should only be run if King is already in check.
-	 * @param king The coordinates of the King piece.
+	 * @param player The player to check.
 	 * @return true If all positions King piece can move to are in enemy sights, false otherwise.
 	 */
 	private boolean checkCheckMate(Player player) {

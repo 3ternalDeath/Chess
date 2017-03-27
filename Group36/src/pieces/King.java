@@ -12,9 +12,8 @@ public class King extends Piece {
 
 	/**
 	 * Constructor for the King class.
+	 * @param coor The starting coordinates of the king.
 	 * @param Color The color of the king.
-	 * @param x The starting x position of the king.
-	 * @param y The starting y position of the king.
 	 */
 	public King(Coordinates coor, PieceColor Color) {
 		super(coor, PieceType.King, Color);

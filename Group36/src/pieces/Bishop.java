@@ -12,9 +12,8 @@ public class Bishop extends Piece {
 
 	/**
 	 * Constructor for the Bishop class.
+	 * @param coor The starting coordinates of the bishop.
 	 * @param Color The color of the bishop.
-	 * @param x The starting x position of the bishop.
-	 * @param y The starting y position of the bishop.
 	 */
 	public Bishop(Coordinates coor,PieceColor Color) {
 		super(coor, PieceType.Bishop, Color);

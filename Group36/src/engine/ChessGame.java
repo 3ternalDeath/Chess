@@ -40,7 +40,7 @@ public class ChessGame extends JPanel implements ActionListener {
 
 	/**
 	 * Constructor for the ChessGame class.
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException if chessboard arrangement is missing.
 	 */
 	public ChessGame() throws FileNotFoundException {
 		setLayout(new GridBagLayout());

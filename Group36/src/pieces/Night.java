@@ -12,9 +12,8 @@ public class Night extends Piece {
 
 	/**
 	 * Constructor for the Knight class.
+	 * @param coor The starting coordinates of the knight.
 	 * @param Color The color of the knight.
-	 * @param x The starting x position of the knight.
-	 * @param y The starting y position of the knight.
 	 */
 	public Night(Coordinates coor, PieceColor Color) {
 		super(coor, PieceType.Night, Color);

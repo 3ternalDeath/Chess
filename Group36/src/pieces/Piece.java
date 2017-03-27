@@ -21,7 +21,7 @@ public abstract class Piece {
 	
 	/**
 	 * Constructor for the Piece class.
-	 * @param coor TODO
+	 * @param coor The starting coordinates of the piece.
 	 * @param type The type of the piece.
 	 * @param color The color of the piece.
 	 */
@@ -36,8 +36,7 @@ public abstract class Piece {
 	
 	/**
 	 * Initializes a piece with no type or color.
-	 * @param x The starting x position of the piece.
-	 * @param y The starting y position of the piece.
+	 * @param coor The starting coordinates of the piece.
 	 */
 	public Piece(Coordinates coor) {
 		type = null;
