@@ -32,7 +32,7 @@ public class ChessGame extends JPanel implements ActionListener {
 	
 	private boolean firstSec = true;
 	private ChessLogic logic;
-	private Player p1, p2;
+	private Player player1, player2;
 	private Coordinates init;
 	private Coordinates fin;
 	private boolean valid;
@@ -57,10 +57,10 @@ public class ChessGame extends JPanel implements ActionListener {
 				if (button[x][y].getPieceRef() != null) {
 					if (button[x][y].getPieceRef().getType() == PieceType.King) {
 						if (button[x][y].getPieceRef().getColor() == PieceColor.White) {
-							p1 = new Player(PieceColor.White, PlayerType.User, true, coor);
+							player1 = new Player(PieceColor.White, PlayerType.User, true, coor);
 						} 
 						else if (button[x][y].getPieceRef().getColor() == PieceColor.Black) {
-							p2 = new Player(PieceColor.Black, PlayerType.Computer, false, coor);
+							player2 = new Player(PieceColor.Black, PlayerType.Computer, false, coor);
 						}
 					}
 				}
@@ -69,10 +69,8 @@ public class ChessGame extends JPanel implements ActionListener {
 				button[x][y].setPreferredSize(new Dimension(71, 71));
 
 				// Checkered Background
-				if ((x + y) % 2 == 0)
-					button[x][y].setBackground(Color.BLACK);
-				else
-					button[x][y].setBackground(Color.WHITE);
+				if ((x + y) % 2 == 0) button[x][y].setBackground(Color.BLACK);
+				else button[x][y].setBackground(Color.WHITE);
 
 				// Setting Icons
 				button[x][y].setIcon(button[x][y].getImage());
@@ -98,31 +96,31 @@ public class ChessGame extends JPanel implements ActionListener {
 		int x = e.getActionCommand().charAt(0) - '0';
 		int y = e.getActionCommand().charAt(1) - '0';
 
-		if (firstSec && !p1.isLost() && !p2.isLost()) {
+		if (firstSec && !player1.isLost() && !player2.isLost()) {
 			init = new Coordinates(x, y);
 			System.out.println("Piece at:" + init);
 			firstSec = false;
 		} 
-		else if (!p1.isLost() && !p2.isLost()) {
+		else if (!player1.isLost() && !player2.isLost()) {
 			fin = new Coordinates(x, y);
 			System.out.println("Moved to:" + fin);
 			firstSec = true;
-			if (p1.isMyTurn()) {
-				if (logic.validMove(init, fin, p1)) {
+			if (player1.isMyTurn()) {
+				if (logic.validMove(init, fin, player1)) {
 					valid = true;
 				}
 			} 
-			else if (p2.isMyTurn()) {
-				if (logic.validMove(init, fin, p2)) {
+			else if (player2.isMyTurn()) {
+				if (logic.validMove(init, fin, player2)) {
 					valid = true;
 				}
 			}
 		}
 		else {
-			if (p1.isLost())
-				System.out.println(p2.getColor() + " Won!!");
-			else if (p2.isLost())
-				System.out.println(p1.getColor() + " Won!!");
+			if (player1.isLost())
+				System.out.println(player2.getColor() + " Won!!");
+			else if (player2.isLost())
+				System.out.println(player1.getColor() + " Won!!");
 			stop();
 		}
 		// Change Icon if valid
@@ -137,9 +135,9 @@ public class ChessGame extends JPanel implements ActionListener {
 	 * Adjusts the icons on every button in the chessboard.
 	 */
 	public void updateIcons() {
-		for (Button[] a : button) {
-			for (Button i : a) {
-				i.updateIcon();
+		for (Button[] x: button) {
+			for (Button y : x) {
+				y.updateIcon();
 			}
 		}
 	}
@@ -170,13 +168,13 @@ public class ChessGame extends JPanel implements ActionListener {
 	 */
 	private void moveStuff(Coordinates init, Coordinates fin) {
 		if (logic.getType(init) == PieceType.King) {
-			if (p1.isMyTurn())
-				p1.setKingCoor(fin);
-			else if (p2.isMyTurn())
-				p2.setKingCoor(fin);
+			if (player1.isMyTurn())
+				player1.setKingCoor(fin);
+			else if (player2.isMyTurn())
+				player2.setKingCoor(fin);
 		}
 		
-		logic.updateBoard(init, fin, p1, p2);
+		logic.updateBoard(init, fin, player1, player2);
 		logic.updateButton();
 		updateIcons();
 	}
@@ -185,15 +183,15 @@ public class ChessGame extends JPanel implements ActionListener {
 	 * Rolls game progression over to the next turn.
 	 */
 	private void nextTurn() {
-		p1.switchTurn();
-		p2.switchTurn();
+		player1.switchTurn();
+		player2.switchTurn();
 
-		if (p1.getType() == PlayerType.Computer && p1.isMyTurn() && !p1.isLost()) {
-			compMove(p1);
+		if (player1.getType() == PlayerType.Computer && player1.isMyTurn() && !player1.isLost()) {
+			compMove(player1);
 			nextTurn();
 		}
-		else if (p2.getType() == PlayerType.Computer && p2.isMyTurn() && !p2.isLost()) {
-			compMove(p2);
+		else if (player2.getType() == PlayerType.Computer && player2.isMyTurn() && !player2.isLost()) {
+			compMove(player2);
 			nextTurn();
 		}
 	}

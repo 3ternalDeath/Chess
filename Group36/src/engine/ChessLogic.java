@@ -40,9 +40,9 @@ public class ChessLogic {
 		this();
 		buttons = grid;
 
-		for (int i = 0; i < ChessGame.SIZE; i++)
-			for (int j = 0; j < ChessGame.SIZE; j++)
-				gameBoard[i][j] = buttons[i][j].getPieceRef();
+		for (int x = 0; x < ChessGame.SIZE; x++)
+			for (int y = 0; y < ChessGame.SIZE; y++)
+				gameBoard[x][y] = buttons[x][y].getPieceRef();
 	}
 	
 	/**
@@ -51,10 +51,10 @@ public class ChessLogic {
 	 */
 	public ChessLogic(ChessLogic logic) {
 		gameBoard = new Piece[ChessGame.SIZE][ChessGame.SIZE];
-		for (int i = 0; i < ChessGame.SIZE; i++)
-			for (int j = 0; j < ChessGame.SIZE; j++)
-				if (logic.buttons[i][j].getPieceRef() != null)
-					gameBoard[i][j] = logic.buttons[i][j].getPiece();
+		for (int x = 0; x < ChessGame.SIZE; x++)
+			for (int y = 0; y < ChessGame.SIZE; y++)
+				if (logic.buttons[x][y].getPieceRef() != null)
+					gameBoard[x][y] = logic.buttons[x][y].getPiece();
 	}
 	
 	/**
@@ -165,8 +165,8 @@ public class ChessLogic {
 			return false;
 		}
 		
-		int temp = castleValid(init, fin, player.getColor());
-		if (temp == -1) {
+		int castling = castleValid(init, fin, player.getColor());
+		if (castling == -1) {
 			return false;
 		}
 		
@@ -174,11 +174,11 @@ public class ChessLogic {
 			return false;
 		}
 		
-	//	if (!checkNextMoveCheck(init, fin, player)) {
-		//	return false;
-	//	}
+//		if (!checkNextMoveCheck(init, fin, player)) {
+//			return false;
+//		}
 	
-		if (temp==1) {//MUST BE LAST IF STATEMENT!!!!!
+		if (castling==1) {//MUST BE LAST IF STATEMENT!!!!!
 			castleNow = true;
 		}
 		return true;
@@ -306,7 +306,6 @@ public class ChessLogic {
 					}
 				}
 			}
-		
 		return false;
 	}
 	
@@ -510,6 +509,7 @@ public class ChessLogic {
 				}
 			}
 			else {
+				//If there is a difference in x and y
 				while (xDifference != 0 && yDifference != 0) {
 					if (gameBoard[init.getX() + xDifference][init.getY() + yDifference] != null) {
 						pathOpen = false;
