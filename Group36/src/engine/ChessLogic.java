@@ -3,7 +3,6 @@ package engine;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import deprecated.Game;
 import pieces.Empty;
 import pieces.Piece;
 import pieces.PieceColor;
@@ -204,7 +203,7 @@ public class ChessLogic {
 						if (gameBoard[x][y].validMove(king)) {	
 							if (pawnCheckValid(new Coordinates(x, y), king)) {
 								if (collisionDetect(new Coordinates(x, y), king)) {	//only checks for collision if piece can move there
-									Game.debugMsg("checkCheck() returns true-- KingCoordinates: " + king + " ||colorPram: "
+									ChessGame.debugMsg("checkCheck() returns true-- KingCoordinates: " + king + " ||colorPram: "
 									+ color + " ||Piece info: " + gameBoard[x][y] + " "
 									+ gameBoard[x][y].getCoordinates());
 								

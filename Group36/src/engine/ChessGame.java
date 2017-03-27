@@ -28,6 +28,7 @@ public class ChessGame extends JPanel implements ActionListener {
 	final static int WINDOW = SIZE * 78;
 	GridBagConstraints gbc = new GridBagConstraints();
 	String fileName = "standard";
+	public static boolean DEBUG = true;
 	
 	private boolean firstSec = true;
 	private ChessLogic logic;
@@ -141,6 +142,15 @@ public class ChessGame extends JPanel implements ActionListener {
 				i.updateIcon();
 			}
 		}
+	}
+	
+	/**
+	 * Displays a debugging message, if the debug switch is turned on.
+	 * @param msg The message to display.
+	 */
+	public static void debugMsg(String msg) {
+		if(DEBUG)
+			System.out.println(msg);
 	}
 	
 	/**
