@@ -12,7 +12,6 @@ import pieces.PieceType;
 /**
  * Handles all the internal logic of a chess game.
  * @author Group 36
- *
  */
 public class ChessLogic {
 	Button[][] buttons;
@@ -191,7 +190,7 @@ public class ChessLogic {
 	 * can take the King piece.
 	 * @param king The coordinates of the King piece.
 	 * @param color The color of friendly pieces; can be left null if unknown.
-	 * @return true if piece at king location can be taken next move, false otherwise
+	 * @return True if piece at king location can be taken next move, false otherwise.
 	 */
 	private boolean checkCheck(Coordinates king, PieceColor color) {
 		if (color == null)
@@ -199,7 +198,6 @@ public class ChessLogic {
 
 		for (int x = 0; x < ChessGame.SIZE; x++) {
 			for (int y = 0; y < ChessGame.SIZE; y++) {
-
 				// returns true when enemy piece can take the king
 				if (gameBoard[x][y] != null) {
 					if (gameBoard[x][y].getColor() != color) {
@@ -256,12 +254,12 @@ public class ChessLogic {
 	}
 	
 	/**
-	 * Checks whether a given move (in terms of a group of coordinates) would put
-	 * another player in check.
+	 * Checks whether a given move (in terms of a group of coordinates) would allow
+	 * a given player to leave check
 	 * @param init The initial set of coordinates.
 	 * @param fin The final set of coordinates.
 	 * @param player The player making the move.
-	 * @return True if the move would put the other player in check, false otherwise.
+	 * @return True if the move would put the player out of check, false otherwise.
 	 */
 	private boolean checkNextMoveCheck(Coordinates init, Coordinates fin, Player player) {
 		ChessLogic nextMove = new ChessLogic(this);
@@ -289,6 +287,11 @@ public class ChessLogic {
 		updateCheckMate(p2);
 	}
 	
+	/**
+	 * Checks whether or not a given player is able to leave check.
+	 * @param p The player to check.
+	 * @return True if the player can leave check, false otherwise.
+	 */
 	private boolean checkAllMoves(Player p) {
 		for (int x = 0; x < ChessGame.SIZE; x++)
 			for (int y = 0; y < ChessGame.SIZE; y++) {
@@ -318,7 +321,7 @@ public class ChessLogic {
 
 			if (checkCheckMate(player))
 				if (!checkAllMoves(player)) {
-					player.setLost(true);;
+					player.setLost(true);
 				}
 				else
 					player.setLost(false);
@@ -413,6 +416,12 @@ public class ChessLogic {
 		return true;
 	}
 
+	/**
+	 * Checks whether a pawn could move to a given location.
+	 * @param init The initial set of coordinates.
+	 * @param fin The final set of coordinates.
+	 * @return True if a pawn could move to the location, false otherwise.
+	 */
 	private boolean pawnCheckValid(Coordinates init, Coordinates fin) {
 		if (Math.abs(fin.getX() - init.getX()) == 1)
 			return true;
