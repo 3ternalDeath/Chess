@@ -1,4 +1,4 @@
-package oldGui;
+package deprecated;
 
 import java.awt.Graphics;
 import java.util.LinkedList;

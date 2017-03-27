@@ -1,4 +1,4 @@
-package oldGui;
+package deprecated;
 
 public enum ID {
 

@@ -1,9 +1,10 @@
-package non_gui;
+package deprecated;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Stack;
 
+import engine.Coordinates;
 import pieces.Bishop;
 import pieces.Empty;
 import pieces.King;

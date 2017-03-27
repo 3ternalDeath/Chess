@@ -2,7 +2,7 @@ package pieces;
 
 import java.util.ArrayList;
 
-import non_gui.Coordinates;
+import engine.Coordinates;
 
 /**
  * A single Knight piece.
@@ -23,24 +23,24 @@ public class Night extends Piece {
 	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		if(Coordinates.inBound(getX() + 2, getY() + 1))
+		if (Coordinates.inBound(getX() + 2, getY() + 1))
 			moves.add(new Coordinates(getX() + 2, getY() + 1));
-		if(Coordinates.inBound(getX() + 2, getY() - 1))
+		if (Coordinates.inBound(getX() + 2, getY() - 1))
 			moves.add(new Coordinates(getX() + 2, getY() - 1));
 		
-		if(Coordinates.inBound(getX() - 2, getY() + 1))
+		if (Coordinates.inBound(getX() - 2, getY() + 1))
 			moves.add(new Coordinates(getX() - 2, getY() + 1));
-		if(Coordinates.inBound(getX() - 2, getY() - 1))
+		if (Coordinates.inBound(getX() - 2, getY() - 1))
 			moves.add(new Coordinates(getX() - 2, getY() - 1));
 		
-		if(Coordinates.inBound(getX() + 1, getY() + 2))
+		if (Coordinates.inBound(getX() + 1, getY() + 2))
 			moves.add(new Coordinates(getX() + 1, getY() + 2));
-		if(Coordinates.inBound(getX() + 1, getY() - 2))
+		if (Coordinates.inBound(getX() + 1, getY() - 2))
 			moves.add(new Coordinates(getX() + 1, getY() - 2));
 		
-		if(Coordinates.inBound(getX() - 1, getY() + 2))
+		if (Coordinates.inBound(getX() - 1, getY() + 2))
 			moves.add(new Coordinates(getX() - 1, getY() + 2));
-		if(Coordinates.inBound(getX() - 1, getY() - 2))
+		if (Coordinates.inBound(getX() - 1, getY() - 2))
 			moves.add(new Coordinates(getX() - 1, getY() - 2));
 		
 		return moves;

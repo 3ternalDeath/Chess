@@ -1,5 +1,6 @@
-package non_gui;
+package deprecated;
 
+import engine.PlayerType;
 import pieces.PieceColor;
 
 /**

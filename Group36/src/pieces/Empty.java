@@ -2,7 +2,7 @@ package pieces;
 
 import java.util.ArrayList;
 
-import non_gui.Coordinates;
+import engine.Coordinates;
 
 /**
  * An empty space -- behaves like a piece in some ways, but
@@ -12,13 +12,18 @@ import non_gui.Coordinates;
 public class Empty extends Piece {
 
 	/**
-	 * Constructor for the Empty class.
+	 * Constructor, with color option, for the Empty class.
 	 * @param coor The starting coordinates of the empty space.
+	 * @param color The color of the empty space (goes unused).
 	 */
 	public Empty(Coordinates coor, PieceColor color) {
 		super(coor);
 	}
 
+	/**
+	 * Constructor, without color option, for the Empty class.
+	 * @param coor The starting coordinates of the empty space.
+	 */
 	public Empty(Coordinates coor) {
 		super(coor);
 	}

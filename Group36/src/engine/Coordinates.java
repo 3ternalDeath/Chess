@@ -1,4 +1,4 @@
-package non_gui;
+package engine;
 
 /**
  * Container for an x value and a y value.
@@ -74,7 +74,7 @@ public class Coordinates {
 	 * @return True if the two coordinates are equal, false otherwise.
 	 */
 	public boolean equals(Coordinates compare) {
-		if(compare.getX() == x && compare.getY() == y)
+		if (compare.getX() == x && compare.getY() == y)
 			return true;
 		else
 			return false;
@@ -90,7 +90,7 @@ public class Coordinates {
 	 * @return True if the x value would be in bounds, false otherwise.
 	 */
 	public static boolean inBound(int x) {
-		if(x < 0 || x >= SIZE)
+		if (x < 0 || x >= SIZE)
 			return false;
 		else
 			return true;
@@ -104,7 +104,7 @@ public class Coordinates {
 	 * @return True if both values would be in bounds, false otherwise.
 	 */
 	public static boolean inBound(int x, int y) {
-		if(x < 0 || x >= SIZE || y < 0 || y >= SIZE)
+		if (x < 0 || x >= SIZE || y < 0 || y >= SIZE)
 			return false;
 		else
 			return true;

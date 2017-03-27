@@ -1,4 +1,4 @@
-package non_gui;
+package engine;
 
 public enum PlayerType {
 	User,

@@ -1,9 +1,11 @@
-package non_gui;
+package deprecated;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import engine.Coordinates;
+import engine.PlayerType;
 import pieces.PieceColor;
 
 /**

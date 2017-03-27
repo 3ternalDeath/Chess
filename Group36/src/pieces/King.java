@@ -2,7 +2,7 @@ package pieces;
 
 import java.util.ArrayList;
 
-import non_gui.Coordinates;
+import engine.Coordinates;
 
 /**
  * A single King piece.
@@ -23,27 +23,27 @@ public class King extends Piece {
 	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 			
-		if(isFirstMove()) {
-			if(Coordinates.inBound(getX() + 2, getY()))
+		if (isFirstMove()) {
+			if (Coordinates.inBound(getX() + 2, getY()))
 				moves.add(new Coordinates(getX() + 2, getY()));
 		}
 			
-		if(Coordinates.inBound(getX(), getY() + 1))
+		if (Coordinates.inBound(getX(), getY() + 1))
 			moves.add(new Coordinates(getX(), getY() + 1));
-		if(Coordinates.inBound(getX(), getY() - 1))
+		if (Coordinates.inBound(getX(), getY() - 1))
 			moves.add(new Coordinates(getX(), getY() - 1));
-		if(Coordinates.inBound(getX() + 1, getY()))
+		if (Coordinates.inBound(getX() + 1, getY()))
 			moves.add(new Coordinates(getX() + 1, getY()));
-		if(Coordinates.inBound(getX() - 1, getY()))
+		if (Coordinates.inBound(getX() - 1, getY()))
 			moves.add(new Coordinates(getX() - 1, getY()));
 			
-		if(Coordinates.inBound(getX() + 1, getY() + 1))
+		if (Coordinates.inBound(getX() + 1, getY() + 1))
 			moves.add(new Coordinates(getX() + 1, getY() + 1));
-		if(Coordinates.inBound(getX() + 1, getY() - 1))
+		if (Coordinates.inBound(getX() + 1, getY() - 1))
 			moves.add(new Coordinates(getX() + 1, getY() - 1));
-		if(Coordinates.inBound(getX() - 1, getY() + 1))
+		if (Coordinates.inBound(getX() - 1, getY() + 1))
 			moves.add(new Coordinates(getX() - 1, getY() + 1));
-		if(Coordinates.inBound(getX() - 1, getY() - 1))
+		if (Coordinates.inBound(getX() - 1, getY() - 1))
 			moves.add(new Coordinates(getX() - 1, getY() - 1));
 			
 		return moves;

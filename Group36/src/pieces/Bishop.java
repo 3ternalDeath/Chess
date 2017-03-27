@@ -2,7 +2,7 @@ package pieces;
 
 import java.util.ArrayList;
 
-import non_gui.Coordinates;
+import engine.Coordinates;
 
 /**
  * A single Bishop piece.
@@ -23,16 +23,16 @@ public class Bishop extends Piece {
 	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		for(int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++) {
+		for (int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++) {
 			moves.add(new Coordinates(getX() + h, getY() + h));
 		}
-		for(int h = 1; Coordinates.inBound(getX() + h, getY() - h); h++) {
+		for (int h = 1; Coordinates.inBound(getX() + h, getY() - h); h++) {
 			moves.add(new Coordinates(getX() + h, getY() - h));
 		}
-		for(int h = 1; Coordinates.inBound(getX() - h, getY() + h); h++) {
+		for (int h = 1; Coordinates.inBound(getX() - h, getY() + h); h++) {
 			moves.add(new Coordinates(getX() - h, getY() + h));
 		}
-		for(int h = 1; Coordinates.inBound(getX() - h, getY() - h); h++) {
+		for (int h = 1; Coordinates.inBound(getX() - h, getY() - h); h++) {
 			moves.add(new Coordinates(getX() - h, getY() - h));
 		}
 		

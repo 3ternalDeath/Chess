@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-import non_gui.Coordinates;
+import engine.Coordinates;
 
 /**
  * Handles all the attributes and actions of a generic
@@ -12,8 +12,6 @@ import non_gui.Coordinates;
  * @author Group 36
  */
 public abstract class Piece {
-	
-	
 	private final PieceType type;
 	private final PieceColor color;
 	private boolean firstMove;
@@ -32,7 +30,7 @@ public abstract class Piece {
 		this.color = color;
 		this.coor = new Coordinates(coor.getX(), coor.getY());
 		firstMove = true;
-		if(type!=null)
+		if (type!=null)
 		img = new ImageIcon("src/Images/"+ Character.toLowerCase(color.toString().charAt(0)) + "" + Character.toLowerCase(type.toString().charAt(0)) +".png");
 	}
 	
@@ -55,7 +53,7 @@ public abstract class Piece {
 	 * @param newCoor The new coordinates of the piece.
 	 */
 	public void move(Coordinates newCoor) {
-		if(firstMove)
+		if (firstMove)
 			firstMove = false;
 		//moves the piece
 		coor.setX(newCoor.getX());
@@ -66,10 +64,60 @@ public abstract class Piece {
 	 * Generates and returns a string to represent a piece, as long as it is not blank.
 	 */
 	public String toString() {
-		if(getColor() != null && getType() != null)
+		if (getColor() != null && getType() != null)
 			return ((getColor()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
 		else
 			return ("  ");
+	}
+	
+	/**
+	 * Generates a new piece with the given attributes.
+	 * @param coor The coordinates of the new piece.
+	 * @param type The type of the new piece.
+	 * @param color The color of the new piece.
+	 * @return The generated piece.
+	 */
+	public static Piece createPiece(Coordinates coor, PieceType type, PieceColor color) {
+		Piece piece;
+		if (type != null)
+			switch(type) {
+			case King:   piece = new King   (coor, color); break;
+			case Night:  piece = new Night  (coor, color); break;
+			case Rook: 	 piece = new Rook   (coor, color); break;
+			case Bishop: piece = new Bishop (coor, color); break;
+			case Queen:  piece = new Queen  (coor, color); break;
+			case Pawn: 	 piece = new Pawn   (coor, color); break;
+			default:     piece = null;
+			}
+		else
+			piece = null;
+
+		return piece;
+	}
+	
+	/**
+	 * Checks to see if piece can make move in a void.
+	 * User must still check whether move is valid in practice.
+	 * @param newCoor The coordinates of the destination.
+	 * @return True if move can can be made, false otherwise.
+	 */
+	public boolean validMove(Coordinates newCoor) {
+		ArrayList<Coordinates> posMoves = getPossibleMoves();
+		
+		if (posMoves != null) {
+			
+//			for (Coordinates move : posMoves) {
+//				System.out.print(move + ", ");
+//			}
+//			System.out.println();
+			
+			for (int index = 0; index < posMoves.size(); index++) {
+				if (newCoor.equals(posMoves.get(index))) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -113,31 +161,6 @@ public abstract class Piece {
 	}
 	
 	/**
-	 * Checks to see if piece can make move in a void.
-	 * User must still check whether move is valid in practice.
-	 * @param newCoor The coordinates of the destination.
-	 * @return True if move can can be made, false otherwise.
-	 */
-	public boolean validMove(Coordinates newCoor) {
-		ArrayList<Coordinates> posMoves = getPossibleMoves();
-		
-		if(posMoves != null) {
-			
-//			for(Coordinates move : posMoves) {
-//				System.out.print(move + ", ");
-//			}
-//			System.out.println();
-			
-			for(int index = 0; index < posMoves.size(); index++) {
-				if(newCoor.equals(posMoves.get(index))) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	/**
 	 * Updates the list of possible moves, based on the piece's type.
 	 * @return All moves the piece can theoretically make from its current location.
 	 */
@@ -151,25 +174,11 @@ public abstract class Piece {
 		return firstMove;
 	}
 	
-	public ImageIcon getImage(){
+	/**
+	 * Returns an image representation of the piece.
+	 * @return The picture of the piece.
+	 */
+	public ImageIcon getImage() {
 		return img;
-	}
-	
-	public static Piece createPiece(Coordinates coor, PieceType type, PieceColor color){
-		Piece piece;
-		if (type != null)
-			switch(type){
-			case King:   piece = new King   (coor, color); break;
-			case Night:  piece = new Night  (coor, color); break;
-			case Rook: 	 piece = new Rook   (coor, color); break;
-			case Bishop: piece = new Bishop (coor, color); break;
-			case Queen:  piece = new Queen  (coor, color); break;
-			case Pawn: 	 piece = new Pawn   (coor, color); break;
-			default:     piece = null;
-			}
-		else
-			piece = null;
-
-		return piece;
 	}
 }

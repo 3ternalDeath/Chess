@@ -2,7 +2,7 @@ package pieces;
 
 import java.util.ArrayList;
 
-import non_gui.Coordinates;
+import engine.Coordinates;
 
 /**
  * A single Pawn piece.
@@ -23,28 +23,28 @@ public class Pawn extends Piece {
 	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		if(this.getColor() == PieceColor.White) {
-			if(isFirstMove())
-				if(Coordinates.inBound(getX(), getY() + 2))
+		if (this.getColor() == PieceColor.White) {
+			if (isFirstMove())
+				if (Coordinates.inBound(getX(), getY() + 2))
 					moves.add(new Coordinates(getX(), getY() + 2));
 		
-			if(Coordinates.inBound(getX() , getY() + 1))
+			if (Coordinates.inBound(getX() , getY() + 1))
 				moves.add(new Coordinates(getX(), getY() + 1));
 			
-			if(Coordinates.inBound(getX() + 1, getY() + 1))
+			if (Coordinates.inBound(getX() + 1, getY() + 1))
 				moves.add(new Coordinates(getX() + 1, getY() + 1));
 			if (Coordinates.inBound(getX() - 1, getY() + 1))
 				moves.add(new Coordinates(getX() - 1, getY() + 1));
 		}
 		else {
-			if(isFirstMove())
-				if(Coordinates.inBound(getX(), getY() - 2))
+			if (isFirstMove())
+				if (Coordinates.inBound(getX(), getY() - 2))
 					moves.add(new Coordinates(getX(), getY() - 2));
 		
-			if(Coordinates.inBound(getX() , getY() - 1))
+			if (Coordinates.inBound(getX() , getY() - 1))
 				moves.add(new Coordinates(getX(), getY() - 1));
 			
-			if(Coordinates.inBound(getX() + 1, getY() - 1))
+			if (Coordinates.inBound(getX() + 1, getY() - 1))
 				moves.add(new Coordinates(getX() + 1, getY() - 1));
 			if (Coordinates.inBound(getX() - 1, getY() - 1))
 				moves.add(new Coordinates(getX() - 1, getY() - 1));

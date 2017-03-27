@@ -1,4 +1,4 @@
-package non_gui;
+package deprecated;
 
 public enum GameType {
 	SINGLE,
