@@ -14,6 +14,5 @@ public class MainGui {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 		f.add(t);
-
 	}
 }

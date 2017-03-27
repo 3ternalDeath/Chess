@@ -34,6 +34,10 @@ public class Player {
 		setKingCoor(new Coordinates(king.getX(), king.getY()));
 	}
 	
+	/**
+	 * Copy constructor for the Player class.
+	 * @param player The Player object to copy.
+	 */
 	public Player(Player player) {
 		this(player.color, player.type, player.myTurn, player.kingCoor);
 	}
