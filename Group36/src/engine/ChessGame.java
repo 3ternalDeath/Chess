@@ -28,7 +28,7 @@ public class ChessGame extends JPanel implements ActionListener {
 	final static int WINDOW = SIZE * 78;
 	GridBagConstraints gbc = new GridBagConstraints();
 	String fileName = "standard";
-	public static boolean DEBUG = true;
+	public static boolean debug = true;
 	
 	private boolean firstSec = true;
 	private ChessLogic logic;
@@ -96,11 +96,13 @@ public class ChessGame extends JPanel implements ActionListener {
 		int x = e.getActionCommand().charAt(0) - '0';
 		int y = e.getActionCommand().charAt(1) - '0';
 
+		//if button click is to choose a piece and neither player has lost
 		if (firstSec && !player1.isLost() && !player2.isLost()) {
 			init = new Coordinates(x, y);
 			System.out.println("Piece at:" + init);
 			firstSec = false;
-		} 
+		}
+		//if button click is to move the chosen piece and neither player has lost
 		else if (!player1.isLost() && !player2.isLost()) {
 			fin = new Coordinates(x, y);
 			System.out.println("Moved to:" + fin);
@@ -147,7 +149,7 @@ public class ChessGame extends JPanel implements ActionListener {
 	 * @param msg The message to display.
 	 */
 	public static void debugMsg(String msg) {
-		if(DEBUG)
+		if(debug)
 			System.out.println(msg);
 	}
 	

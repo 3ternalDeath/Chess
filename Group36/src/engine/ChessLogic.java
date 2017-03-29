@@ -157,31 +157,29 @@ public class ChessLogic {
 	 * @return True if the move is valid, false otherwise.
 	 */
 	public boolean validMove(Coordinates init, Coordinates fin, Player player) {
-		if (!basicValid(init, fin, player.getColor())) {
-			return false;
-		}
+		boolean valid = false;
 		
-		if (!pawnValid(init, fin, player.getColor())) {
-			return false;
+		if (basicValid(init, fin, player.getColor())) {
+			valid = true;
 		}
-		
+		if (pawnValid(init, fin, player.getColor())) {
+			valid = true;
+		}
 		int castling = castleValid(init, fin, player.getColor());
-		if (castling == -1) {
-			return false;
+		if (castling == 1) {
+			valid = true;
 		}
-		
-		if (!collisionDetect(init, fin)) {
-			return false;
+		if (collisionDetect(init, fin)) {
+			valid = true;
 		}
-		
-//		if (!checkNextMoveCheck(init, fin, player)) {
-//			return false;
+//		if (checkNextMoveCheck(init, fin, player)) {
+//			return true;
 //		}
-	
 		if (castling==1) {//MUST BE LAST IF STATEMENT!!!!!
 			castleNow = true;
 		}
-		return true;
+		
+		return valid;
 	}
 	
 	/**
@@ -192,14 +190,17 @@ public class ChessLogic {
 	 * @return True if piece at king location can be taken next move, false otherwise.
 	 */
 	private boolean checkCheck(Coordinates king, PieceColor color) {
+		boolean check = false;
 		if (color == null)
 			color = gameBoard[king.getX()][king.getY()].getColor();
 
+		//run through every element in the board
 		for (int x = 0; x < ChessGame.SIZE; x++) {
 			for (int y = 0; y < ChessGame.SIZE; y++) {
-				// returns true when enemy piece can take the king
+				//if there's a piece belonging to the other player at the index
 				if (gameBoard[x][y] != null) {
 					if (gameBoard[x][y].getColor() != color) {
+						//if the piece could move to the king coordinates
 						if (gameBoard[x][y].validMove(king)) {	
 							if (pawnCheckValid(new Coordinates(x, y), king)) {
 								if (collisionDetect(new Coordinates(x, y), king)) {	//only checks for collision if piece can move there
@@ -207,7 +208,7 @@ public class ChessLogic {
 									+ color + " ||Piece info: " + gameBoard[x][y] + " "
 									+ gameBoard[x][y].getCoordinates());
 								
-									return true;
+									check = true;
 								}
 							}
 						}
@@ -216,7 +217,7 @@ public class ChessLogic {
 			}
 		}
 		
-		return false;
+		return check;
 	}
 	
 	/**
@@ -226,41 +227,42 @@ public class ChessLogic {
 	 * @return true If all positions King piece can move to are in enemy sights, false otherwise.
 	 */
 	private boolean checkCheckMate(Player player) {
+		boolean inCheck = true;
 		Coordinates king = player.getKingCoor();
 		PieceColor color = gameBoard[king.getX()][king.getY()].getColor();
 		Coordinates check = new Coordinates(king.getX(), king.getY());
 		
 		for (int x = -1; x <= 1; x++) {
 			for (int y = -1; y <= 1; y++) {
-				check.incrementX(x); // changes coords of check based on loop
-										// variables
+				check.incrementX(x);
 				check.incrementY(y);
 
-				// in order for check mate to happen king should not be able to
-				// move anywhere without dying
+				//in order for check mate to happen king should not be able to
+				//move anywhere without dying
 				if (Coordinates.inBound(check.getX(), check.getY()))
 					if (!checkNextMoveCheck(king, check, player)) {
-						return false;
+						inCheck = false;
 					}
 
-				check.incrementX(x * (-1));// puts check coords back the way
-											// they were
+				//put check coordinates back to initial values
+				check.incrementX(x * (-1));
 				check.incrementY(y * (-1));
 			}
 		}
 		
-		return true;
+		return inCheck;
 	}
 	
 	/**
 	 * Checks whether a given move (in terms of a group of coordinates) would allow
-	 * a given player to leave check
+	 * a given player to leave check.
 	 * @param init The initial set of coordinates.
 	 * @param fin The final set of coordinates.
 	 * @param player The player making the move.
 	 * @return True if the move would put the player out of check, false otherwise.
 	 */
 	private boolean checkNextMoveCheck(Coordinates init, Coordinates fin, Player player) {
+		boolean leaveCheck = true;
 		ChessLogic nextMove = new ChessLogic(this);
 		Player testPlayer = new Player(player);
 
@@ -270,10 +272,11 @@ public class ChessLogic {
 		nextMove.makeTestMove(init, fin);
 		nextMove.updateCheck(testPlayer);
 
-		if (testPlayer.isInCheck())
-			return false;
-		else
-			return true;
+		if (testPlayer.isInCheck()) {
+			leaveCheck = false;
+		}
+		
+		return leaveCheck;
 	}
 	
 	/**
@@ -292,21 +295,27 @@ public class ChessLogic {
 	 * @return True if the player can leave check, false otherwise.
 	 */
 	private boolean checkAllMoves(Player p) {
+		boolean canLeave = false;
+		
+		//check every element in the board
 		for (int x = 0; x < ChessGame.SIZE; x++)
 			for (int y = 0; y < ChessGame.SIZE; y++) {
+				//if there's a piece belonging to the player at the index
 				if (gameBoard[x][y] != null) {
 					if (gameBoard[x][y].getColor() == p.getColor()) {
 						Coordinates piece = new Coordinates(x,y);
 						ArrayList<Coordinates> moves = gameBoard[x][y].getPossibleMoves();
+						//run through all its moves for next move check
 						for (Coordinates move : moves) {
 							if (checkNextMoveCheck(piece, move, p)) {
-								return true;
+								canLeave = true;
 							}
 						}
 					}
 				}
 			}
-		return false;
+		
+		return canLeave;
 	}
 	
 	/**
@@ -364,31 +373,31 @@ public class ChessLogic {
 	 * @return True if every test proves valid, false otherwise.
 	 */
 	private boolean basicValid(Coordinates init, Coordinates fin, PieceColor color) {
+		boolean valid = true;
+		
 		if (gameBoard[init.getX()][init.getY()] == null) {
 			System.out.println("Selecting empty space.");
-			return false;
+			valid = false;
 		}
-		// if coordinates point to the other player's pieces then disallow them
+		//initial coordinates point to other player's piece
 		else if (gameBoard[init.getX()][init.getY()].getColor() != color) {
 			System.out.println("Selecting opponent's piece. Your color is " + color + ".");
-			return false;
+			valid = false;
 		}
-		// if coordinates point to a piece the current player owns then disallow
-		// them
+		//final coordinates point to the player's own piece
 		else if (gameBoard[fin.getX()][fin.getY()] != null) {
 			if (gameBoard[fin.getX()][fin.getY()].getColor() == gameBoard[init.getX()][init.getY()].getColor()) {
 				System.out.println("Moving into your own piece.");
-				return false;
+				valid = false;
 			}
 		}
-		// if coordinates would cause an illegal move for the piece in question
-		// then disallow them
+		//coordinates cause an illegal move
 		else if (!gameBoard[init.getX()][init.getY()].validMove(fin)) {
 			System.out.println("The piece can't move there.");
-			return false;
+			valid = false;
 		}
 
-		return true;
+		return valid;
 	}
 
 	/**
@@ -399,19 +408,22 @@ public class ChessLogic {
 	 * @return True if every test proves valid, false otherwise.
 	 */
 	private boolean pawnValid(Coordinates init, Coordinates fin, PieceColor color) {
+		boolean valid = true;
+		
 		if (gameBoard[init.getX()][init.getY()].getType() == PieceType.Pawn) {
-			// diagonal movement for pawn,
+			//attempting diagonal movement to an empty space
 			if (gameBoard[fin.getX()][fin.getY()] == null && Math.abs(fin.getX() - init.getX()) == 1) {
 				System.out.println("The pawn can only kill like that.");
-				return false;
+				valid = false;
 			}
+			//attempting to kill another piece head-on
 			else if (gameBoard[fin.getX()][fin.getY()] != null && Math.abs(fin.getX() - init.getX()) == 0) {
 				System.out.println("The pawn can't kill like that.");
-				return false;
+				valid = false;
 			}
 		}
 		
-		return true;
+		return valid;
 	}
 
 	/**
@@ -421,9 +433,13 @@ public class ChessLogic {
 	 * @return True if a pawn could move to the location, false otherwise.
 	 */
 	private boolean pawnCheckValid(Coordinates init, Coordinates fin) {
-		if (Math.abs(fin.getX() - init.getX()) == 1)
-			return true;
-		return false;
+		boolean valid = false;
+		
+		if (Math.abs(fin.getX() - init.getX()) == 1) {
+			valid = true;
+		}
+		
+		return valid;
 	}
 
 	/**
@@ -434,20 +450,22 @@ public class ChessLogic {
 	 * @return True if every test proves valid, false otherwise.
 	 */
 	private int castleValid(Coordinates init, Coordinates fin, PieceColor color) {
+		int castling = 0;
+		
 		if (gameBoard[init.getX()][init.getY()].getType() == PieceType.King) {
 			if (Coordinates.inBound(fin.getX() + 1) && gameBoard[fin.getX() + 1][fin.getY()] != null) {
-				//checks for castling
+				//if the other piece is not a rook
 				if (gameBoard[fin.getX() + 1][fin.getY()].getType() != PieceType.Rook && (fin.getX() - init.getX()) == 2) {
 					System.out.println("Castling can only be done if there is a rook");
-					return -1;
+					castling = -1;
 				}
 				else if (gameBoard[fin.getX() + 1][fin.getY()].getType() == PieceType.Rook && (fin.getX() - init.getX()) == 2 && gameBoard[fin.getX() + 1][fin.getY()].isFirstMove()) {
-					return 1;
+					castling = 1;
 				}
 			}
 		}
 		
-		return 0;
+		return castling;
 	}
 	
 	/**
@@ -462,12 +480,12 @@ public class ChessLogic {
 		int xDifference = fin.getX() - init.getX();
 		int yDifference = fin.getY() - init.getY();
 		
-		if (gameBoard[init.getX()][init.getY()].getType() == PieceType.Night) {
-			pathOpen = true;
-		}
-		else if ((Math.abs(xDifference) == 1 || Math.abs(yDifference) == 1) && gameBoard[init.getX()][init.getY()].getType() != PieceType.Pawn) {
-		}
-		else { 
+		//if piece is a knight, or if piece is a non-pawn moving by one block,
+		//then simply let it through
+		if ((gameBoard[init.getX()][init.getY()].getType() == PieceType.Night) || 
+				(((Math.abs(xDifference) == 1 || Math.abs(yDifference) == 1) 
+				&& gameBoard[init.getX()][init.getY()].getType() != PieceType.Pawn))) {}
+		else {
 			if (xDifference < 0) {
 				xDifference++;
 			}
