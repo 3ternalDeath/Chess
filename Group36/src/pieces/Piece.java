@@ -94,6 +94,28 @@ public abstract class Piece {
 		return piece;
 	}
 	
+	public static Piece createPiece(Coordinates coor, String creation) {
+		PieceType type;
+		switch(creation.charAt(1)) {
+		case 'k': type = PieceType.King;    break;
+		case 'q': type = PieceType.Queen;   break;
+		case 'r': type = PieceType.Rook;    break;
+		case 'n': type = PieceType.Night;   break;
+		case 'b': type = PieceType.Bishop;  break;
+		case 'p': type = PieceType.Pawn;    break;
+		default: type = null;
+		}
+		
+		PieceColor color;
+		switch(creation.charAt(0)) {
+		case 'b': color = PieceColor.Black; break;
+		case 'w': color = PieceColor.White; break;
+		default: color = null;
+		}
+		
+		return createPiece(coor, type, color);
+	}
+	
 	/**
 	 * Checks to see if piece can make move in a void.
 	 * User must still check whether move is valid in practice.

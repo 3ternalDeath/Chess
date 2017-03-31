@@ -1,6 +1,9 @@
 package engine;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Stack;
 
 import pieces.Empty;
@@ -13,48 +16,85 @@ import pieces.PieceType;
  * @author Group 36
  */
 public class ChessLogic {
-	Button[][] buttons;
+	private final String FILE_NAME = "standard";
 	Piece[][] gameBoard;
-	private Stack<int[][]> moves;
-	private Stack<Piece> deadPiece;
-	private int[] castle;
-	private boolean castleNow;
+	private Player player1, player2;
 	
-	/**
-	 * Constructor for the ChessLogic class that sets all variables to default values. 
-	 */
-	public ChessLogic() {
-		moves = new Stack<int[][]>();
-		deadPiece = new Stack<Piece>();
-		castle = new int[2];
-		castle[0] = -1;
-		castle[1] = -1;
+	public ChessLogic() throws FileNotFoundException {
 		gameBoard = new Piece[ChessGame.SIZE][ChessGame.SIZE];
-	}
-
-	/**
-	 * Constructor for the ChessLogic class that copies a 2d array of chessboard buttons.
-	 * @param grid The array of buttons to copy.
-	 */
-	public ChessLogic(Button[][] grid) {
-		this();
-		buttons = grid;
-
-		for (int x = 0; x < ChessGame.SIZE; x++)
-			for (int y = 0; y < ChessGame.SIZE; y++)
-				gameBoard[x][y] = buttons[x][y].getPieceRef();
+		
+		Scanner file = new Scanner(new File("src/engine/" + FILE_NAME + ".txt"));
+		
+		for (int y = ChessGame.SIZE - 1; y >= 0; y--) {
+			for (int x = 0; x < ChessGame.SIZE; x++) {
+				// new Button
+				Coordinates coor = new Coordinates(x, y);
+				String piece = file.next();
+				gameBoard[x][y] = Piece.createPiece(coor, piece);
+				
+				if (getPieceAt(coor) != null) {
+					if (getType(coor) == PieceType.King) {
+						if (getColor(coor) == PieceColor.White) {
+							player1 = new Player(PieceColor.White, PlayerType.User, true, coor);
+						} 
+						else if (getColor(coor) == PieceColor.Black) {
+							player2 = new Player(PieceColor.Black, PlayerType.Computer, false, coor);
+						}
+					}
+				}
+			}
+		}
+		
+		file.close();
 	}
 	
 	/**
 	 * Copy constructor for the ChessLogic class.
 	 * @param logic The ChessLogic object to copy.
 	 */
-	public ChessLogic(ChessLogic logic) {
+	public ChessLogic(ChessLogic copy) {
 		gameBoard = new Piece[ChessGame.SIZE][ChessGame.SIZE];
-		for (int x = 0; x < ChessGame.SIZE; x++)
-			for (int y = 0; y < ChessGame.SIZE; y++)
-				if (logic.buttons[x][y].getPieceRef() != null)
-					gameBoard[x][y] = logic.buttons[x][y].getPiece();
+		for(int x = 0; x < ChessGame.SIZE; x++) {
+			for(int y = 0; y < ChessGame.SIZE; y++) {
+				gameBoard[x][y] = copy.getPieceAt(new Coordinates(x, y));
+			}
+		}
+	}
+	
+	/**
+	 * Checks whether or not a given group of coordinates creates a legal move for a given player.
+	 * @param init The initial coordinates.
+	 * @param fin The final coordinates.
+	 * @param player The player in question.
+	 * @return True if the move is valid, false otherwise.
+	 */
+	public boolean validMove(Coordinates init, Coordinates fin, PieceColor color) {
+		boolean valid = true;
+		
+		if (!basicValid(init, fin, color)) {
+			valid = false;
+		}
+		if (!pawnValid(init, fin, color)) {
+			valid = false;
+		}
+		int castling = castleValid(init, fin, color);
+		if (castling == -1) {
+			valid = false;
+		}
+		if (!collisionDetect(init, fin)) {
+			System.out.println("There's a piece in the way.");
+			valid = false;
+		}
+//		if (checkNextMoveCheck(init, fin, player)) {
+//			return true;
+//		}
+		/*
+		if (castling==1) {//MUST BE LAST IF STATEMENT!!!!!
+			castleNow = true;
+		}
+		*/
+		
+		return valid;
 	}
 	
 	/**
@@ -76,65 +116,73 @@ public class ChessLogic {
 		return comp.pickMove(init, gameBoard);
 	}
 	
+	public void movePiece(Coordinates init, Coordinates fin) {
+		Piece piece = getPieceAt(init);
+		piece.move(fin);
+		
+		if (getType(init) == PieceType.King) {
+			if (player1.isMyTurn())
+				player1.setKingCoor(fin);
+			else if (player2.isMyTurn())
+				player2.setKingCoor(fin);
+		}
+		
+		setPieceAt(init, null);
+		setPieceAt(fin, piece);
+		
+		nextTurn();
+	}
+	
 	/**
-	 * Sets the piece reference of every button in the button array to that of the
-	 * corresponding piece in the piece array.
+	 * Rolls game progression over to the next turn.
 	 */
-	public void updateButton() {
-		for (int x = 0; x < ChessGame.SIZE; x++) {
-			for (int y = 0; y < ChessGame.SIZE; y++) {
-				buttons[x][y].setPieceRef(gameBoard[x][y]);
-			}
+	private void nextTurn() {
+		player1.switchTurn();
+		player2.switchTurn();
+
+		if (player1.getType() == PlayerType.Computer && player1.isMyTurn() && !player1.isLost()) {
+			compMove(player1);
+		}
+		else if (player2.getType() == PlayerType.Computer && player2.isMyTurn() && !player2.isLost()) {
+			compMove(player2);
 		}
 	}
 	
 	/**
-	 * Updates the board according to a given group of coordinates.
-	 * @param init The initial coordinates.
-	 * @param fin The final coordinates.
-	 * @param p1 The game's player 1.
-	 * @param p2 The game's player 2.
+	 * Generates a random move for the computer player and executes it
+	 * @param comp The computer player.
 	 */
-	public void updateBoard(Coordinates init, Coordinates fin, Player p1, Player p2) {
-		if (castleNow) {
-			makeMove(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()));
-			if (castle[0] != -1) {
-				castle[1] = moves.size();
-			} 
-			else {
-				castle[0] = moves.size();
-			}
-			castleNow = false;
-		}
-		
-		makeMove(init, fin);
-		//updateCheckMate(p1, p2);
-	}
+	private void compMove(Player comp) {
+		boolean goodMove = false;
+		do {
+			Coordinates init = compGetInit(comp);
+			Coordinates fin = compGetFin(comp, init);
 
-	/**
-	 * Updates the entire board based on user input.
-	 * Takes the piece at initial coordinates, and moves it to final coordinates.
-	 * Does not check for valid movement;
-	 * user must only call update after movement has been error-checked.
-	 * @param init The coordinates of the piece that is moving.
-	 * @param fin The coordinates that the piece is moving to.
-	 */
-	public void makeMove(Coordinates init, Coordinates fin) {
-		System.out.println("Selected Piece:" + gameBoard[init.getX()][init.getY()].getType());
-		System.out.println("Piece Color: " + gameBoard[init.getX()][init.getY()].getColor());
-		
-		//move the specified piece to the specified location
-		//add move to the moves Stack
-		Piece piece = gameBoard[init.getX()][init.getY()];
-		piece.move(fin);
-		
-		//undo moves
-		int[][] currentMove = {{init.getX(), init.getY()}, {fin.getX(), fin.getY()}};
-		moves.add(currentMove);
-		deadPiece.add(gameBoard[fin.getX()][fin.getY()]);
-		
-		gameBoard[init.getX()][init.getY()] = null;
-		gameBoard[fin.getX()][fin.getY()] = piece;
+			if (validMove(init, fin, comp.getColor())) {
+				movePiece(init, fin);
+				goodMove = true;
+			}
+
+		} while (!goodMove);
+	}
+	
+	public Piece getPieceAt(Coordinates location) {
+		if (gameBoard[location.getX()][location.getY()] != null) {
+			Piece newPiece = gameBoard[location.getX()][location.getY()];
+			return Piece.createPiece(location, newPiece.getType(), newPiece.getColor());
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public void setPieceAt(Coordinates location, Piece piece) {
+		if (piece != null) {
+			Piece newPiece = Piece.createPiece(location, piece.getType(), piece.getColor());
+			gameBoard[location.getX()][location.getY()] = newPiece;
+		}
+		else
+			gameBoard[location.getX()][location.getY()] = null;
 	}
 	
 	/**
@@ -149,37 +197,39 @@ public class ChessLogic {
 			return null;
 	}
 	
+	public PieceColor getColor(Coordinates coor) {
+		if (gameBoard[coor.getX()][coor.getY()] != null)
+			return gameBoard[coor.getX()][coor.getY()].getColor();
+		else
+			return null;
+	}
+	
+	public boolean p1Lost() {
+		return player1.isLost();
+	}
+	
+	public boolean p2Lost() {
+		return player2.isLost();
+	}
+	
+	public Player getP1() {
+		return new Player(player1);
+	}
+	
+	public Player getP2() {
+		return new Player(player2);
+	}
+	
 	/**
-	 * Checks whether or not a given group of coordinates creates a legal move for a given player.
-	 * @param init The initial coordinates.
-	 * @param fin The final coordinates.
-	 * @param player The player in question.
-	 * @return True if the move is valid, false otherwise.
+	 * Tests a particular move (in terms of a group of coordinates) without directly affecting the chessboard.
+	 * @param init The initial set of coordinates.
+	 * @param fin The final set of coordinates.
 	 */
-	public boolean validMove(Coordinates init, Coordinates fin, Player player) {
-		boolean valid = false;
-		
-		if (basicValid(init, fin, player.getColor())) {
-			valid = true;
-		}
-		if (pawnValid(init, fin, player.getColor())) {
-			valid = true;
-		}
-		int castling = castleValid(init, fin, player.getColor());
-		if (castling == 1) {
-			valid = true;
-		}
-		if (collisionDetect(init, fin)) {
-			valid = true;
-		}
-//		if (checkNextMoveCheck(init, fin, player)) {
-//			return true;
-//		}
-		if (castling==1) {//MUST BE LAST IF STATEMENT!!!!!
-			castleNow = true;
-		}
-		
-		return valid;
+	public void makeTestMove(Coordinates init, Coordinates fin) {
+		Piece piece = gameBoard[init.getX()][init.getY()];
+		piece.move(fin);
+		gameBoard[init.getX()][init.getY()] = null;
+		gameBoard[fin.getX()][fin.getY()] = piece;
 	}
 	
 	/**
@@ -189,10 +239,15 @@ public class ChessLogic {
 	 * @param color The color of friendly pieces; can be left null if unknown.
 	 * @return True if piece at king location can be taken next move, false otherwise.
 	 */
+	/**
+	 * @param king
+	 * @param color
+	 * @return
+	 */
 	private boolean checkCheck(Coordinates king, PieceColor color) {
 		boolean check = false;
 		if (color == null)
-			color = gameBoard[king.getX()][king.getY()].getColor();
+			color = getColor(king);
 
 		//run through every element in the board
 		for (int x = 0; x < ChessGame.SIZE; x++) {
@@ -229,7 +284,7 @@ public class ChessLogic {
 	private boolean checkCheckMate(Player player) {
 		boolean inCheck = true;
 		Coordinates king = player.getKingCoor();
-		PieceColor color = gameBoard[king.getX()][king.getY()].getColor();
+		PieceColor color = getColor(king);
 		Coordinates check = new Coordinates(king.getX(), king.getY());
 		
 		for (int x = -1; x <= 1; x++) {
@@ -353,16 +408,52 @@ public class ChessLogic {
 		}
 	}
 	
-	/**
-	 * Tests a particular move (in terms of a group of coordinates) without directly affecting the chessboard.
-	 * @param init The initial set of coordinates.
-	 * @param fin The final set of coordinates.
-	 */
-	private void makeTestMove(Coordinates init, Coordinates fin) {
-		Piece piece = gameBoard[init.getX()][init.getY()];
-		piece.move(fin);
-		gameBoard[init.getX()][init.getY()] = null;
-		gameBoard[fin.getX()][fin.getY()] = piece;
+	public boolean validInit(Coordinates init, PieceColor color) {
+		boolean valid = true;
+		
+		if (gameBoard[init.getX()][init.getY()] == null) {
+			System.out.println("Selecting empty space.");
+			valid = false;
+		}
+		//initial coordinates point to other player's piece
+		else if (getColor(init) != color) {
+			System.out.println("Selecting opponent's piece. Your color is " + color + ".");
+			valid = false;
+		}
+		
+		return valid;
+	}
+	
+	public boolean validFin(Coordinates init, Coordinates fin, PieceColor color) {
+		boolean valid = true;
+		
+		//final coordinates point to the player's own piece
+		if (gameBoard[fin.getX()][fin.getY()] != null) {
+			if (getColor(fin) == getColor(init)) {
+				System.out.println("Moving into your own piece.");
+				valid = false;
+			}
+		}
+		//coordinates cause an illegal move
+		if (!gameBoard[init.getX()][init.getY()].validMove(fin)) {
+			System.out.println("The piece can't move there.");
+			valid = false;
+		}
+		
+		if (getType(init) == PieceType.Pawn) {
+			//attempting diagonal movement to an empty space
+			if (gameBoard[fin.getX()][fin.getY()] == null && Math.abs(fin.getX() - init.getX()) == 1) {
+				System.out.println("The pawn can only kill like that.");
+				valid = false;
+			}
+			//attempting to kill another piece head-on
+			else if (gameBoard[fin.getX()][fin.getY()] != null && Math.abs(fin.getX() - init.getX()) == 0) {
+				System.out.println("The pawn can't kill like that.");
+				valid = false;
+			}
+		}
+		
+		return valid;
 	}
 
 	/**
@@ -380,13 +471,13 @@ public class ChessLogic {
 			valid = false;
 		}
 		//initial coordinates point to other player's piece
-		else if (gameBoard[init.getX()][init.getY()].getColor() != color) {
+		else if (getColor(init) != color) {
 			System.out.println("Selecting opponent's piece. Your color is " + color + ".");
 			valid = false;
 		}
 		//final coordinates point to the player's own piece
 		else if (gameBoard[fin.getX()][fin.getY()] != null) {
-			if (gameBoard[fin.getX()][fin.getY()].getColor() == gameBoard[init.getX()][init.getY()].getColor()) {
+			if (getColor(fin) == getColor(init)) {
 				System.out.println("Moving into your own piece.");
 				valid = false;
 			}
@@ -410,7 +501,7 @@ public class ChessLogic {
 	private boolean pawnValid(Coordinates init, Coordinates fin, PieceColor color) {
 		boolean valid = true;
 		
-		if (gameBoard[init.getX()][init.getY()].getType() == PieceType.Pawn) {
+		if (getType(init) == PieceType.Pawn) {
 			//attempting diagonal movement to an empty space
 			if (gameBoard[fin.getX()][fin.getY()] == null && Math.abs(fin.getX() - init.getX()) == 1) {
 				System.out.println("The pawn can only kill like that.");

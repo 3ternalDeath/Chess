@@ -21,21 +21,18 @@ import pieces.PieceType;
  * @author Group 36
  */
 public class ChessGame extends JPanel implements ActionListener {
-
 	private static final long serialVersionUID = -3433959957442938842L;
 
 	final static int SIZE = 8;
 	final static int WINDOW = SIZE * 78;
 	GridBagConstraints gbc = new GridBagConstraints();
-	String fileName = "standard";
 	public static boolean debug = true;
 	
 	private boolean firstSec = true;
-	private ChessLogic logic;
-	private Player player1, player2;
 	private Coordinates init;
 	private Coordinates fin;
 	private boolean valid;
+	private LogicHandler handler;
 
 	Button[][] button = new Button[SIZE][SIZE];
 
@@ -45,25 +42,12 @@ public class ChessGame extends JPanel implements ActionListener {
 	 */
 	public ChessGame() throws FileNotFoundException {
 		setLayout(new GridBagLayout());
-		Scanner file = new Scanner(new File("src/engine/" + fileName + ".txt"));
+		handler = new LogicHandler();
+		button = handler.updateButtons();
 		
 		for (int y = SIZE - 1; y >= 0; y--) {
 			for (int x = 0; x < SIZE; x++) {
-				// new Button
 				Coordinates coor = new Coordinates(x, y);
-				String piece = file.next();
-				button[x][y] = new Button(coor, piece);
-				
-				if (button[x][y].getPieceRef() != null) {
-					if (button[x][y].getPieceRef().getType() == PieceType.King) {
-						if (button[x][y].getPieceRef().getColor() == PieceColor.White) {
-							player1 = new Player(PieceColor.White, PlayerType.User, true, coor);
-						} 
-						else if (button[x][y].getPieceRef().getColor() == PieceColor.Black) {
-							player2 = new Player(PieceColor.Black, PlayerType.Computer, false, coor);
-						}
-					}
-				}
 
 				// Size
 				button[x][y].setPreferredSize(new Dimension(71, 71));
@@ -87,9 +71,6 @@ public class ChessGame extends JPanel implements ActionListener {
 				add(button[x][y], gbc);
 			}
 		}
-		
-		file.close();
-		logic = new ChessLogic(button);// Purposeful privacy leak
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -97,38 +78,32 @@ public class ChessGame extends JPanel implements ActionListener {
 		int y = e.getActionCommand().charAt(1) - '0';
 
 		//if button click is to choose a piece and neither player has lost
-		if (firstSec && !player1.isLost() && !player2.isLost()) {
+		if (firstSec && !handler.gameLost()) {
 			init = new Coordinates(x, y);
 			System.out.println("Piece at:" + init);
-			firstSec = false;
+			if (handler.validInit(init)) {
+				firstSec = false;	
+			}
 		}
 		//if button click is to move the chosen piece and neither player has lost
-		else if (!player1.isLost() && !player2.isLost()) {
+		else if (!handler.gameLost()) {
 			fin = new Coordinates(x, y);
 			System.out.println("Moved to:" + fin);
 			firstSec = true;
-			if (player1.isMyTurn()) {
-				if (logic.validMove(init, fin, player1)) {
-					valid = true;
-				}
-			} 
-			else if (player2.isMyTurn()) {
-				if (logic.validMove(init, fin, player2)) {
-					valid = true;
-				}
+			if (handler.validFin(init, fin)) {
+				valid = true;
 			}
 		}
-		else {
+		/*else {
 			if (player1.isLost())
 				System.out.println(player2.getColor() + " Won!!");
 			else if (player2.isLost())
 				System.out.println(player1.getColor() + " Won!!");
 			stop();
-		}
+		}*/
 		// Change Icon if valid
 		if (valid) {
 			moveStuff(init, fin);
-			nextTurn();
 			valid = false;
 		}
 	}
@@ -169,50 +144,8 @@ public class ChessGame extends JPanel implements ActionListener {
 	 * @param fin The coordinate to end at.
 	 */
 	private void moveStuff(Coordinates init, Coordinates fin) {
-		if (logic.getType(init) == PieceType.King) {
-			if (player1.isMyTurn())
-				player1.setKingCoor(fin);
-			else if (player2.isMyTurn())
-				player2.setKingCoor(fin);
-		}
-		
-		logic.updateBoard(init, fin, player1, player2);
-		logic.updateButton();
+		handler.updateBoard(init, fin);
+		button = handler.updateButtons();
 		updateIcons();
-	}
-
-	/**
-	 * Rolls game progression over to the next turn.
-	 */
-	private void nextTurn() {
-		player1.switchTurn();
-		player2.switchTurn();
-
-		if (player1.getType() == PlayerType.Computer && player1.isMyTurn() && !player1.isLost()) {
-			compMove(player1);
-			nextTurn();
-		}
-		else if (player2.getType() == PlayerType.Computer && player2.isMyTurn() && !player2.isLost()) {
-			compMove(player2);
-			nextTurn();
-		}
-	}
-
-	/**
-	 * Generates a random move for the computer player and executes it
-	 * @param comp The computer player.
-	 */
-	private void compMove(Player comp) {
-		boolean goodMove = false;
-		do {
-			Coordinates init = logic.compGetInit(comp);
-			Coordinates fin = logic.compGetFin(comp, init);
-
-			if (logic.validMove(init, fin, comp)) {
-				moveStuff(init, fin);
-				goodMove = true;
-			}
-
-		} while (!goodMove);
 	}
 }

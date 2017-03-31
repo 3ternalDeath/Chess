@@ -50,6 +50,16 @@ public class Button extends JButton {
 		piece = Piece.createPiece(coor, type, color);
 	}
 	
+	public Button(Piece piece) {
+		super();
+		
+		if (piece != null) {
+			this.piece = piece;
+		}
+		else
+			this.piece = null;
+	}
+	
 //	public Button(Coordinates coor, Icon icon) {
 //		super(icon);
 //		
@@ -74,14 +84,6 @@ public class Button extends JButton {
 			return piece.getImage();
 		else
 			return null;
-	}
-	
-	/**
-	 * Returns the reference to the button's corresponding piece.
-	 * @return The piece reference.
-	 */
-	public Piece getPieceRef() {
-		return piece;
 	}
 	
 	/**
