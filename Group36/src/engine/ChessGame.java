@@ -44,11 +44,12 @@ public class ChessGame extends JPanel implements ActionListener {
 		setLayout(new GridBagLayout());
 		handler = new LogicHandler();
 		button = handler.updateButtons();
-		
+		populateWindow();
+	}
+	
+	public void populateWindow() {
 		for (int y = SIZE - 1; y >= 0; y--) {
 			for (int x = 0; x < SIZE; x++) {
-				Coordinates coor = new Coordinates(x, y);
-
 				// Size
 				button[x][y].setPreferredSize(new Dimension(71, 71));
 
@@ -147,5 +148,8 @@ public class ChessGame extends JPanel implements ActionListener {
 		handler.updateBoard(init, fin);
 		button = handler.updateButtons();
 		updateIcons();
+		super.removeAll();
+		setLayout(new GridBagLayout());
+		populateWindow();
 	}
 }
