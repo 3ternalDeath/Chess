@@ -60,14 +60,15 @@ public class Player {
 	public Coordinates pickPiece(Piece[][] board) {
 		Random num = new Random();
 		boolean validPiece = false;
-		int x;
-		int y;
+		int x,y;
 		do {
 			x = num.nextInt(8);
 			y = num.nextInt(8);
-			if (board[x][y] != null)
-				if (board[x][y].getColor() == color)
+			if (board[x][y] != null) {
+				if (board[x][y].getColor() == color) {
 					validPiece = true;
+				}
+			}
 			
 		} while(!validPiece);
 		
@@ -82,13 +83,23 @@ public class Player {
 	 */
 	public Coordinates pickMove(Coordinates piece, Piece[][] board) {
 		ArrayList<Coordinates> moves = board[piece.getX()][piece.getY()].getPossibleMoves();
+		Coordinates move = piece;
 		if (moves.size() != 0) {
-			int index = new Random().nextInt(moves.size());
-			return moves.get(index);
+			for(Coordinates c : moves) {
+				if(board[c.getX()][c.getY()] != null) {
+					if(board[c.getX()][c.getY()].getColor() != board[piece.getX()][piece.getY()].getColor()) {
+						move = c;
+					}
+				}
+			}
+			
+			if (move.equals(piece)) {
+				int index = new Random().nextInt(moves.size());
+				return moves.get(index);
+			}
 		}
-		else {
-			return piece;
-		}
+		
+		return move;
 	}
 	
 	/**

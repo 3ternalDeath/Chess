@@ -68,6 +68,8 @@ public class ChessLogic {
 	 * @param player The player in question.
 	 * @return True if the move is valid, false otherwise.
 	 */
+	//DEPRECATED -- USE validInit() AND validFin() INSTEAD
+	//maybe transform into validateSpecialMoves?
 	public boolean validMove(Coordinates init, Coordinates fin, PieceColor color) {
 		boolean valid = true;
 		
@@ -158,7 +160,7 @@ public class ChessLogic {
 			Coordinates init = compGetInit(comp);
 			Coordinates fin = compGetFin(comp, init);
 
-			if (validMove(init, fin, comp.getColor())) {
+			if (validInit(init, comp.getColor()) && validFin(init, fin, comp.getColor())) {
 				movePiece(init, fin);
 				goodMove = true;
 			}
@@ -453,6 +455,11 @@ public class ChessLogic {
 			}
 		}
 		
+		if(!collisionDetect(init, fin)) {
+			System.out.println("There's something in the way.");
+			valid = false;
+		}
+		
 		return valid;
 	}
 
@@ -463,6 +470,7 @@ public class ChessLogic {
 	 * @param color The color of the moving piece.
 	 * @return True if every test proves valid, false otherwise.
 	 */
+	//DEPRECATED
 	private boolean basicValid(Coordinates init, Coordinates fin, PieceColor color) {
 		boolean valid = true;
 		
@@ -498,6 +506,7 @@ public class ChessLogic {
 	 * @param color The color of the moving piece.
 	 * @return True if every test proves valid, false otherwise.
 	 */
+	//DEPRECATED
 	private boolean pawnValid(Coordinates init, Coordinates fin, PieceColor color) {
 		boolean valid = true;
 		

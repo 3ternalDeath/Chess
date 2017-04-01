@@ -137,10 +137,10 @@ public class LogicHandler {
 		
 		logic.movePiece(init, fin);
 		
-		if (currentPlayer.getColor() == PieceColor.White)
+		/*if (currentPlayer.getColor() == PieceColor.White)
 			currentPlayer = logic.getP2();
 		else
-			currentPlayer = logic.getP1();
+			currentPlayer = logic.getP1();*/ //this should only be used in multiplayer
 	}
 	
 	public boolean gameLost() {
