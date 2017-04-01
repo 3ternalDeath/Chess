@@ -147,9 +147,9 @@ public class ChessGame extends JPanel implements ActionListener {
 	private void moveStuff(Coordinates init, Coordinates fin) {
 		handler.updateBoard(init, fin);
 		button = handler.updateButtons();
-		updateIcons();
 		super.removeAll();
 		setLayout(new GridBagLayout());
 		populateWindow();
+		super.validate();
 	}
 }
