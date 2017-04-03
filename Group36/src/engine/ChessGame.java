@@ -6,15 +6,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import pieces.PieceColor;
-import pieces.PieceType;
+
 
 /**
  * Handles the main functionality of the chess game.
@@ -42,9 +39,14 @@ public class ChessGame extends JPanel implements ActionListener {
 	 */
 	public ChessGame() throws FileNotFoundException {
 		setLayout(new GridBagLayout());
-		handler = new LogicHandler();
-		button = handler.updateButtons();
-		populateWindow();
+		try{
+			handler = new LogicHandler();
+			button = handler.updateButtons();
+			populateWindow();
+		}catch(FileNotFoundException fnfe){
+			add(new JLabel("File is not there"));
+		}
+		
 	}
 	
 	public void populateWindow() {
