@@ -72,24 +72,7 @@ public class LogicHandler {
 		return buttons;
 	}
 	
-	/**
-	 * Randomly generates a set of initial coordinates for a computer player.
-	 * @param comp The computer player.
-	 * @return The set of initial coordinates.
-	 */
-	public Coordinates compGetInit(Player comp) {
-		return logic.compGetInit(comp);
-	}
 	
-	/**
-	 * Randomly generates a set of final coordinates for a computer player.
-	 * @param comp The computer player.
-	 * @param init The corresponding set of initial coordinates.
-	 * @return The set of final coordinates.
-	 */
-	public Coordinates compGetFin(Player comp, Coordinates init) {
-		return logic.compGetFin(comp, init);
-	}
 	
 	/**
 	 * Updates the board according to a given group of coordinates.

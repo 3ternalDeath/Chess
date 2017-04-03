@@ -20,6 +20,14 @@ public class Coordinates {
 		this.y = y;
 	}
 	
+	public Coordinates() {
+		this(0, 0);
+	}
+	
+	public Coordinates(Coordinates copy) {
+		this(copy.getX(), copy.getY());
+	}
+
 	/**
 	 * Returns the x value of the coordinates.
 	 * @return x The current x value.

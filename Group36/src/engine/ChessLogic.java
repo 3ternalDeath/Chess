@@ -3,6 +3,7 @@ package engine;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -16,7 +17,7 @@ import pieces.PieceType;
  * @author Group 36
  */
 public class ChessLogic {
-	private final String FILE_NAME = "standard";
+	private final String FILE_NAME = "standard1";
 	Piece[][] gameBoard;
 	private Player player1, player2;
 	
@@ -99,24 +100,7 @@ public class ChessLogic {
 		return valid;
 	}
 	
-	/**
-	 * Randomly generates a set of initial coordinates for a computer player.
-	 * @param comp The computer player.
-	 * @return The set of initial coordinates.
-	 */
-	public Coordinates compGetInit(Player comp) {
-		return comp.pickPiece(gameBoard);
-	}
 	
-	/**
-	 * Randomly generates a set of final coordinates for a computer player.
-	 * @param comp The computer player.
-	 * @param init The corresponding set of initial coordinates.
-	 * @return The set of final coordinates.
-	 */
-	public Coordinates compGetFin(Player comp, Coordinates init) {
-		return comp.pickMove(init, gameBoard);
-	}
 	
 	public void movePiece(Coordinates init, Coordinates fin) {
 		Piece piece = getPieceAt(init);
@@ -148,24 +132,6 @@ public class ChessLogic {
 		else if (player2.getType() == PlayerType.Computer && player2.isMyTurn() && !player2.isLost()) {
 			compMove(player2);
 		}
-	}
-	
-	/**
-	 * Generates a random move for the computer player and executes it
-	 * @param comp The computer player.
-	 */
-	private void compMove(Player comp) {
-		boolean goodMove = false;
-		do {
-			Coordinates init = compGetInit(comp);
-			Coordinates fin = compGetFin(comp, init);
-
-			if (validInit(init, comp.getColor()) && validFin(init, fin, comp.getColor())) {
-				movePiece(init, fin);
-				goodMove = true;
-			}
-
-		} while (!goodMove);
 	}
 	
 	public Piece getPieceAt(Coordinates location) {
@@ -449,7 +415,7 @@ public class ChessLogic {
 				valid = false;
 			}
 			//attempting to kill another piece head-on
-			else if (gameBoard[fin.getX()][fin.getY()] != null && Math.abs(fin.getX() - init.getX()) == 0) {
+			else if (gameBoard[fin.getX()][fin.getY()] != null && (fin.getX() - init.getX()) == 0) {
 				System.out.println("The pawn can't kill like that.");
 				valid = false;
 			}
@@ -461,6 +427,53 @@ public class ChessLogic {
 		}
 		
 		return valid;
+	}
+	
+	public void compMove(Player comp) {
+		ArrayList<Piece> pieces = new ArrayList<Piece>();
+		PieceColor color = comp.getColor();
+		Coordinates init = new Coordinates();
+		Coordinates fin = new Coordinates();
+		
+		for (int x = 0; x < ChessGame.SIZE;x++){
+			for(int y = 0; y < ChessGame.SIZE; y++){
+				if (gameBoard[x][y] != null) {
+					if (gameBoard[x][y].getColor() == color) {
+						pieces.add(gameBoard[x][y]);
+					}
+				}
+			}
+		}
+		
+		for (Piece piece : pieces){
+			for (Coordinates coor : piece.getPossibleMoves()){
+				if(gameBoard[coor.getX()][coor.getY()] != null){
+					if(gameBoard[coor.getX()][coor.getY()].getColor() != color){
+						if(validFin(piece.getCoordinates(), coor, color)) {
+							init = piece.getCoordinates();
+							fin = new Coordinates(coor);
+						}
+					}
+				}
+			}
+		}
+		
+		Random num = new Random();
+		if (init.equals(fin)) {
+			init = pieces.get(num.nextInt(pieces.size())).getCoordinates();
+			boolean goodMove = false;
+			do {
+				for (Coordinates coor : gameBoard[init.getX()][init.getY()].getPossibleMoves()) {
+					if(validFin(init, coor, color)) {
+						fin = new Coordinates(coor);
+						goodMove = true;
+					}
+				}
+
+			} while (!goodMove);
+		}
+		
+		movePiece(init, fin);
 	}
 
 	/**

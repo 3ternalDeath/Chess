@@ -57,23 +57,7 @@ public class Player {
 	 * @param board The current configuration of the chessboard.
 	 * @return The coordinates corresponding to the chosen piece.
 	 */
-	public Coordinates pickPiece(Piece[][] board) {
-		Random num = new Random();
-		boolean validPiece = false;
-		int x,y;
-		do {
-			x = num.nextInt(8);
-			y = num.nextInt(8);
-			if (board[x][y] != null) {
-				if (board[x][y].getColor() == color) {
-					validPiece = true;
-				}
-			}
-			
-		} while(!validPiece);
-		
-		return new Coordinates(x, y);
-	}
+	
 	
 	/**
 	 * Chooses a random move for a given piece to make.
