@@ -423,6 +423,9 @@ public class ChessLogic {
 		
 		if(!collisionDetect(init, fin)) {
 			System.out.println("There's something in the way.");
+			System.out.println("Piece: " + gameBoard[init.getX()][init.getY()].getType());
+			System.out.println("From: " + init + " to " + fin);
+			
 			valid = false;
 		}
 		
@@ -460,9 +463,9 @@ public class ChessLogic {
 		
 		Random num = new Random();
 		if (init.equals(fin)) {
-			init = pieces.get(num.nextInt(pieces.size())).getCoordinates();
 			boolean goodMove = false;
 			do {
+				init = pieces.get(num.nextInt(pieces.size())).getCoordinates();
 				for (Coordinates coor : gameBoard[init.getX()][init.getY()].getPossibleMoves()) {
 					if(validFin(init, coor, color)) {
 						fin = new Coordinates(coor);
@@ -577,7 +580,6 @@ public class ChessLogic {
 				}
 			}
 		}
-		
 		return castling;
 	}
 	
@@ -593,27 +595,29 @@ public class ChessLogic {
 		int xDifference = fin.getX() - init.getX();
 		int yDifference = fin.getY() - init.getY();
 		
-		//if piece is a knight, or if piece is a non-pawn moving by one block,
-		//then simply let it through
-		if ((gameBoard[init.getX()][init.getY()].getType() == PieceType.Night) || 
-				(((Math.abs(xDifference) == 1 || Math.abs(yDifference) == 1) 
-				&& gameBoard[init.getX()][init.getY()].getType() != PieceType.Pawn))) {}
+		//shifts x and y towards zero 
+		xDifference = shift(xDifference);
+		yDifference = shift(yDifference);
+
+		//if piece is a knight, then simply let it through
+		if (gameBoard[init.getX()][init.getY()].getType() == PieceType.Night){}
 		else {
-			if (xDifference < 0) {
-				xDifference++;
-			}
-			else if (xDifference > 0) {
-				xDifference--;
+
+			//while x and y aren't both zero
+			while (xDifference != 0 || yDifference != 0) {
+				
+				//if there is a piece in the way
+				if (gameBoard[init.getX() + xDifference][init.getY() + yDifference] != null) {
+					pathOpen = false;
+				}
+				
+				//shifts x and y towards zero 
+				xDifference = shift(xDifference);
+				yDifference = shift(yDifference);
+				
 			}
 			
-			if (yDifference < 0) {
-				yDifference++;
-			}
-			else if (yDifference > 0) {
-				yDifference--;
-			}
-			
-			if (xDifference == 0) {
+			/*if (xDifference == 0) {
 				while (yDifference != 0) {
 					if (gameBoard[init.getX()][init.getY() + yDifference] != null) {
 						pathOpen = false;
@@ -631,38 +635,46 @@ public class ChessLogic {
 					if (gameBoard[init.getX() + xDifference][init.getY()] != null) {
 						pathOpen = false;
 					}
-					if (xDifference < 0) {
-						xDifference++;
-					}
-					else if (xDifference > 0) {
-						xDifference--;
-					}
+					if		(xDifference < 0) xDifference++;
+					else if (xDifference > 0) xDifference--;
 				}
 			}
 			else {
-				//If there is a difference in x and y
-				while (xDifference != 0 && yDifference != 0) {
+				//loop while there is a difference in x and y
+				while (xDifference != 0 || yDifference != 0) {
+					
+					//if there is a piece in the way
 					if (gameBoard[init.getX() + xDifference][init.getY() + yDifference] != null) {
 						pathOpen = false;
 					}
 					
-					if (xDifference < 0) {
-						xDifference++;
-					}
-					else if (xDifference > 0) {
-						xDifference--;
-					}
+					//move x difference towards 0
+					if 		(xDifference < 0) xDifference++;
+					else if (xDifference > 0) xDifference--;
 					
-					if (yDifference < 0) {
-						yDifference++;
-					}
-					else if (yDifference > 0) {
-						yDifference--;
-					}
+					//move y difference towards 0
+					if 		(yDifference < 0) yDifference++;
+					else if (yDifference > 0) yDifference--;
 				}
-			}
+			}*/
 		}
+		
 		
 		return pathOpen;
 	}
+	
+	/**
+	 * Shifts the number towards zero
+	 * @param num The number to shift
+	 * @return the number after shifting.
+	 */
+	private int shift(int num){
+		
+		//moves number towards zero
+		if 		(num < 0) num++;
+		else if (num > 0) num--;
+		
+		return num;
+	}
+	
 }
