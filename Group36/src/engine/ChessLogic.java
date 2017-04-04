@@ -17,7 +17,7 @@ import pieces.PieceType;
  * @author Group 36
  */
 public class ChessLogic {
-	private final String FILE_NAME = "standard1";
+	private final String FILE_NAME = "standard";
 	private Stack<Coordinates[]> moves;
 	private Stack<Piece> deadPieces;
 	Piece[][] gameBoard;
@@ -129,6 +129,7 @@ public class ChessLogic {
 			Piece piece = getPieceRef(rook);
 			moves.add(new Coordinates[]{new Coordinates(init), new Coordinates(fin), rook, rookTo});
 			
+			piece.move(rookTo);
 			setPieceAt(rook, null);
 			setPieceAt(rookTo, piece);
 		}
@@ -139,6 +140,7 @@ public class ChessLogic {
 			Piece piece = getPieceRef(rook);
 			moves.add(new Coordinates[]{new Coordinates(init), new Coordinates(fin), rook, rookTo});
 			
+			piece.move(rookTo);
 			setPieceAt(rook, null);
 			setPieceAt(rookTo, piece);
 		}
