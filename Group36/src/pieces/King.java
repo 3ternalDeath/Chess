@@ -25,6 +25,8 @@ public class King extends Piece {
 		if (isFirstMove()) {
 			if (Coordinates.inBound(getX() + 2, getY()))
 				moves.add(new Coordinates(getX() + 2, getY()));
+			if(Coordinates.inBound(getX() - 2, getY()))
+				moves.add(new Coordinates(getX() - 2, getY()));
 		}
 			
 		if (Coordinates.inBound(getX(), getY() + 1))

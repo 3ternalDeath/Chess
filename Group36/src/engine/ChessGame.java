@@ -147,7 +147,7 @@ public class ChessGame extends JPanel implements ActionListener {
 	 * @param fin The coordinate to end at.
 	 */
 	private void moveStuff(Coordinates init, Coordinates fin) {
-		handler.updateBoard(init, fin);
+		handler.makeMove(init, fin);
 		button = handler.updateButtons();
 		super.removeAll();
 		setLayout(new GridBagLayout());

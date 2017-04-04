@@ -2,7 +2,6 @@ package engine;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 import pieces.Piece;
 import pieces.PieceColor;

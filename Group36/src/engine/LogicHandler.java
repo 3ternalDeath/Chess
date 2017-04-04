@@ -1,27 +1,12 @@
 package engine;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.util.Stack;
-
-import pieces.Piece;
-import pieces.PieceColor;
-import pieces.PieceType;
 
 public class LogicHandler {
-	private Stack<int[][]> moves;
-	private Stack<Piece> deadPiece;
-	private int[] castle;
 	private ChessLogic logic;
 	private Player currentPlayer;
 	
 	public LogicHandler() throws FileNotFoundException {
-		moves = new Stack<int[][]>();
-		deadPiece = new Stack<Piece>();
-		castle = new int[2];
-		castle[0] = -1;
-		castle[1] = -1;
 		logic = new ChessLogic();
 		currentPlayer = new Player(logic.getP1());
 	}
@@ -72,31 +57,6 @@ public class LogicHandler {
 		return buttons;
 	}
 	
-	
-	
-	/**
-	 * Updates the board according to a given group of coordinates.
-	 * @param init The initial coordinates.
-	 * @param fin The final coordinates.
-	 * @param p1 The game's player 1.
-	 * @param p2 The game's player 2.
-	 */
-	public void updateBoard(Coordinates init, Coordinates fin) {
-		/*if (castleNow) {
-			makeMove(new Coordinates(fin.getX() + 1, fin.getY()), new Coordinates(fin.getX() - 1, fin.getY()));
-			if (castle[0] != -1) {
-				castle[1] = moves.size();
-			} 
-			else {
-				castle[0] = moves.size();
-			}
-			castleNow = false;
-		}*/
-		
-		makeMove(init, fin);
-		updateButtons();
-		//updateCheckMate(p1, p2);
-	}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              	/**
 	 * Updates the entire board based on user input.
   	 * Takes the piece at initial coordinates, and moves it to final coordinates.
@@ -110,13 +70,6 @@ public class LogicHandler {
 		System.out.println("Piece Color: " + logic.getColor(init));
 		
 		//move the specified piece to the specified location
-		//add move to the moves Stack
-		
-		
-		//undo moves
-		int[][] currentMove = {{init.getX(), init.getY()}, {fin.getX(), fin.getY()}};
-		moves.add(currentMove);
-		deadPiece.add(logic.getPieceAt(fin));
 		
 		logic.movePiece(init, fin);
 		
