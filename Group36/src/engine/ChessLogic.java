@@ -67,8 +67,6 @@ public class ChessLogic {
 	}
 	
 	public void movePiece(Coordinates init, Coordinates fin) {
-		Piece piece = getPieceRef(init);
-		piece.move(fin);
 		
 		if (getType(init) == PieceType.King) {
 			if (player1.isMyTurn())
@@ -84,6 +82,9 @@ public class ChessLogic {
 			moves.add(new Coordinates[]{new Coordinates(init), new Coordinates(fin)});
 			deadPieces.add(getPieceAt(fin));
 		}
+		
+		Piece piece = getPieceRef(init);
+		piece.move(fin);
 		
 		setPieceAt(init, null);
 		setPieceAt(fin, piece);
