@@ -28,10 +28,10 @@ public class Rook extends Piece {
 		for (int x = getX()-1; Coordinates.inBound(x); x--) {
 			moves.add(new Coordinates(x, getY()));
 		}
-		for (int y = getX()+1; Coordinates.inBound(y); y++) {
+		for (int y = getY()+1; Coordinates.inBound(y); y++) {
 			moves.add(new Coordinates(getX(), y));
 		}
-		for (int y = getX()-1; Coordinates.inBound(y); y--) {
+		for (int y = getY()-1; Coordinates.inBound(y); y--) {
 			moves.add(new Coordinates(getX(), y));
 		}
 		

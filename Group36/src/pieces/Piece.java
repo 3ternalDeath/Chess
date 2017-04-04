@@ -127,10 +127,12 @@ public abstract class Piece {
 		
 		if (posMoves != null) {
 			
-//			for (Coordinates move : posMoves) {
-//				System.out.print(move + ", ");
-//			}
-//			System.out.println();
+			System.out.println("Piece: " + this.getType());
+			System.out.println("At; " + this.getCoordinates());
+			for (Coordinates move : posMoves) {
+				System.out.print(move + ", ");
+			}
+			System.out.println();
 			
 			for (int index = 0; index < posMoves.size(); index++) {
 				if (newCoor.equals(posMoves.get(index))) {

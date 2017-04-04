@@ -127,10 +127,10 @@ public class ChessLogic {
 		player2.switchTurn();
 
 		if (player1.getType() == PlayerType.Computer && player1.isMyTurn() && !player1.isLost()) {
-			compMove(player1);
+			compMove(player1.getColor());
 		}
 		else if (player2.getType() == PlayerType.Computer && player2.isMyTurn() && !player2.isLost()) {
-			compMove(player2);
+			compMove(player2.getColor());
 		}
 	}
 	
@@ -146,7 +146,7 @@ public class ChessLogic {
 	
 	public void setPieceAt(Coordinates location, Piece piece) {
 		if (piece != null) {
-			Piece newPiece = Piece.createPiece(location, piece.getType(), piece.getColor());
+			Piece newPiece = piece;
 			gameBoard[location.getX()][location.getY()] = newPiece;
 		}
 		else
@@ -432,12 +432,18 @@ public class ChessLogic {
 		return valid;
 	}
 	
-	public void compMove(Player comp) {
+	/**
+	 * Movement for the computer player
+	 * @param comp The player that is moving
+	 * @param color The color of the moving piece.
+	 * @return An array containing the initial and final coordinates.
+	 */
+	public void compMove(PieceColor color) {
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
-		PieceColor color = comp.getColor();
 		Coordinates init = new Coordinates();
 		Coordinates fin = new Coordinates();
 		
+		//Finds all pieces
 		for (int x = 0; x < ChessGame.SIZE;x++){
 			for(int y = 0; y < ChessGame.SIZE; y++){
 				if (gameBoard[x][y] != null) {
@@ -448,6 +454,8 @@ public class ChessLogic {
 			}
 		}
 		
+		//Find a move in which it can kill a piece.
+		//Piece that's farthest right then farthest to the top that can kill a piece.
 		for (Piece piece : pieces){
 			for (Coordinates coor : piece.getPossibleMoves()){
 				if(gameBoard[coor.getX()][coor.getY()] != null){
@@ -461,24 +469,65 @@ public class ChessLogic {
 			}
 		}
 		
-		Random num = new Random();
+		//Randomly moves if no possible kill is found.
+		//initial and final coordinates wouldn't be equal if valid kill is found.
 		if (init.equals(fin)) {
-			boolean goodMove = false;
-			do {
-				init = pieces.get(num.nextInt(pieces.size())).getCoordinates();
+			Coordinates[] movement = new Coordinates[2];
+			movement = randomMove(pieces, color);
+			init = movement[0];
+			fin = movement[1];
+		}
+		
+		//move piece
+		movePiece(init, fin);
+	}
+
+	/**
+	 * Randomly chooses a piece to move, then randomly chooses from possible moves.
+	 * @param pieces The ArrayList of all pieces for that color.
+	 * @param color The color of the moving piece.
+	 * @return An array containing the initial and final coordinates.
+	 */
+	private Coordinates[] randomMove(ArrayList<Piece> pieces, PieceColor color){
+		Coordinates[] movement = new Coordinates[2];
+		Coordinates init = new Coordinates();
+		Coordinates fin = new Coordinates();
+		Random num = new Random();
+		
+		boolean goodMove = false;
+		do {
+			if (!pieces.isEmpty()){
+				
+				//Picks a random piece, then sees if movement is possible.
+				Piece piece = pieces.get(num.nextInt(pieces.size()));
+				init = piece.getCoordinates();
+				
+				//possible moves of that piece
 				for (Coordinates coor : gameBoard[init.getX()][init.getY()].getPossibleMoves()) {
 					if(validFin(init, coor, color)) {
 						fin = new Coordinates(coor);
 						goodMove = true;
 					}
 				}
-
-			} while (!goodMove);
-		}
+				
+				//removes piece from movable pieces;
+				pieces.remove(piece);
+			}
+			//No piece can move
+			else{
+				//TODO: STALEMATE
+			}
+		} while (!goodMove);
 		
-		movePiece(init, fin);
+		//coordinates into array
+		movement[0] = init;
+		movement[1] = fin;
+		
+		return movement;
+				
 	}
-
+	
+	
 	/**
 	 * Runs the basic tests on a given move (in terms of a group of coordinates).
 	 * @param init The initial set of coordinates.
@@ -538,7 +587,6 @@ public class ChessLogic {
 				valid = false;
 			}
 		}
-		
 		return valid;
 	}
 
