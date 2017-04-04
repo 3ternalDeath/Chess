@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 import pieces.Empty;
 import pieces.Piece;
@@ -100,8 +101,6 @@ public class ChessLogic {
 		return valid;
 	}
 	
-	
-	
 	public void movePiece(Coordinates init, Coordinates fin) {
 		Piece piece = getPieceAt(init);
 		piece.move(fin);
@@ -127,9 +126,21 @@ public class ChessLogic {
 		player2.switchTurn();
 
 		if (player1.getType() == PlayerType.Computer && player1.isMyTurn() && !player1.isLost()) {
+			try {
+				TimeUnit.MILLISECONDS.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			compMove(player1.getColor());
 		}
 		else if (player2.getType() == PlayerType.Computer && player2.isMyTurn() && !player2.isLost()) {
+			try {
+				TimeUnit.MILLISECONDS.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			compMove(player2.getColor());
 		}
 	}
