@@ -2,7 +2,7 @@ package engine;
 
 import java.io.FileNotFoundException;
 
-public class LogicHandler {
+public class LogicHandler{
 	private ChessLogic logic;
 	private Player currentPlayer;
 	

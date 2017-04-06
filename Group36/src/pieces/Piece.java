@@ -1,5 +1,6 @@
 package pieces;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -11,7 +12,8 @@ import engine.Coordinates;
  * piece on the chessboard.
  * @author Group 36
  */
-public abstract class Piece {
+public abstract class Piece implements Serializable{
+	private static final long serialVersionUID = 411L;
 	private final PieceType type;
 	private final PieceColor color;
 	private boolean firstMove;

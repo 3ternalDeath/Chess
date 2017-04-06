@@ -1,5 +1,6 @@
 package engine;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -11,7 +12,8 @@ import pieces.PieceColor;
  * or to have pieces be moved by an AI.
  * @author Group 36
  */
-public class Player {
+public class Player implements Serializable{
+	private static final long serialVersionUID = 311L;
 	private PieceColor color;
 	private PlayerType type;
 	private boolean myTurn;

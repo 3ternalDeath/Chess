@@ -2,6 +2,7 @@ package engine;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -16,7 +17,8 @@ import pieces.PieceType;
  * Handles all the internal logic of a chess game.
  * @author Group 36
  */
-public class ChessLogic {
+public class ChessLogic implements Serializable{
+	private static final long serialVersionUID = 211L;
 	private final String FILE_NAME = "standard";
 	private Stack<Coordinates[]> moves;
 	private Stack<Piece> deadPieces;

@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,8 +18,8 @@ import javax.swing.JPanel;
  * Handles the main functionality of the chess game.
  * @author Group 36
  */
-public class ChessGame extends JPanel implements ActionListener {
-	private static final long serialVersionUID = -3433959957442938842L;
+public class ChessGame extends JPanel implements ActionListener, Serializable {
+	private static final long serialVersionUID = 111L;
 
 	final static int SIZE = 8;
 	final static int WINDOW = SIZE * 78;
