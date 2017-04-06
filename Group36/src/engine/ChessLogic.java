@@ -243,8 +243,12 @@ public class ChessLogic {
 	}
 	
 	public PieceColor getColor(Coordinates coor) {
-		if (gameBoard[coor.getX()][coor.getY()] != null)
-			return gameBoard[coor.getX()][coor.getY()].getColor();
+		return getColor(coor.getX(), coor.getY());
+	}
+	
+	private PieceColor getColor(int x, int y){
+		if (gameBoard[x][y] != null)
+			return gameBoard[x][y].getColor();
 		else
 			return null;
 	}
@@ -281,7 +285,18 @@ public class ChessLogic {
 		return valid;
 	}
 	
-	public boolean validFin(Coordinates init, Coordinates fin, PieceColor color) {
+	public boolean validFin(Coordinates init, Coordinates fin, Player player) {
+		boolean valid = validFinAux(init, fin, player.getColor());
+		
+		if(valid){
+			if(!checkNextMoveCheck(init, fin, player)){
+				valid = false;
+			}
+		}
+		return valid;
+	}
+	
+	public boolean validFinAux(Coordinates init, Coordinates fin, PieceColor color) {
 		boolean valid = true;
 		
 		//final coordinates point to the player's own piece
@@ -356,7 +371,7 @@ public class ChessLogic {
 			for (Coordinates coor : piece.getPossibleMoves()){
 				if(gameBoard[coor.getX()][coor.getY()] != null){
 					if(gameBoard[coor.getX()][coor.getY()].getColor() != color){
-						if(validFin(piece.getCoordinates(), coor, color)) {
+						if(validFin(piece.getCoordinates(), coor, getPlayerRef(color))) {
 							init = piece.getCoordinates();
 							fin = new Coordinates(coor);
 						}
@@ -400,7 +415,7 @@ public class ChessLogic {
 				
 				//possible moves of that piece
 				for (Coordinates coor : gameBoard[init.getX()][init.getY()].getPossibleMoves()) {
-					if(validFin(init, coor, color)) {
+					if(validFin(init, coor, getPlayerRef(color))) {
 						fin = new Coordinates(coor);
 						goodMove = true;
 					}
@@ -474,6 +489,166 @@ public class ChessLogic {
 		else if (num > 0) num--;
 		
 		return num;
+	}
+	
+	private Player getPlayerRef(PieceColor color){
+		if(player1.getColor() == color){
+			return player1;
+		}
+		else if(player2.getColor() == color){
+			return player2;
+		}
+		else
+			return null;
+	}
+	
+	
+	
+	/////ALL BELOW IS CHECK CHECKER
+	
+	
+	
+	
+	/**
+	 * @param king the coordinates of the king
+	 * @param color the color of the king
+	 * @return true if king is in check, false otherwise
+	 */
+	public boolean checkCheck(Coordinates king, PieceColor color, boolean aux) {
+		boolean check = false;
+
+		//run through every element in the board
+		for (int x = 0; x < ChessGame.SIZE; x++) {
+			for (int y = 0; y < ChessGame.SIZE; y++) {
+				//if there's a piece belonging to the other player at the index
+				if(getColor(x, y) != null && getColor(x, y) != color){
+					if(!aux){
+						if(validFin(new Coordinates(x, y), new Coordinates(king), getPlayerRef(getColor(x, y)))){
+							check = true;
+						}
+					}
+					else{
+						if(validFinAux(new Coordinates(x, y), new Coordinates(king), getColor(x, y))){
+							check = true;
+						}
+					}
+				}
+				
+			}
+		}
+		
+		return check;
+	}
+	
+	/**
+	 * Updates the checkmate status of both players in the game.
+	 * @param p1 The game's player 1.
+	 * @param p2 The game's player 2.
+	 */
+	private void updateCheckMate(Player p1, Player p2) {
+		updateCheckMate(p1);
+		updateCheckMate(p2);
+	}
+	
+	/**
+	 * Checks whether a given player is in checkmate and adjusts the player's checkmate status accordingly.
+	 * @param player The player to check.
+	 */
+	private void updateCheckMate(Player player) {
+		updateCheck(player, false);
+		
+		if(player.isInCheck()){
+			if(!checkAllMoves(player)){
+				player.setLost(true);
+			}
+		}
+	}
+	
+	/**
+	 * Checks whether a given player is in check and adjusts the player's check status accordingly.
+	 * @param player The player to check.
+	 */
+	private void updateCheck(Player player, boolean aux) {
+		if (checkCheck(player.getKingCoor(), player.getColor(), aux)) {
+			player.setInCheck(true);
+		}
+		else {
+			player.setInCheck(false);
+			player.setLost(false);
+		}
+	}
+	
+	
+	
+	//NEXT MOVE CHECK CHECKER
+	
+	
+	
+	/**
+	 * Checks whether or not a given player is able to leave check.
+	 * @param p The player to check.
+	 * @return True if the player can leave check, false otherwise.
+	 */
+	private boolean checkAllMoves(Player p) {
+		boolean canLeave = false;
+		
+		//check every element in the board
+		for (int x = 0; x < ChessGame.SIZE; x++)
+			for (int y = 0; y < ChessGame.SIZE; y++) {
+				//if there's a piece belonging to the player at the index
+				
+					if (getColor(x, y) == p.getColor()) {
+						Coordinates piece = new Coordinates(x,y);
+						ArrayList<Coordinates> moves = gameBoard[x][y].getPossibleMoves();
+						//run through all its moves for next move check
+						for (Coordinates move : moves) {
+							if (checkNextMoveCheck(piece, move, p)) {
+								canLeave = true;
+							}
+						}
+					
+				}
+			}
+		
+		return canLeave;
+	}
+	
+	/**
+	 * Checks whether a given move (in terms of a group of coordinates) would allow
+	 * a given player to leave check.
+	 * @param init The initial set of coordinates.
+	 * @param fin The final set of coordinates.
+	 * @param player The player making the move.
+	 * @return True if the move would put the player out of check, false otherwise.
+	 */
+	private boolean checkNextMoveCheck(Coordinates init, Coordinates fin, Player player) {
+		boolean leaveCheck = true;
+		ChessLogic nextMove = new ChessLogic(this);
+		Player testPlayer = new Player(player);
+
+		if (nextMove.getType(init) == PieceType.King)
+			testPlayer.setKingCoor(fin);
+
+		nextMove.makeTestMove(init, fin);
+		nextMove.updateCheck(testPlayer, true);
+
+		if (testPlayer.isInCheck()) {
+			leaveCheck = false;
+		}
+		
+		return leaveCheck;
+	}
+	
+	/**
+	 * Tests a particular move (in terms of a group of coordinates) without directly affecting the chessboard.
+	 * @param init The initial set of coordinates.
+	 * @param fin The final set of coordinates.
+	 */
+	public void makeTestMove(Coordinates init, Coordinates fin) {
+		Piece piece = gameBoard[init.getX()][init.getY()];
+		piece.move(fin);
+		gameBoard[init.getX()][init.getY()] = null;
+		gameBoard[fin.getX()][fin.getY()] = piece;
 	}
 	
 }

@@ -40,7 +40,7 @@ public class LogicHandler {
 	}
 	
 	public boolean validFin(Coordinates init, Coordinates fin) {
-		return logic.validFin(init, fin, currentPlayer.getColor());
+		return logic.validFin(init, fin, currentPlayer);
 	}
 	
 	/**
