@@ -74,7 +74,7 @@ public class Board {
 		PieceColor color;
 		//Black pieces at top of board
 		color = PieceColor.Black;
-		gameBoard[0][7] = 	new Rook   (new Coordinates(0,7), color);
+		gameBoard[0][7] = 	new Rook   (new Coordinates(s0,7), color);
 		gameBoard[1][7] = 	new Night  (new Coordinates(1,7), color);
 		gameBoard[2][7] = 	new Bishop (new Coordinates(2,7), color);
 		gameBoard[3][7] = 	new Queen  (new Coordinates(3,7), color);

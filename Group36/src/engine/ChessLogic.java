@@ -93,8 +93,10 @@ public class ChessLogic implements Serializable{
 		setPieceAt(fin, piece);
 		
 		updateCheckMate(player1, player2);
-//		checkStalemate(player1);
-//		checkStalemate(player2);
+		if (player1.isMyTurn())
+			checkStalemate(player1);
+		if (player2.isMyTurn())
+			checkStalemate(player2);
 		
 		nextTurn();
 	}
@@ -519,6 +521,8 @@ public class ChessLogic implements Serializable{
 	public boolean checkCheck(Coordinates king, PieceColor color, boolean aux) {
 		boolean check = false;
 
+		ArrayList<Piece> checking = new ArrayList<Piece>();
+		
 		//run through every element in the board
 		for (int x = 0; x < ChessGame.SIZE; x++) {
 			for (int y = 0; y < ChessGame.SIZE; y++) {
@@ -527,16 +531,26 @@ public class ChessLogic implements Serializable{
 					if(!aux){
 						if(validFin(new Coordinates(x, y), new Coordinates(king), getPlayerRef(getColor(x, y)))){
 							check = true;
+							checking.add(gameBoard[x][y]);
 						}
 					}
 					else{
 						if(validFinAux(new Coordinates(x, y), new Coordinates(king), getColor(x, y))){
 							check = true;
+							checking.add(gameBoard[x][y]);
 						}
 					}
 				}
 				
 			}
+		}
+		
+		if (check == true){
+			System.out.print("Will be checked by:");
+			for (Piece piece: checking){
+				System.out.print(piece.getType() + ", ");
+			}
+			
 		}
 		
 		return check;
@@ -639,7 +653,6 @@ public class ChessLogic implements Serializable{
 		if (testPlayer.isInCheck()) {
 			leaveCheck = false;
 		}
-		testPlayer.setKingCoor(init);
 		return leaveCheck;
 	}
 	
