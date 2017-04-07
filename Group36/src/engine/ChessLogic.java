@@ -91,6 +91,8 @@ public class ChessLogic implements Serializable{
 		setPieceAt(init, null);
 		setPieceAt(fin, piece);
 		
+		updateCheckMate(player1, player2);
+		
 		nextTurn();
 	}
 	
@@ -628,10 +630,12 @@ public class ChessLogic implements Serializable{
 		ChessLogic nextMove = new ChessLogic(this);
 		Player testPlayer = new Player(player);
 
-		if (nextMove.getType(init) == PieceType.King)
-			testPlayer.setKingCoor(fin);
-
-		nextMove.makeTestMove(init, fin);
+		if(validFinAux(init, fin, testPlayer.getColor())) {
+			if (nextMove.getType(init) == PieceType.King)
+				testPlayer.setKingCoor(fin);
+			nextMove.makeTestMove(init, fin);
+		}
+		
 		nextMove.updateCheck(testPlayer, true);
 
 		if (testPlayer.isInCheck()) {

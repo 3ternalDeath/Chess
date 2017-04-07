@@ -82,7 +82,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		int y = e.getActionCommand().charAt(1) - '0';
 
 		//if button click is to choose a piece and neither player has lost
-		if (firstSec && !handler.gameLost()) {
+		if (firstSec && !handler.gameOver()) {
 			init = new Coordinates(x, y);
 			System.out.println("Piece at:" + init);
 			if (handler.validInit(init)) {
@@ -90,7 +90,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			}
 		}
 		//if button click is to move the chosen piece and neither player has lost
-		else if (!handler.gameLost()) {
+		else if (!handler.gameOver()) {
 			fin = new Coordinates(x, y);
 			System.out.println("Moved to:" + fin);
 			firstSec = true;
@@ -98,17 +98,15 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 				valid = true;
 			}
 		}
-		/*else {
-			if (player1.isLost())
-				System.out.println(player2.getColor() + " Won!!");
-			else if (player2.isLost())
-				System.out.println(player1.getColor() + " Won!!");
-			stop();
-		}*/
+		
 		// Change Icon if valid
 		if (valid) {
 			moveStuff(init, fin);
 			valid = false;
+		}
+		
+		if(handler.gameOver()) {
+			stop();
 		}
 	}
 	

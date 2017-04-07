@@ -79,8 +79,8 @@ public class LogicHandler{
 			currentPlayer = logic.getP1();*/ //this should only be used in multiplayer
 	}
 	
-	public boolean gameLost() {
-		return logic.p1Lost() && logic.p2Lost();
+	public boolean gameOver() {
+		return logic.p1Lost() || logic.p2Lost();
 	}
 	
 	public Player getCurrentPlayer() {
