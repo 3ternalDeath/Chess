@@ -22,6 +22,7 @@ public class ChessLogic implements Serializable{
 	private final String FILE_NAME = "standard";
 	private Stack<Coordinates[]> moves;
 	private Stack<Piece> deadPieces;
+	private boolean stalemate = false;
 	Piece[][] gameBoard;
 	private Player player1, player2;
 	
@@ -92,6 +93,8 @@ public class ChessLogic implements Serializable{
 		setPieceAt(fin, piece);
 		
 		updateCheckMate(player1, player2);
+//		checkStalemate(player1);
+//		checkStalemate(player2);
 		
 		nextTurn();
 	}
@@ -184,21 +187,9 @@ public class ChessLogic implements Serializable{
 		player2.switchTurn();
 
 		if (player1.getType() == PlayerType.Computer && player1.isMyTurn() && !player1.isLost()) {
-			try {
-				TimeUnit.MILLISECONDS.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			compMove(player1.getColor());
 		}
 		else if (player2.getType() == PlayerType.Computer && player2.isMyTurn() && !player2.isLost()) {
-			try {
-				TimeUnit.MILLISECONDS.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			compMove(player2.getColor());
 		}
 	}
@@ -206,7 +197,7 @@ public class ChessLogic implements Serializable{
 	public Piece getPieceAt(Coordinates location) {
 		if (gameBoard[location.getX()][location.getY()] != null) {
 			Piece newPiece = gameBoard[location.getX()][location.getY()];
-			return Piece.createPiece(location, newPiece.getType(), newPiece.getColor());
+			return Piece.createPiece(location, newPiece.getType(), newPiece.getColor(), newPiece.isFirstMove());
 		}
 		else {
 			return null;
@@ -265,6 +256,10 @@ public class ChessLogic implements Serializable{
 		return player2.isLost();
 	}
 	
+	public boolean stalemate() {
+		return stalemate;
+	}
+	
 	public Player getP1() {
 		return new Player(player1);
 	}
@@ -305,13 +300,15 @@ public class ChessLogic implements Serializable{
 		
 		//final coordinates point to the player's own piece
 		if (gameBoard[fin.getX()][fin.getY()] != null && getColor(fin) == getColor(init)) {
+			System.out.println(gameBoard[init.getX()][init.getY()].getType() + " into " + gameBoard[fin.getX()][fin.getY()].getType());
+			System.out.println(init + " into " + fin);
 			System.out.println("Moving into your own piece.");
 			valid = false;
 		}
 
 		// coordinates cause an illegal move
 		else if (!gameBoard[init.getX()][init.getY()].validMove(fin)) {
-			System.out.println("The piece can't move there.");
+			System.out.println("The "+ gameBoard[init.getX()][init.getY()].getType() +" at " + init + " can't move to " + fin);
 			valid = false;
 		}
 		
@@ -336,7 +333,7 @@ public class ChessLogic implements Serializable{
 			}
 		}
 		
-		if(getType(init) == PieceType.King){
+		if(valid && getType(init) == PieceType.King){
 			if(Math.abs(init.getX() - fin.getX()) > 1){
 				if(!moveIsCastle(init, fin)){
 					valid = false;
@@ -344,6 +341,7 @@ public class ChessLogic implements Serializable{
 			}
 		}
 		
+		System.out.println("The move is " + valid);
 		return valid;
 	}
 	
@@ -430,7 +428,7 @@ public class ChessLogic implements Serializable{
 			}
 			//No piece can move
 			else{
-				//TODO: STALEMATE
+				stalemate = true;
 			}
 		} while (!goodMove);
 		
@@ -641,7 +639,7 @@ public class ChessLogic implements Serializable{
 		if (testPlayer.isInCheck()) {
 			leaveCheck = false;
 		}
-		
+		testPlayer.setKingCoor(init);
 		return leaveCheck;
 	}
 	
@@ -655,6 +653,42 @@ public class ChessLogic implements Serializable{
 		piece.move(fin);
 		gameBoard[init.getX()][init.getY()] = null;
 		gameBoard[fin.getX()][fin.getY()] = piece;
+	}
+	
+	private void checkStalemate(Player player) {
+		
+		Player testPlayer = new Player(player);
+		ArrayList<Piece> pieces = new ArrayList<Piece>();
+		player.getKingCoor();
+		PieceColor color = testPlayer.getColor();
+		boolean stalemate = true;
+		
+		//Finds all pieces
+		for (int x = 0; x < ChessGame.SIZE;x++){
+			for(int y = 0; y < ChessGame.SIZE; y++){
+				if (gameBoard[x][y] != null) {
+					if (gameBoard[x][y].getColor() == color) {
+						pieces.add(gameBoard[x][y]);
+					}
+				}
+			}
+		}
+		
+		Coordinates init = new Coordinates();
+		for (Piece piece : pieces){
+			if (!pieces.isEmpty()){
+				init = piece.getCoordinates();
+				
+				//possible moves of that piece
+				for (Coordinates coor : gameBoard[init.getX()][init.getY()].getPossibleMoves()) {
+					if(validFin(init, coor, getPlayerRef(color))) {
+						stalemate = false;
+					}
+				}
+			}
+		}
+		
+		this.stalemate = stalemate;
 	}
 	
 }

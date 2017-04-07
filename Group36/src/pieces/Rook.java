@@ -14,9 +14,10 @@ public class Rook extends Piece {
 	 * Constructor for the Rook class.
 	 * @param coor The starting coordinates of the rook.
 	 * @param Color The color of the rook.
+	 * @param isFirstMove 
 	 */
-	public Rook(Coordinates coor, PieceColor Color) {
-		super(coor, PieceType.Rook, Color);
+	public Rook(Coordinates coor, PieceColor Color, boolean isFirstMove) {
+		super(coor, PieceType.Rook, Color, isFirstMove);
 	}
 
 	public ArrayList<Coordinates> getPossibleMoves() {

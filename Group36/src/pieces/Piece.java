@@ -21,21 +21,7 @@ public abstract class Piece implements Serializable{
 	private Coordinates coor;
 	private ImageIcon img;
 	
-	/**
-	 * Constructor for the Piece class.
-	 * @param coor The starting coordinates of the piece.
-	 * @param type The type of the piece.
-	 * @param color The color of the piece.
-	 */
-	public Piece(Coordinates coor, PieceType type, PieceColor color) {
-		this.type = type;
-		this.color = color;
-		this.coor = new Coordinates(coor.getX(), coor.getY());
-		firstMove = true;
-		if (type!=null)
-		img = new ImageIcon("src/Images/"+ Character.toLowerCase(color.toString().charAt(0)) + "" + Character.toLowerCase(type.toString().charAt(0)) +".png");
-	}
-	
+		
 	/**
 	 * Initializes a piece with no type or color.
 	 * @param coor The starting coordinates of the piece.
@@ -46,6 +32,20 @@ public abstract class Piece implements Serializable{
 		this.coor = new Coordinates(coor.getX(), coor.getY());
 		firstMove = false;
 		img = null;
+	}
+	/**
+	 * Constructor for the Piece class.
+	 * @param coor The starting coordinates of the piece.
+	 * @param type The type of the piece.
+	 * @param color The color of the piece.
+	 */
+	public Piece(Coordinates coor, PieceType type, PieceColor color, boolean isFirstMove) {
+		this.type = type;
+		this.color = color;
+		this.coor = new Coordinates(coor.getX(), coor.getY());
+		this.firstMove = isFirstMove;
+		if (type!=null)
+			img = new ImageIcon("src/Images/"+ Character.toLowerCase(color.toString().charAt(0)) + "" + Character.toLowerCase(type.toString().charAt(0)) +".png");
 	}
 
 	/**
@@ -78,18 +78,19 @@ public abstract class Piece implements Serializable{
 	 * @param color The color of the new piece.
 	 * @return The generated piece.
 	 */
-	public static Piece createPiece(Coordinates coor, PieceType type, PieceColor color) {
+	public static Piece createPiece(Coordinates coor, PieceType type, PieceColor color, boolean isFirstMove) {
 		Piece piece;
 		if (type != null)
 			switch(type) {
-			case King:   piece = new King   (coor, color); break;
-			case Night:  piece = new Night  (coor, color); break;
-			case Rook: 	 piece = new Rook   (coor, color); break;
-			case Bishop: piece = new Bishop (coor, color); break;
-			case Queen:  piece = new Queen  (coor, color); break;
-			case Pawn: 	 piece = new Pawn   (coor, color); break;
+			case King:   piece = new King   (coor, color, isFirstMove); break;
+			case Night:  piece = new Night  (coor, color, isFirstMove); break;
+			case Rook: 	 piece = new Rook   (coor, color, isFirstMove); break;
+			case Bishop: piece = new Bishop (coor, color, isFirstMove); break;
+			case Queen:  piece = new Queen  (coor, color, isFirstMove); break;
+			case Pawn: 	 piece = new Pawn   (coor, color, isFirstMove); break;
 			default:     piece = null;
 			}
+
 		else
 			piece = null;
 
@@ -115,7 +116,7 @@ public abstract class Piece implements Serializable{
 		default: color = null;
 		}
 		
-		return createPiece(coor, type, color);
+		return createPiece(coor, type, color, true);
 	}
 	
 	/**
@@ -129,8 +130,7 @@ public abstract class Piece implements Serializable{
 		
 		if (posMoves != null) {
 			
-			System.out.println("Piece: " + this.getType());
-			System.out.println("At; " + this.getCoordinates());
+			System.out.println(this.getColor() + " " + this.getType() + " at " + this.getCoordinates());
 			for (Coordinates move : posMoves) {
 				System.out.print(move + ", ");
 			}

@@ -118,6 +118,7 @@ public class Player implements Serializable{
 	 * @return The king piece's coordinates.
 	 */
 	public Coordinates getKingCoor() {
+		System.out.println(getColor() + " King Coordinates is :" + kingCoor);
 		return new Coordinates(kingCoor.getX(), kingCoor.getY());
 	}
 
@@ -126,6 +127,7 @@ public class Player implements Serializable{
 	 * @param kingCoor The new coordinates for the king piece.
 	 */
 	public void setKingCoor(Coordinates kingCoor) {
+		System.out.println(getColor() + " King Coordinates set to :" + kingCoor);
 		this.kingCoor = new Coordinates(kingCoor.getX(), kingCoor.getY());
 	}
 

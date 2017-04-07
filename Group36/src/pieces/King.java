@@ -14,11 +14,13 @@ public class King extends Piece {
 	 * Constructor for the King class.
 	 * @param coor The starting coordinates of the king.
 	 * @param Color The color of the king.
+	 * @param b 
 	 */
-	public King(Coordinates coor, PieceColor Color) {
-		super(coor, PieceType.King, Color);
+	public King(Coordinates coor, PieceColor Color, boolean isFirstMove) {
+		super(coor, PieceType.King, Color, isFirstMove);
 	}
-		
+	
+
 	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 			

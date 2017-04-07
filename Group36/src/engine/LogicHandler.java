@@ -80,7 +80,7 @@ public class LogicHandler{
 	}
 	
 	public boolean gameOver() {
-		return logic.p1Lost() || logic.p2Lost();
+		return logic.p1Lost() || logic.p2Lost() || logic.stalemate();
 	}
 	
 	public Player getCurrentPlayer() {

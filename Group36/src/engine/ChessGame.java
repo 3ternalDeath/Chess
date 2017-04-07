@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -99,8 +100,9 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			}
 		}
 		
-		// Change Icon if valid
+		// move is valid
 		if (valid) {
+			System.out.println("move is valid");
 			moveStuff(init, fin);
 			valid = false;
 		}

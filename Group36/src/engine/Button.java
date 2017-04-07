@@ -47,7 +47,7 @@ public class Button extends JButton {
 		}
 		
 		System.out.println(color + " " + type + " at " + coor);
-		piece = Piece.createPiece(coor, type, color);
+		piece = Piece.createPiece(coor, type, color,true);
 	}
 	
 	public Button(Piece piece) {
