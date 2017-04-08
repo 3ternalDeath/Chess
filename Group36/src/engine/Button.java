@@ -18,8 +18,6 @@ public class Button extends JButton {
 	
 	private Piece piece;
 	
-	//public Button(Coordinates coor, PieceColor color, PieceType type) {}
-	
 	/**
 	 * Constructor for the Button class.
 	 * @param coor The coordinates of the button.
@@ -46,7 +44,6 @@ public class Button extends JButton {
 		default: type = null;
 		}
 		
-		System.out.println(color + " " + type + " at " + coor);
 		piece = Piece.createPiece(coor, type, color,true);
 	}
 	
@@ -59,12 +56,6 @@ public class Button extends JButton {
 		else
 			this.piece = null;
 	}
-	
-//	public Button(Coordinates coor, Icon icon) {
-//		super(icon);
-//		
-//		this.coor = new Coordinates(coor.getX(),coor.getY());
-//	}
 
 	/**
 	 * Returns the button's coordinates.

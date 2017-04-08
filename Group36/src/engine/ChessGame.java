@@ -8,12 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
+import pieces.PieceColor;
 
 /**
  * Handles the main functionality of the chess game.
@@ -23,9 +22,10 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	private static final long serialVersionUID = 111L;
 
 	final static int SIZE = 8;
-	final static int WINDOW = SIZE * 78;
+	final static int WINDOW = SIZE * 80;
 	GridBagConstraints gbc = new GridBagConstraints();
 	public static boolean debug = true;
+	static JLabel msgDisplay = new JLabel("Make a move, Player 1!", JLabel.CENTER);
 	
 	private boolean firstSec = true;
 	private Coordinates init;
@@ -39,7 +39,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 * Constructor for the ChessGame class.
 	 * @throws FileNotFoundException if chessboard arrangement is missing.
 	 */
-	public ChessGame() throws FileNotFoundException {
+	public ChessGame() {
 		setLayout(new GridBagLayout());
 		try{
 			handler = new LogicHandler();
@@ -69,6 +69,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 				button[x][y].setActionCommand(x + "" + y);
 
 				// GridBag dimensions
+				gbc.gridwidth = 1;
 				gbc.gridx = x;
 				gbc.gridy = SIZE - y;
 
@@ -76,6 +77,13 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 				add(button[x][y], gbc);
 			}
 		}
+		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridwidth = SIZE;
+		gbc.gridx = 0;
+		gbc.gridy = SIZE + 1;
+		msgDisplay.setVisible(true);
+		add(msgDisplay, gbc);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -85,7 +93,6 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		//if button click is to choose a piece and neither player has lost
 		if (firstSec && !handler.gameOver()) {
 			init = new Coordinates(x, y);
-			System.out.println("Piece at:" + init);
 			if (handler.validInit(init)) {
 				firstSec = false;	
 			}
@@ -93,7 +100,6 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		//if button click is to move the chosen piece and neither player has lost
 		else if (!handler.gameOver()) {
 			fin = new Coordinates(x, y);
-			System.out.println("Moved to:" + fin);
 			firstSec = true;
 			if (handler.validFin(init, fin)) {
 				valid = true;
@@ -102,7 +108,6 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		
 		// move is valid
 		if (valid) {
-			System.out.println("move is valid");
 			moveStuff(init, fin);
 			valid = false;
 		}
@@ -130,6 +135,19 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	public static void debugMsg(String msg) {
 		if(debug)
 			System.out.println(msg);
+	}
+	
+	
+	/**
+	 * Displays a game-related message to the user.
+	 * @param message The message to display.
+	 * @param color The color of the player it concerns--must be white for message to display.
+	 * @param realMessage Whether or not this message concerns a real action or a hypothetical one.
+	 */
+	public static void gameMsg(String message, PieceColor color, boolean realMessage) {
+		if(color == PieceColor.White && realMessage) {
+			msgDisplay.setText(message);
+		}
 	}
 	
 	/**

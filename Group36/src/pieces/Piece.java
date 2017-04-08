@@ -20,7 +20,6 @@ public abstract class Piece implements Serializable{
 	
 	private Coordinates coor;
 	private ImageIcon img;
-	
 		
 	/**
 	 * Initializes a piece with no type or color.
@@ -129,13 +128,6 @@ public abstract class Piece implements Serializable{
 		ArrayList<Coordinates> posMoves = getPossibleMoves();
 		
 		if (posMoves != null) {
-			
-			System.out.println(this.getColor() + " " + this.getType() + " at " + this.getCoordinates());
-			for (Coordinates move : posMoves) {
-				System.out.print(move + ", ");
-			}
-			System.out.println();
-			
 			for (int index = 0; index < posMoves.size(); index++) {
 				if (newCoor.equals(posMoves.get(index))) {
 					return true;

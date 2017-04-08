@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
-import java.util.concurrent.TimeUnit;
 
 import pieces.Piece;
 import pieces.PieceColor;
@@ -26,6 +25,10 @@ public class ChessLogic implements Serializable{
 	Piece[][] gameBoard;
 	private Player player1, player2;
 	
+	/**
+	 * Default constructor for the ChessLogic class.
+	 * @throws FileNotFoundException if chessboard arrangement file is missing.
+	 */
 	public ChessLogic() throws FileNotFoundException {
 		gameBoard = new Piece[ChessGame.SIZE][ChessGame.SIZE];
 		moves = new Stack<Coordinates[]>();
@@ -69,8 +72,13 @@ public class ChessLogic implements Serializable{
 		}
 	}
 	
+	/**
+	 * Makes a single move based on a given series of coordinates. Adjusts all logic attributes
+	 * according to the move's effect on the game state.
+	 * @param init The coordinates of the piece being moved.
+	 * @param fin The coordinates to move to.
+	 */
 	public void movePiece(Coordinates init, Coordinates fin) {
-		
 		if (getType(init) == PieceType.King) {
 			if (player1.isMyTurn())
 				player1.setKingCoor(fin);
@@ -101,6 +109,12 @@ public class ChessLogic implements Serializable{
 		nextTurn();
 	}
 	
+	/**
+	 * Checks whether or not a given series of coordinates creates a valid castling move.
+	 * @param init The coordinates of the piece being moved.
+	 * @param fin The coordinates to move to.
+	 * @return True if the coordinates are a valid castling move, false otherwise.
+	 */
 	private boolean moveIsCastle(Coordinates init, Coordinates fin) {
 		boolean castle = false;
 
@@ -130,6 +144,11 @@ public class ChessLogic implements Serializable{
 		return castle;
 	}
 	
+	/**
+	 * Castles a rook piece and king piece.
+	 * @param init The coordinates of the piece being moved.
+	 * @param fin The coordinates to move to.
+	 */
 	private void makeCastleMove(Coordinates init, Coordinates fin){
 		if ((fin.getX() - init.getX()) == 2) {
 			//moving right
@@ -155,6 +174,9 @@ public class ChessLogic implements Serializable{
 		}
 	}
 
+	/**
+	 * Undoes one move. Must be called twice to undo an entire turn.
+	 */
 	public void undoMove() {
 		Coordinates[] move = moves.pop();
 		
@@ -196,6 +218,11 @@ public class ChessLogic implements Serializable{
 		}
 	}
 	
+	/**
+	 * Returns the piece on the chessboard at a given location.
+	 * @param location The coordinates on the chessboard to return.
+	 * @return The piece (or null pointer) at the given location.
+	 */
 	public Piece getPieceAt(Coordinates location) {
 		if (gameBoard[location.getX()][location.getY()] != null) {
 			Piece newPiece = gameBoard[location.getX()][location.getY()];
@@ -206,14 +233,30 @@ public class ChessLogic implements Serializable{
 		}
 	}
 	
+	/**
+	 * Returns the reference to a piece at a given location on the chessboard.
+	 * @param location The coordinates on the chessboard to return.
+	 * @return The reference to the specific piece (or null pointer) at the given location.
+	 */
 	private Piece getPieceRef(Coordinates location){
 		return getPieceRef(location.getX(), location.getY());
 	}
 	
+	/**
+	 * Returns the reference to a piece at a given location on the chessboard.
+	 * @param x The x coordinates on the chessboard to return.
+	 * @param y The y coordinates on the chessboard to return.
+	 * @return The reference to the specific piece (or null pointer) at the given location.
+	 */
 	private Piece getPieceRef(int x, int y){
 		return gameBoard[x][y];
 	}
 	
+	/**
+	 * Puts a given piece at a given location on the chessboard.
+	 * @param location The location on which to place the piece.
+	 * @param piece The piece in question.
+	 */
 	public void setPieceAt(Coordinates location, Piece piece) {
 		if (piece != null) {
 			Piece newPiece = piece;
@@ -232,6 +275,12 @@ public class ChessLogic implements Serializable{
 		return getType(coor.getX(), coor.getY());
 	}
 	
+	/**
+	 * Returns the type of the piece at a given set of coordinates.
+	 * @param x The x coordinate to check.
+	 * @param y The y coordinate to check.
+	 * @return The type of the piece.
+	 */
 	private PieceType getType(int x, int y){
 		if (gameBoard[x][y] != null)
 			return gameBoard[x][y].getType();
@@ -239,10 +288,21 @@ public class ChessLogic implements Serializable{
 			return null;
 	}
 	
+	/**
+	 * Returns the color of the piece at a given set of coordinates.
+	 * @param coor The set of coordinates to check.
+	 * @return The color of the piece.
+	 */
 	public PieceColor getColor(Coordinates coor) {
 		return getColor(coor.getX(), coor.getY());
 	}
 	
+	/**
+	 * Returns the color of the piece at a given set of coordinates.
+	 * @param x The x coordinate to check.
+	 * @param y The y coordinate to check.
+	 * @return The color of the piece.
+	 */
 	private PieceColor getColor(int x, int y){
 		if (gameBoard[x][y] != null)
 			return gameBoard[x][y].getColor();
@@ -250,87 +310,134 @@ public class ChessLogic implements Serializable{
 			return null;
 	}
 	
+	/**
+	 * Returns the losing state of player 1.
+	 * @return True if player 1 has lost, false otherwise.
+	 */
 	public boolean p1Lost() {
 		return player1.isLost();
 	}
 	
+	/**
+	 * Returns the losing state of player 2.
+	 * @return True if player 2 has lost, false otherwise.
+	 */
 	public boolean p2Lost() {
 		return player2.isLost();
 	}
 	
+	/**
+	 * Returns the stalemate state of the game.
+	 * @return True if the game is in stalemate, false otherwise.
+	 */
 	public boolean stalemate() {
 		return stalemate;
 	}
 	
+	/**
+	 * Returns a player object with the same attributes as player 1.
+	 * @return The new player object.
+	 */
 	public Player getP1() {
 		return new Player(player1);
 	}
 	
+	/**
+	 * Returns a player object with the same attributes as player 2.
+	 * @return The new player object.
+	 */
 	public Player getP2() {
 		return new Player(player2);
 	}
 	
+	/**
+	 * Checks whether a set of coordinates function as the first half of a full move.
+	 * If coordinates are invalid and inputted by the user, prints a message to the screen
+	 * explaining why they are invalid.
+	 * @param init The set of coordinates to check.
+	 * @param color The color of the player making the half-move.
+	 * @return True if the coordinates are a valid starting point, false otherwise.
+	 */
 	public boolean validInit(Coordinates init, PieceColor color) {
 		boolean valid = true;
 		
 		if (gameBoard[init.getX()][init.getY()] == null) {
-			System.out.println("Selecting empty space.");
+			ChessGame.gameMsg("Selecting empty space.", color, true);
 			valid = false;
 		}
 		//initial coordinates point to other player's piece
 		else if (getColor(init) != color) {
-			System.out.println("Selecting opponent's piece. Your color is " + color + ".");
+			ChessGame.gameMsg("Selecting opponent's piece. Your color is " + color + ".", color, true);
 			valid = false;
 		}
 		
+		if(valid) ChessGame.gameMsg("Selected Piece: " + getType(init) + ".", color, true);
 		return valid;
 	}
 	
-	public boolean validFin(Coordinates init, Coordinates fin, Player player) {
-		boolean valid = validFinAux(init, fin, player.getColor());
+	/**
+	 * Checks whether a series of coordinates create a legal move.
+	 * If coordinates are invalid, correspond to a white move, and non-hypothetical,
+	 * prints a message to the screen explaining why they are invalid.
+	 * @param init The coordinates to move from.
+	 * @param fin The coordinates to move to.
+	 * @param player The player making the move.
+	 * @param inReality Whether or not the move is actually occurring or is hypothetical.
+	 * @return True if coordinates are valid, false otherwise.
+	 */
+	public boolean validFin(Coordinates init, Coordinates fin, Player player, boolean inReality) {
+		boolean valid = validFinAux(init, fin, player.getColor(), inReality);
 		
 		if(valid){
 			if(!checkNextMoveCheck(init, fin, player)){
+				if(player.isInCheck()) {ChessGame.gameMsg("Get out of check!", player.getColor(), inReality);}
+				else {ChessGame.gameMsg("Don't get into check!", player.getColor(), inReality);}
 				valid = false;
 			}
 		}
 		return valid;
 	}
 	
-	public boolean validFinAux(Coordinates init, Coordinates fin, PieceColor color) {
+	/**
+	 * Checks whether a series of coordinates create a legal move.
+	 * If coordinates are invalid, correspond to a white move, and non-hypothetical,
+	 * prints a message to the screen explaining why they are invalid.
+	 * TODO: explain how this differs from validFin
+	 * @param init The coordinates to move from.
+	 * @param fin The coordinates to move to.
+	 * @param player The player making the move.
+	 * @param inReality Whether or not the move is actually occurring or is hypothetical.
+	 * @return True if coordinates are valid, false otherwise.
+	 */
+	public boolean validFinAux(Coordinates init, Coordinates fin, PieceColor color, boolean inReality) {
 		boolean valid = true;
 		
 		//final coordinates point to the player's own piece
 		if (gameBoard[fin.getX()][fin.getY()] != null && getColor(fin) == getColor(init)) {
-			System.out.println(gameBoard[init.getX()][init.getY()].getType() + " into " + gameBoard[fin.getX()][fin.getY()].getType());
-			System.out.println(init + " into " + fin);
-			System.out.println("Moving into your own piece.");
+			ChessGame.gameMsg("Moving into your own piece.", color, inReality);
 			valid = false;
 		}
 
 		// coordinates cause an illegal move
 		else if (!gameBoard[init.getX()][init.getY()].validMove(fin)) {
-			System.out.println("The "+ gameBoard[init.getX()][init.getY()].getType() +" at " + init + " can't move to " + fin);
+			ChessGame.gameMsg("The "+ gameBoard[init.getX()][init.getY()].getType() +" at " + init + " can't move to " + fin + ".", color, inReality);
 			valid = false;
 		}
 		
 		else if(!collisionDetect(init, fin)) {
-			System.out.println("There's something in the way.");
-			System.out.println("Piece: " + gameBoard[init.getX()][init.getY()].getType());
-			System.out.println("From: " + init + " to " + fin);
-			
+			ChessGame.gameMsg("There's something in the way.", color, inReality);
 			valid = false;
 		}
 		
 		if (getType(init) == PieceType.Pawn) {
 			//attempting diagonal movement to an empty space
 			if (gameBoard[fin.getX()][fin.getY()] == null && Math.abs(fin.getX() - init.getX()) == 1) {
-				System.out.println("The pawn can only kill like that.");
+				ChessGame.gameMsg("The pawn can only kill like that.", color, inReality);
 				valid = false;
 			}
 			//attempting to kill another piece head-on
 			else if (gameBoard[fin.getX()][fin.getY()] != null && (fin.getX() - init.getX()) == 0) {
-				System.out.println("The pawn can't kill like that.");
+				ChessGame.gameMsg("The pawn can't kill like that.", color, inReality);
 				valid = false;
 			}
 		}
@@ -343,15 +450,14 @@ public class ChessLogic implements Serializable{
 			}
 		}
 		
-		System.out.println("The move is " + valid);
+		if(valid) ChessGame.gameMsg("Make a move, Player 1!", color, inReality);
 		return valid;
 	}
 	
 	/**
-	 * Movement for the computer player
-	 * @param comp The player that is moving
-	 * @param color The color of the moving piece.
-	 * @return An array containing the initial and final coordinates.
+	 * Generates a move for the computer player. If there is a move which allows the computer
+	 * to take one of the user's pieces, chooses that move. Otherwise, chooses a move at random.
+	 * @param color The color of the computer player's pieces.
 	 */
 	public void compMove(PieceColor color) {
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
@@ -374,8 +480,9 @@ public class ChessLogic implements Serializable{
 		for (Piece piece : pieces){
 			for (Coordinates coor : piece.getPossibleMoves()){
 				if(gameBoard[coor.getX()][coor.getY()] != null){
-					if(gameBoard[coor.getX()][coor.getY()].getColor() != color){
-						if(validFin(piece.getCoordinates(), coor, getPlayerRef(color))) {
+					if(gameBoard[coor.getX()][coor.getY()].getColor() != color &&
+							gameBoard[coor.getX()][coor.getY()].getType() != PieceType.King){
+						if(validFin(piece.getCoordinates(), coor, getPlayerRef(color), false)) {
 							init = piece.getCoordinates();
 							fin = new Coordinates(coor);
 						}
@@ -419,7 +526,7 @@ public class ChessLogic implements Serializable{
 				
 				//possible moves of that piece
 				for (Coordinates coor : gameBoard[init.getX()][init.getY()].getPossibleMoves()) {
-					if(validFin(init, coor, getPlayerRef(color))) {
+					if(validFin(init, coor, getPlayerRef(color), false)) {
 						fin = new Coordinates(coor);
 						goodMove = true;
 					}
@@ -431,6 +538,7 @@ public class ChessLogic implements Serializable{
 			//No piece can move
 			else{
 				stalemate = true;
+				ChessGame.gameMsg("Stalemate!", PieceColor.White, true);
 			}
 		} while (!goodMove);
 		
@@ -461,7 +569,6 @@ public class ChessLogic implements Serializable{
 		//if piece is a knight, then simply let it through
 		if (gameBoard[init.getX()][init.getY()].getType() == PieceType.Night){}
 		else {
-
 			//while x and y aren't both zero
 			while (xDifference != 0 || yDifference != 0) {
 				
@@ -476,18 +583,15 @@ public class ChessLogic implements Serializable{
 				
 			}
 		}
-		
-		
 		return pathOpen;
 	}
 	
 	/**
-	 * Shifts the number towards zero
-	 * @param num The number to shift
-	 * @return the number after shifting.
+	 * Shifts the number towards zero.
+	 * @param num The number to shift.
+	 * @return The number after shifting.
 	 */
 	private int shift(int num){
-		
 		//moves number towards zero
 		if 		(num < 0) num++;
 		else if (num > 0) num--;
@@ -495,6 +599,11 @@ public class ChessLogic implements Serializable{
 		return num;
 	}
 	
+	/**
+	 * Returns the reference to a player of a given color.
+	 * @param color The player's color.
+	 * @return The reference to the player or null pointer.
+	 */
 	private Player getPlayerRef(PieceColor color){
 		if(player1.getColor() == color){
 			return player1;
@@ -506,16 +615,10 @@ public class ChessLogic implements Serializable{
 			return null;
 	}
 	
-	
-	
-	/////ALL BELOW IS CHECK CHECKER
-	
-	
-	
-	
 	/**
 	 * @param king the coordinates of the king
 	 * @param color the color of the king
+	 * TODO: explain what aux is
 	 * @return true if king is in check, false otherwise
 	 */
 	public boolean checkCheck(Coordinates king, PieceColor color, boolean aux) {
@@ -529,14 +632,15 @@ public class ChessLogic implements Serializable{
 				//if there's a piece belonging to the other player at the index
 				if(getColor(x, y) != null && getColor(x, y) != color){
 					if(!aux){
-						if(validFin(new Coordinates(x, y), new Coordinates(king), getPlayerRef(getColor(x, y)))){
+						if(validFin(new Coordinates(x, y), new Coordinates(king), getPlayerRef(getColor(x, y)), false)){
 							check = true;
 							checking.add(gameBoard[x][y]);
 						}
 					}
 					else{
-						if(validFinAux(new Coordinates(x, y), new Coordinates(king), getColor(x, y))){
+						if(validFinAux(new Coordinates(x, y), new Coordinates(king), getColor(x, y), false)){
 							check = true;
+							ChessGame.gameMsg(color + " is in check!", PieceColor.White, aux);
 							checking.add(gameBoard[x][y]);
 						}
 					}
@@ -544,15 +648,6 @@ public class ChessLogic implements Serializable{
 				
 			}
 		}
-		
-		if (check == true){
-			System.out.print("Will be checked by:");
-			for (Piece piece: checking){
-				System.out.print(piece.getType() + ", ");
-			}
-			
-		}
-		
 		return check;
 	}
 	
@@ -576,6 +671,7 @@ public class ChessLogic implements Serializable{
 		if(player.isInCheck()){
 			if(!checkAllMoves(player)){
 				player.setLost(true);
+				ChessGame.gameMsg(player.getColor() + " is in checkmate!", PieceColor.White, true);
 			}
 		}
 	}
@@ -583,6 +679,7 @@ public class ChessLogic implements Serializable{
 	/**
 	 * Checks whether a given player is in check and adjusts the player's check status accordingly.
 	 * @param player The player to check.
+	 * TODO: explain what aux is
 	 */
 	private void updateCheck(Player player, boolean aux) {
 		if (checkCheck(player.getKingCoor(), player.getColor(), aux)) {
@@ -593,12 +690,6 @@ public class ChessLogic implements Serializable{
 			player.setLost(false);
 		}
 	}
-	
-	
-	
-	//NEXT MOVE CHECK CHECKER
-	
-	
 	
 	/**
 	 * Checks whether or not a given player is able to leave check.
@@ -642,7 +733,7 @@ public class ChessLogic implements Serializable{
 		ChessLogic nextMove = new ChessLogic(this);
 		Player testPlayer = new Player(player);
 
-		if(validFinAux(init, fin, testPlayer.getColor())) {
+		if(validFinAux(init, fin, testPlayer.getColor(), false)) {
 			if (nextMove.getType(init) == PieceType.King)
 				testPlayer.setKingCoor(fin);
 			nextMove.makeTestMove(init, fin);
@@ -668,8 +759,11 @@ public class ChessLogic implements Serializable{
 		gameBoard[fin.getX()][fin.getY()] = piece;
 	}
 	
+	/**
+	 * Checks whether or not a player is in stalemate.
+	 * @param player The player to check.
+	 */
 	private void checkStalemate(Player player) {
-		
 		Player testPlayer = new Player(player);
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
 		player.getKingCoor();
@@ -694,7 +788,7 @@ public class ChessLogic implements Serializable{
 				
 				//possible moves of that piece
 				for (Coordinates coor : gameBoard[init.getX()][init.getY()].getPossibleMoves()) {
-					if(validFin(init, coor, getPlayerRef(color))) {
+					if(validFin(init, coor, getPlayerRef(color), false)) {
 						stalemate = false;
 					}
 				}
@@ -703,5 +797,4 @@ public class ChessLogic implements Serializable{
 		
 		this.stalemate = stalemate;
 	}
-	
 }

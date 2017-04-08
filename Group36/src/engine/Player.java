@@ -54,13 +54,6 @@ public class Player implements Serializable{
 	}
 	
 	/**
-	 * Chooses a random piece belonging to the player.
-	 * @param board The current configuration of the chessboard.
-	 * @return The coordinates corresponding to the chosen piece.
-	 */
-	
-	
-	/**
 	 * Chooses a random move for a given piece to make.
 	 * @param piece The coordinates of the piece to move.
 	 * @param board The current configuration of the chessboard.
@@ -118,7 +111,7 @@ public class Player implements Serializable{
 	 * @return The king piece's coordinates.
 	 */
 	public Coordinates getKingCoor() {
-		System.out.println(getColor() + " King Coordinates is :" + kingCoor);
+		/*System.out.println(getColor() + " King Coordinates is :" + kingCoor);*/
 		return new Coordinates(kingCoor.getX(), kingCoor.getY());
 	}
 
@@ -127,7 +120,7 @@ public class Player implements Serializable{
 	 * @param kingCoor The new coordinates for the king piece.
 	 */
 	public void setKingCoor(Coordinates kingCoor) {
-		System.out.println(getColor() + " King Coordinates set to :" + kingCoor);
+		/*System.out.println(getColor() + " King Coordinates set to :" + kingCoor);*/
 		this.kingCoor = new Coordinates(kingCoor.getX(), kingCoor.getY());
 	}
 

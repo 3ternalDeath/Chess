@@ -11,36 +11,12 @@ public class LogicHandler{
 		currentPlayer = new Player(logic.getP1());
 	}
 	
-	/*public LogicHandler(LogicHandler copy) throws FileNotFoundException {
-		this();
-		for(int x = 0; x < ChessGame.SIZE; x++) {
-			for(int y = 0; y < ChessGame.SIZE; y++) {
-				gameBoard[x][y] = copy.getPieceAt(new Coordinates(x, y));
-			}
-		}
-	}*/
-	
-	/**
-	 * Constructor for the LogicHandler class that copies a 2d array of chessboard buttons.
-	 * @param grid The array of buttons to copy.
-	 */
-	/*
-	 * public LogicHandler(Button[][] grid) {
-		this();
-		buttons = grid;
-
-		for (int x = 0; x < ChessGame.SIZE; x++)
-			for (int y = 0; y < ChessGame.SIZE; y++)
-				gameBoard[x][y] = buttons[x][y].getPieceRef();
-	}
-	*/
-	
 	public boolean validInit(Coordinates init) {
 		return logic.validInit(init, currentPlayer.getColor());
 	}
 	
 	public boolean validFin(Coordinates init, Coordinates fin) {
-		return logic.validFin(init, fin, currentPlayer);
+		return logic.validFin(init, fin, currentPlayer, true);
 	}
 	
 	/**
@@ -66,17 +42,7 @@ public class LogicHandler{
 	 * @param fin The coordinates that the piece is moving to.
 	 */
 	public void makeMove(Coordinates init, Coordinates fin) {
-		System.out.println("Selected Piece:" + logic.getType(init));
-		System.out.println("Piece Color: " + logic.getColor(init));
-		
-		//move the specified piece to the specified location
-		
 		logic.movePiece(init, fin);
-		
-		/*if (currentPlayer.getColor() == PieceColor.White)
-			currentPlayer = logic.getP2();
-		else
-			currentPlayer = logic.getP1();*/ //this should only be used in multiplayer
 	}
 	
 	public boolean gameOver() {
