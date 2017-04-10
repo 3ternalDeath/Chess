@@ -102,7 +102,9 @@ public class ChessLogic implements Serializable{
 		
 		updateCheckMate(player1, player2);
 		if (player1.isInCheck()) {ChessGame.gameMsg(player1.getColor() + " is in check!", PieceColor.White, true);}
-		else if (player2.isInCheck()) {ChessGame.gameMsg(player2.getColor() + " is in check!", PieceColor.White, true);}
+		else {ChessGame.gameMsg("Make a move, Player 1!", PieceColor.White, true);}
+		if (player2.isInCheck()) {ChessGame.gameMsg(player2.getColor() + " is in check!", PieceColor.White, true);}
+		else {ChessGame.gameMsg("Make a move, Player 1!", PieceColor.White, true);}
 		if (player1.isMyTurn())
 			checkStalemate(player1);
 		else if (player2.isMyTurn())
