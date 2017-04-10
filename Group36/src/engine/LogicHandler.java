@@ -50,6 +50,10 @@ public class LogicHandler{
 		logic.movePiece(init, fin);
 	}
 	
+	public void nextTurn(){
+		logic.nextTurn();
+	}
+	
 	public boolean gameOver() {
 		return logic.p1Lost() || logic.p2Lost() || logic.stalemate();
 	}

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 import pieces.Piece;
 import pieces.PieceColor;
@@ -110,7 +111,7 @@ public class ChessLogic implements Serializable{
 		else if (player2.isMyTurn())
 			checkStalemate(player2);
 		
-		nextTurn();
+		
 	}
 	
 	/**
@@ -210,16 +211,34 @@ public class ChessLogic implements Serializable{
 	/**
 	 * Rolls game progression over to the next turn.
 	 */
-	private void nextTurn() {
+	public void nextTurn() {
 		player1.switchTurn();
 		player2.switchTurn();
 
 		if (player1.getType() == PlayerType.Computer && player1.isMyTurn() && !player1.isLost()) {
+			pause(500);
 			compMove(player1.getColor());
+			nextTurn();
 		}
 		else if (player2.getType() == PlayerType.Computer && player2.isMyTurn() && !player2.isLost()) {
+			pause(500);
 			compMove(player2.getColor());
+			nextTurn();
 		}
+	}
+	
+	private void pause(int ms){
+
+		try {
+			TimeUnit.MILLISECONDS.sleep(ms);
+
+		} catch (InterruptedException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+
 	}
 	
 	/**
@@ -467,10 +486,10 @@ public class ChessLogic implements Serializable{
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
 		Coordinates init = new Coordinates();
 		Coordinates fin = new Coordinates();
-		
-		//Finds all pieces
-		for (int x = 0; x < ChessGame.SIZE;x++){
-			for(int y = 0; y < ChessGame.SIZE; y++){
+
+		// Finds all pieces
+		for (int x = 0; x < ChessGame.SIZE; x++) {
+			for (int y = 0; y < ChessGame.SIZE; y++) {
 				if (gameBoard[x][y] != null) {
 					if (gameBoard[x][y].getColor() == color) {
 						pieces.add(gameBoard[x][y]);

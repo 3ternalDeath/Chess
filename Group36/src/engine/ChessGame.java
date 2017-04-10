@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -86,6 +87,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		temp = new JButton("2 Player");
 		temp.addActionListener(this);
 		add(temp);
+		validate();
 	}
 	
 	private void mainMenu(){
@@ -162,7 +164,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if(cmd.length() == 2){
-			actionMove(e.getActionCommand());
+			actionMove(cmd);
 		}
 		
 		else if(cmd.equals("New Game")){
@@ -269,5 +271,28 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		setLayout(new GridBagLayout());
 		populateWindow();
 		validate();
+		pause(500);
+		handler.nextTurn();
+		button = handler.updateButtons();
+		removeAll();
+		repaint();
+		setLayout(new GridBagLayout());
+		populateWindow();
+		validate();
 	}
+
+	private void pause(int ms){
+
+		try {
+			TimeUnit.MILLISECONDS.sleep(ms);
+
+		} catch (InterruptedException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+
+	}
+
 }
