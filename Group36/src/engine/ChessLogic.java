@@ -22,6 +22,7 @@ public class ChessLogic implements Serializable{
 	private final String FILE_NAME = "standard";
 	private Stack<Coordinates[]> moves;
 	private Stack<Piece> deadPieces;
+	private Stack<Boolean> firstMoveMoved;
 	private boolean stalemate = false;
 	Piece[][] gameBoard;
 	private Player player1, player2;
@@ -34,6 +35,7 @@ public class ChessLogic implements Serializable{
 		gameBoard = new Piece[ChessGame.SIZE][ChessGame.SIZE];
 		moves = new Stack<Coordinates[]>();
 		deadPieces = new Stack<Piece>();
+		firstMoveMoved  = new Stack<Boolean>();
 		
 		Scanner file = new Scanner(new File("src/engine/" + FILE_NAME + ".txt"));
 		
@@ -96,21 +98,37 @@ public class ChessLogic implements Serializable{
 		}
 		
 		Piece piece = getPieceRef(init);
+		firstMoveMoved.add(piece.isFirstMove());
 		piece.move(fin);
 		
 		setPieceAt(init, null);
 		setPieceAt(fin, piece);
 		
 		updateCheckMate(player1, player2);
-		if (player1.isInCheck()) {ChessGame.gameMsg(player1.getColor() + " is in check!", PieceColor.White, true);}
-		else {ChessGame.gameMsg("Make a move, Player 1!", PieceColor.White, true);}
-		if (player2.isInCheck()) {ChessGame.gameMsg(player2.getColor() + " is in check!", PieceColor.White, true);}
-		else {ChessGame.gameMsg("Make a move, Player 1!", PieceColor.White, true);}
+		
+		StringBuffer msg = new StringBuffer();
+		if (player1.isInCheck()) {
+			msg.append(player1.getColor() + " is in check!");
+		}
+
+		if (player2.isInCheck()) {
+			msg.append(player2.getColor() + " is in check!");
+		} 
+		
+		if(player1.isMyTurn() || player2.getType() == PlayerType.Computer){
+			msg.append("Make Your Move Player1");
+		}
+		
+		if(player2.isMyTurn() && player2.getType() != PlayerType.Computer){
+			msg.append("Make Your Move Player2");
+		}
+		
+		ChessGame.gameMsg(msg.toString(), true);
+		
 		if (player1.isMyTurn())
 			checkStalemate(player1);
 		else if (player2.isMyTurn())
 			checkStalemate(player2);
-		
 		
 	}
 	
@@ -200,6 +218,10 @@ public class ChessLogic implements Serializable{
 		Piece piece = getPieceRef(init);
 		piece.move(fin);
 		
+		if(firstMoveMoved.pop()){
+			piece = Piece.createPiece(fin, piece.getType(), piece.getColor(), true);
+		}
+		
 		if(move.length == 2)
 			setPieceAt(init, deadPieces.pop());
 		else
@@ -207,7 +229,6 @@ public class ChessLogic implements Serializable{
 		
 		setPieceAt(fin, piece);
 	}
-
 	/**
 	 * Rolls game progression over to the next turn.
 	 */
@@ -216,12 +237,12 @@ public class ChessLogic implements Serializable{
 		player2.switchTurn();
 
 		if (player1.getType() == PlayerType.Computer && player1.isMyTurn() && !player1.isLost()) {
-			pause(500);
+			pause(250);
 			compMove(player1.getColor());
 			nextTurn();
 		}
 		else if (player2.getType() == PlayerType.Computer && player2.isMyTurn() && !player2.isLost()) {
-			pause(500);
+			pause(250);
 			compMove(player2.getColor());
 			nextTurn();
 		}
@@ -240,6 +261,8 @@ public class ChessLogic implements Serializable{
 		}
 
 	}
+
+	
 	
 	/**
 	 * Returns the piece on the chessboard at a given location.
@@ -373,6 +396,15 @@ public class ChessLogic implements Serializable{
 		return new Player(player2);
 	}
 	
+	public Player getCurrentPlayer(){
+		if(player1.isMyTurn())
+			return getP1();
+		if(player2.isMyTurn())
+			return getP2();
+		
+		return null;
+	}
+	
 	/**
 	 * Checks whether a set of coordinates function as the first half of a full move.
 	 * If coordinates are invalid and inputted by the user, prints a message to the screen
@@ -385,16 +417,16 @@ public class ChessLogic implements Serializable{
 		boolean valid = true;
 		
 		if (gameBoard[init.getX()][init.getY()] == null) {
-			ChessGame.gameMsg("Selecting empty space.", color, true);
+			ChessGame.gameMsg("Selecting empty space.", true);
 			valid = false;
 		}
 		//initial coordinates point to other player's piece
 		else if (getColor(init) != color) {
-			ChessGame.gameMsg("Selecting opponent's piece. Your color is " + color + ".", color, true);
+			ChessGame.gameMsg("Selecting opponent's piece. Your color is " + color + ".", true);
 			valid = false;
 		}
 		
-		if(valid) ChessGame.gameMsg("Selected Piece: " + getType(init) + ".", color, true);
+		if(valid) ChessGame.gameMsg("Selected Piece: " + getType(init) + ".", true);
 		return valid;
 	}
 	
@@ -413,8 +445,8 @@ public class ChessLogic implements Serializable{
 		
 		if(valid){
 			if(!checkNextMoveCheck(init, fin, player)){
-				if(player.isInCheck()) {ChessGame.gameMsg("Get out of check!", player.getColor(), inReality);}
-				else {ChessGame.gameMsg("Don't get into check!", player.getColor(), inReality);}
+				if(player.isInCheck()) {ChessGame.gameMsg("Get out of check!", inReality);}
+				else {ChessGame.gameMsg("Don't get into check!", inReality);}
 				valid = false;
 			}
 		}
@@ -437,30 +469,30 @@ public class ChessLogic implements Serializable{
 		
 		//final coordinates point to the player's own piece
 		if (gameBoard[fin.getX()][fin.getY()] != null && getColor(fin) == getColor(init)) {
-			ChessGame.gameMsg("Moving into your own piece.", color, inReality);
+			ChessGame.gameMsg("Moving into your own piece.", inReality);
 			valid = false;
 		}
 
 		// coordinates cause an illegal move
 		else if (!gameBoard[init.getX()][init.getY()].validMove(fin)) {
-			ChessGame.gameMsg("The "+ gameBoard[init.getX()][init.getY()].getType() +" at " + init + " can't move to " + fin + ".", color, inReality);
+			ChessGame.gameMsg("The "+ gameBoard[init.getX()][init.getY()].getType() +" at " + init + " can't move to " + fin + ".", inReality);
 			valid = false;
 		}
 		
 		else if(!collisionDetect(init, fin)) {
-			ChessGame.gameMsg("There's something in the way.", color, inReality);
+			ChessGame.gameMsg("There's something in the way.", inReality);
 			valid = false;
 		}
 		
 		if (getType(init) == PieceType.Pawn) {
 			//attempting diagonal movement to an empty space
 			if (gameBoard[fin.getX()][fin.getY()] == null && Math.abs(fin.getX() - init.getX()) == 1) {
-				ChessGame.gameMsg("The pawn can only kill like that.", color, inReality);
+				ChessGame.gameMsg("The pawn can only kill like that.", inReality);
 				valid = false;
 			}
 			//attempting to kill another piece head-on
 			else if (gameBoard[fin.getX()][fin.getY()] != null && (fin.getX() - init.getX()) == 0) {
-				ChessGame.gameMsg("The pawn can't kill like that.", color, inReality);
+				ChessGame.gameMsg("The pawn can't kill like that.", inReality);
 				valid = false;
 			}
 		}
@@ -473,7 +505,7 @@ public class ChessLogic implements Serializable{
 			}
 		}
 		
-		if(valid) ChessGame.gameMsg("Make a move, Player 1!", color, inReality);
+		if(valid) ChessGame.gameMsg("Make a move, Player 1!", inReality);
 		return valid;
 	}
 	
@@ -561,7 +593,7 @@ public class ChessLogic implements Serializable{
 			//No piece can move
 			else{
 				stalemate = true;
-				ChessGame.gameMsg("Stalemate!", PieceColor.White, true);
+				ChessGame.gameMsg("Stalemate!", true);
 			}
 		} while (!goodMove);
 		
@@ -693,7 +725,7 @@ public class ChessLogic implements Serializable{
 		if(player.isInCheck()){
 			if(!checkAllMoves(player)){
 				player.setLost(true);
-				ChessGame.gameMsg(player.getColor() + " is in checkmate!", PieceColor.White, true);
+				ChessGame.gameMsg(player.getColor() + " is in checkmate!", true);
 			}
 		}
 	}

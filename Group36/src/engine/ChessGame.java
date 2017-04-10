@@ -26,7 +26,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	private static final long serialVersionUID = 111L;
 
 	final static int SIZE = 8;
-	final static int WINDOW = SIZE * 80;
+	final static int WINDOW = SIZE * 83;
 	GridBagConstraints gbc = new GridBagConstraints();
 	public static boolean debug = true;
 	static JLabel msgDisplay = new JLabel("Make a move, Player 1!", JLabel.CENTER);
@@ -38,6 +38,8 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	private LogicHandler handler;
 
 	Button[][] button = new Button[SIZE][SIZE];
+	
+	JButton undo, saveGame;
 
 	/**
 	 * Constructor for the ChessGame class.
@@ -45,6 +47,11 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 */
 	public ChessGame() {
 		mainMenu();
+		
+		undo = new JButton("Undo");
+		undo.addActionListener(this);
+		saveGame = new JButton("Save Game");
+		saveGame.addActionListener(this);
 		
 	}
 	
@@ -67,13 +74,9 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			msgDisplay.setText("Something went wrong");
 			ioe.printStackTrace();
 		}
-		removeAll();
-		repaint();
+		
 		msgDisplay.setText("Make a move, Player 1!");
-		setLayout(new GridBagLayout());
-		button = handler.updateButtons();
-		populateWindow();
-		validate();
+		refresh();
 	}
 	
 	private void newGameMenu(){
@@ -102,7 +105,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	}
 	
 	private void loadMenu(){
-		String file = JOptionPane.showInputDialog("Enter Name of File: ", "Right Here");
+		String file = JOptionPane.showInputDialog("Enter Name of File To Load From: ", "Right Here");
 		try{
 			handler = new LogicHandler(file);
 		}
@@ -117,13 +120,22 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			msgDisplay.setText("That is not a Chess save file");
 		}
 		
-		removeAll();
-		repaint();
 		msgDisplay.setText("Make a move, Player 1!");
-		setLayout(new GridBagLayout());
-		button = handler.updateButtons();
-		populateWindow();
-		validate();
+		refresh();
+	}
+	
+	private void saveGame(){
+		String file = JOptionPane.showInputDialog("Enter Name of File To Save To: ", "Right Here");
+		try{
+			handler.writeLogic(file);
+		}
+		catch(FileNotFoundException fnfe){
+			msgDisplay.setText("The File is not there... even after I just created it");
+		}
+		catch(IOException ioe){
+			msgDisplay.setText("Something went wrong while saving");
+			ioe.printStackTrace();
+		}
 	}
 	
 	public void populateWindow() {
@@ -153,12 +165,26 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			}
 		}
 		
+		
+		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridwidth = SIZE;
 		gbc.gridx = 0;
 		gbc.gridy = SIZE + 1;
+		gbc.ipady = 10;
 		msgDisplay.setVisible(true);
 		add(msgDisplay, gbc);
+		
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridwidth = 4;
+		gbc.ipady = 0;
+		gbc.gridy = SIZE + 2;
+		
+		gbc.gridx = 0;
+		add(undo, gbc);
+		
+		gbc.gridx = 4;
+		add(saveGame, gbc);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -181,6 +207,15 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		
 		else if(cmd.equals("2 Player")){
 			newGame2P();
+		}
+		
+		else if(cmd.equals("Undo")){
+			handler.undo();
+			refresh();
+		}
+		
+		else if(cmd.equals("Save Game")){
+			saveGame();
 		}
 	}
 	
@@ -242,8 +277,8 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 * @param color The color of the player it concerns--must be white for message to display.
 	 * @param realMessage Whether or not this message concerns a real action or a hypothetical one.
 	 */
-	public static void gameMsg(String message, PieceColor color, boolean realMessage) {
-		if(color == PieceColor.White && realMessage) {
+	public static void gameMsg(String message, boolean realMessage) {
+		if(realMessage) {
 			msgDisplay.setText(message);
 		}
 	}
@@ -265,34 +300,18 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 */
 	private void moveStuff(Coordinates init, Coordinates fin) {
 		handler.makeMove(init, fin);
-		button = handler.updateButtons();
-		removeAll();
-		repaint();
-		setLayout(new GridBagLayout());
-		populateWindow();
-		validate();
-		pause(500);
+		refresh();
 		handler.nextTurn();
+		refresh();
+	}
+	
+	private void refresh(){
 		button = handler.updateButtons();
 		removeAll();
 		repaint();
 		setLayout(new GridBagLayout());
 		populateWindow();
 		validate();
-	}
-
-	private void pause(int ms){
-
-		try {
-			TimeUnit.MILLISECONDS.sleep(ms);
-
-		} catch (InterruptedException e) {
-
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}
-
 	}
 
 }

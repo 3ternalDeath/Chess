@@ -1,11 +1,17 @@
 package engine;
 
+import java.io.Serializable;
+
 /**
  * Container for an x value and a y value.
  * Also performs several validation checks for a hypothetical chessboard.
  * @author Group 36
  */
-public class Coordinates {
+public class Coordinates implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 811L;
 	private int x;
 	private int y;
 	private final static int SIZE = 8;

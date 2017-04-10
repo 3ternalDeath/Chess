@@ -9,11 +9,12 @@ public class LogicHandler{
 	
 	public LogicHandler(PlayerType gameType) throws FileNotFoundException,  IOException{
 		logic = new ChessLogic(gameType);
-		currentPlayer = new Player(logic.getP1());
+		currentPlayer = logic.getCurrentPlayer();
 	}
 	
 	public LogicHandler(String file) throws FileNotFoundException, IOException, ClassNotFoundException {
 		logic = (ChessLogic) FileIOHelper.readObject(file);
+		currentPlayer = logic.getCurrentPlayer();
 	}
 	
 	public boolean validInit(Coordinates init) {
@@ -22,6 +23,10 @@ public class LogicHandler{
 	
 	public boolean validFin(Coordinates init, Coordinates fin) {
 		return logic.validFin(init, fin, currentPlayer, true);
+	}
+	
+	public void writeLogic(String file) throws FileNotFoundException, IOException{
+		FileIOHelper.writeObject(file, logic);
 	}
 	
 	/**
@@ -60,5 +65,10 @@ public class LogicHandler{
 	
 	public Player getCurrentPlayer() {
 		return new Player(currentPlayer);
+	}
+	
+	public void undo(){
+		logic.undoMove();
+		logic.undoMove();
 	}
 }
