@@ -116,11 +116,11 @@ public class ChessLogic implements Serializable{
 		} 
 		
 		if(player1.isMyTurn() || player2.getType() == PlayerType.Computer){
-			msg.append("Make Your Move Player1");
+			msg.append("Make a move, Player 1!");
 		}
 		
 		if(player2.isMyTurn() && player2.getType() != PlayerType.Computer){
-			msg.append("Make Your Move Player2");
+			msg.append("Make a move, Player 2!");
 		}
 		
 		ChessGame.gameMsg(msg.toString(), true);
@@ -201,33 +201,38 @@ public class ChessLogic implements Serializable{
 	 * Undoes one move. Must be called twice to undo an entire turn.
 	 */
 	public void undoMove() {
-		Coordinates[] move = moves.pop();
+		if(moves.size() == 0) {
+			ChessGame.gameMsg("No moves to undo!", true);
+		}
+		else {
+			Coordinates[] move = moves.pop();
 		
-		if(move.length == 4){
-			Coordinates init = move[3];
-			Coordinates fin = move[2];
+			if(move.length == 4){
+				Coordinates init = move[3];
+				Coordinates fin = move[2];
+				Piece piece = getPieceRef(init);
+				piece.move(fin);
+			
+				setPieceAt(init, null);
+				setPieceAt(fin, piece);
+			}
+		
+			Coordinates init = move[1];
+			Coordinates fin = move[0];
 			Piece piece = getPieceRef(init);
 			piece.move(fin);
-			
-			setPieceAt(init, null);
+		
+			if(firstMoveMoved.pop()){
+				piece = Piece.createPiece(fin, piece.getType(), piece.getColor(), true);
+			}
+		
+			if(move.length == 2)
+				setPieceAt(init, deadPieces.pop());
+			else
+				setPieceAt(init, null);
+		
 			setPieceAt(fin, piece);
 		}
-		
-		Coordinates init = move[1];
-		Coordinates fin = move[0];
-		Piece piece = getPieceRef(init);
-		piece.move(fin);
-		
-		if(firstMoveMoved.pop()){
-			piece = Piece.createPiece(fin, piece.getType(), piece.getColor(), true);
-		}
-		
-		if(move.length == 2)
-			setPieceAt(init, deadPieces.pop());
-		else
-			setPieceAt(init, null);
-		
-		setPieceAt(fin, piece);
 	}
 	/**
 	 * Rolls game progression over to the next turn.
