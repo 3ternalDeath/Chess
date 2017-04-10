@@ -101,9 +101,11 @@ public class ChessLogic implements Serializable{
 		setPieceAt(fin, piece);
 		
 		updateCheckMate(player1, player2);
+		if (player1.isInCheck()) {ChessGame.gameMsg(player1.getColor() + " is in check!", PieceColor.White, true);}
+		else if (player2.isInCheck()) {ChessGame.gameMsg(player2.getColor() + " is in check!", PieceColor.White, true);}
 		if (player1.isMyTurn())
 			checkStalemate(player1);
-		if (player2.isMyTurn())
+		else if (player2.isMyTurn())
 			checkStalemate(player2);
 		
 		nextTurn();
@@ -640,7 +642,6 @@ public class ChessLogic implements Serializable{
 					else{
 						if(validFinAux(new Coordinates(x, y), new Coordinates(king), getColor(x, y), false)){
 							check = true;
-							ChessGame.gameMsg(color + " is in check!", PieceColor.White, aux);
 							checking.add(gameBoard[x][y]);
 						}
 					}
