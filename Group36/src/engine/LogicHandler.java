@@ -1,14 +1,19 @@
 package engine;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class LogicHandler{
 	private ChessLogic logic;
 	private Player currentPlayer;
 	
-	public LogicHandler() throws FileNotFoundException {
-		logic = new ChessLogic();
+	public LogicHandler(PlayerType gameType) throws FileNotFoundException,  IOException{
+		logic = new ChessLogic(gameType);
 		currentPlayer = new Player(logic.getP1());
+	}
+	
+	public LogicHandler(String file) throws FileNotFoundException, IOException, ClassNotFoundException {
+		logic = (ChessLogic) FileIOHelper.readObject(file);
 	}
 	
 	public boolean validInit(Coordinates init) {

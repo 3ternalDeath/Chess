@@ -7,9 +7,12 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import pieces.PieceColor;
@@ -40,15 +43,85 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 * @throws FileNotFoundException if chessboard arrangement is missing.
 	 */
 	public ChessGame() {
-		setLayout(new GridBagLayout());
+		mainMenu();
+		
+	}
+	
+	private void newGameSP(){
+		newGame(PlayerType.Computer);
+	}
+	
+	private void newGame2P(){
+		newGame(PlayerType.User);
+	}
+	
+	private void newGame(PlayerType type){
 		try{
-			handler = new LogicHandler();
-			button = handler.updateButtons();
-			populateWindow();
-		}catch(FileNotFoundException fnfe){
-			add(new JLabel("File is not there"));
+			handler = new LogicHandler(type);
+		}
+		catch(FileNotFoundException fnfe){
+			msgDisplay.setText("Missing critical file");
+		}
+		catch(IOException ioe){
+			msgDisplay.setText("Something went wrong");
+			ioe.printStackTrace();
+		}
+		removeAll();
+		repaint();
+		msgDisplay.setText("Make a move, Player 1!");
+		setLayout(new GridBagLayout());
+		button = handler.updateButtons();
+		populateWindow();
+		validate();
+	}
+	
+	private void newGameMenu(){
+		removeAll();
+		repaint();
+		msgDisplay.setText("What type?");
+		add(msgDisplay);
+		JButton temp = new JButton("Single Player");
+		temp.addActionListener(this);
+		add(temp);
+		temp = new JButton("2 Player");
+		temp.addActionListener(this);
+		add(temp);
+	}
+	
+	private void mainMenu(){
+		msgDisplay.setText("Play Some EPIK Chess bro");
+		add(msgDisplay);
+		JButton temp = new JButton("New Game");
+		temp.addActionListener(this);
+		add(temp);
+		temp = new JButton("Load Game");
+		temp.addActionListener(this);
+		add(temp);
+	}
+	
+	private void loadMenu(){
+		String file = JOptionPane.showInputDialog("Enter Name of File: ", "Right Here");
+		try{
+			handler = new LogicHandler(file);
+		}
+		catch(FileNotFoundException fnfe){
+			msgDisplay.setText("File is not there");
+		}
+		catch(IOException ioe){
+			msgDisplay.setText("Something else went wrong");
+			ioe.printStackTrace();
+		}
+		catch(ClassNotFoundException cne){
+			msgDisplay.setText("That is not a Chess save file");
 		}
 		
+		removeAll();
+		repaint();
+		msgDisplay.setText("Make a move, Player 1!");
+		setLayout(new GridBagLayout());
+		button = handler.updateButtons();
+		populateWindow();
+		validate();
 	}
 	
 	public void populateWindow() {
@@ -87,8 +160,31 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		int x = e.getActionCommand().charAt(0) - '0';
-		int y = e.getActionCommand().charAt(1) - '0';
+		String cmd = e.getActionCommand();
+		if(cmd.length() == 2){
+			actionMove(e.getActionCommand());
+		}
+		
+		else if(cmd.equals("New Game")){
+			newGameMenu();
+		}
+		
+		else if(cmd.equals("Load Game")){
+			loadMenu();
+		}
+		
+		else if(cmd.equals("Single Player")){
+			newGameSP();
+		}
+		
+		else if(cmd.equals("2 Player")){
+			newGame2P();
+		}
+	}
+	
+	private void actionMove(String move){
+		int x = move.charAt(0) - '0';
+		int y = move.charAt(1) - '0';
 
 		//if button click is to choose a piece and neither player has lost
 		if (firstSec && !handler.gameOver()) {
@@ -168,9 +264,10 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	private void moveStuff(Coordinates init, Coordinates fin) {
 		handler.makeMove(init, fin);
 		button = handler.updateButtons();
-		super.removeAll();
+		removeAll();
+		repaint();
 		setLayout(new GridBagLayout());
 		populateWindow();
-		super.validate();
+		validate();
 	}
 }

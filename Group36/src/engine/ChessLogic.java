@@ -29,7 +29,7 @@ public class ChessLogic implements Serializable{
 	 * Default constructor for the ChessLogic class.
 	 * @throws FileNotFoundException if chessboard arrangement file is missing.
 	 */
-	public ChessLogic() throws FileNotFoundException {
+	public ChessLogic(PlayerType p2) throws FileNotFoundException {
 		gameBoard = new Piece[ChessGame.SIZE][ChessGame.SIZE];
 		moves = new Stack<Coordinates[]>();
 		deadPieces = new Stack<Piece>();
@@ -49,7 +49,7 @@ public class ChessLogic implements Serializable{
 							player1 = new Player(PieceColor.White, PlayerType.User, true, coor);
 						} 
 						else if (getColor(coor) == PieceColor.Black) {
-							player2 = new Player(PieceColor.Black, PlayerType.Computer, false, coor);
+							player2 = new Player(PieceColor.Black, p2, false, coor);
 						}
 					}
 				}
