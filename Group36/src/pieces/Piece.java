@@ -14,10 +14,12 @@ import engine.Coordinates;
  */
 public abstract class Piece implements Serializable{
 	private static final long serialVersionUID = 411L;
+	
+	protected final static int SIZE = 8;
 	private final PieceType type;
 	private final PieceColor color;
-	private boolean firstMove;
 	
+	private boolean firstMove;
 	private Coordinates coor;
 	private ImageIcon img;
 		

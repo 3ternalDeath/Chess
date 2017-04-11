@@ -23,31 +23,23 @@ public class Queen extends Piece {
 	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		for (int x = getX()+1; Coordinates.inBound(x); x++) {
-			moves.add(new Coordinates(x, getY()));
-		}
-		for (int x = getX()-1; Coordinates.inBound(x); x--) {
-			moves.add(new Coordinates(x, getY()));
-		}
-		for (int y = getY()+1; Coordinates.inBound(y); y++) {
-			moves.add(new Coordinates(getX(), y));
-		}
-		for (int y = getY()-1; Coordinates.inBound(y); y--) {
-			moves.add(new Coordinates(getX(), y));
-		}
+		//Vertical and horizontal moves.
+		for (int x = 0; x < SIZE; x++)
+			if (x != getX())
+				moves.add(new Coordinates(x, getY()));
+		for (int y = 0; y < SIZE; y++)
+			if (y != getY())
+				moves.add(new Coordinates(getX(), y));
 		
-		for (int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++) {
+		//Diagonal Moves
+		for (int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++)
 			moves.add(new Coordinates(getX() + h, getY() + h));
-		}
-		for (int h = 1; Coordinates.inBound(getX() + h, getY() - h); h++) {
+		for (int h = 1; Coordinates.inBound(getX() + h, getY() - h); h++)
 			moves.add(new Coordinates(getX() + h, getY() - h));
-		}
-		for (int h = 1; Coordinates.inBound(getX() - h, getY() + h); h++) {
+		for (int h = 1; Coordinates.inBound(getX() - h, getY() + h); h++)
 			moves.add(new Coordinates(getX() - h, getY() + h));
-		}
-		for (int h = 1; Coordinates.inBound(getX() - h, getY() - h); h++) {
+		for (int h = 1; Coordinates.inBound(getX() - h, getY() - h); h++)
 			moves.add(new Coordinates(getX() - h, getY() - h));
-		}
 		
 		return moves;
 	}

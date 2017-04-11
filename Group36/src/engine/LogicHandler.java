@@ -3,9 +3,15 @@ package engine;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/**
+ * Handles all communication between Chesslogic and ChessGame
+ * @author Group 36
+ */
 public class LogicHandler {
+	
 	private ChessLogic logic;
 	private Player currentPlayer;
+	
 	private static final String CONSTANT_USE_FILE = "/bin/secret.dat";
 	
 	/**
@@ -91,6 +97,14 @@ public class LogicHandler {
 	}
 	
 	/**
+	 * Undoes the entire last turn of the chess game.
+	 */
+	public void undo() {
+		logic.undoMove();
+		logic.undoMove();
+	}
+	
+	/**
 	 * Switches the turn over within internal logic object.
 	 */
 	public void nextTurn() {
@@ -103,21 +117,5 @@ public class LogicHandler {
 	 */
 	public boolean gameOver() {
 		return logic.p1Lost() || logic.p2Lost() || logic.stalemate() || logic.draw();
-	}
-	
-	/**
-	 * Returns a copy of whatever player the LogicHandler is currently focussing on.
-	 * @return The copy of the Player object.
-	 */
-	public Player getCurrentPlayer() {
-		return new Player(currentPlayer);
-	}
-	
-	/**
-	 * Undoes the entire last turn of the chess game.
-	 */
-	public void undo() {
-		logic.undoMove();
-		logic.undoMove();
 	}
 }

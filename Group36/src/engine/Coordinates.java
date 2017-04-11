@@ -8,12 +8,9 @@ import java.io.Serializable;
  * @author Group 36
  */
 public class Coordinates implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 811L;
-	private int x;
-	private int y;
+	
+	private int x, y;
 	private final static int SIZE = 8;
 
 	/**
@@ -26,10 +23,17 @@ public class Coordinates implements Serializable{
 		this.y = y;
 	}
 	
+	/**
+	 * Default Constructor
+	 */
 	public Coordinates() {
 		this(0, 0);
 	}
-	
+
+	/**
+	 * Constructor which creates a copy of coordinates.
+	 * @param copy The coordinates that needs to by copied.
+	 */
 	public Coordinates(Coordinates copy) {
 		this(copy.getX(), copy.getY());
 	}
@@ -94,20 +98,11 @@ public class Coordinates implements Serializable{
 			return false;
 	}
 	
+	/**
+	 * Prints data from the coordinates
+	 */
 	public String toString() {
 		return("(" + x + "," + y + ")");
-	}
-	
-	/**
-	 * Checks whether a given x value is in the bounds of a hypothetical Board object.
-	 * @param x The x value to check.
-	 * @return True if the x value would be in bounds, false otherwise.
-	 */
-	public static boolean inBound(int x) {
-		if (x < 0 || x >= SIZE)
-			return false;
-		else
-			return true;
 	}
 	
 	/**
@@ -122,29 +117,5 @@ public class Coordinates implements Serializable{
 			return false;
 		else
 			return true;
-	}
-	
-	/**
-	 * Checks whether a set of letter values can translate into valid, in-bound
-	 * coordinates for a hypothetical Board object.
-	 * @param letter The letter coordinate to check.
-	 * @param number The number coordinate to check.
-	 * @return True if both values would be in bounds, false otherwise.
-	 */
-	public static boolean inBoundPlus(char letter, char number) {
-		boolean valid = true;
-
-		// Letter is between 'a' and 'h'
-		if (letter < 'a' || letter > 'h') {
-			System.out.println("Letter coordinate is out of range(a-h).");
-			valid = false;
-		}
-		// Number is between '1' and '8'
-		if (number < '1' || number > '8') {
-			System.out.println("Number coordinate is out of range(1-8).");
-			valid = false;
-		}
-		
-		return valid;
 	}
 }
