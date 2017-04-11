@@ -125,6 +125,7 @@ public class ChessLogic implements Serializable{
 		
 		ChessGame.gameMsg(msg.toString(), true);
 		
+		
 		if (player1.isMyTurn())
 			checkStalemate(player1);
 		else if (player2.isMyTurn())
@@ -260,7 +261,6 @@ public class ChessLogic implements Serializable{
 
 		} catch (InterruptedException e) {
 
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}
@@ -511,6 +511,7 @@ public class ChessLogic implements Serializable{
 		}
 		
 		if(valid) ChessGame.gameMsg("Make a move, Player 1!", inReality);
+		
 		return valid;
 	}
 	
@@ -686,6 +687,9 @@ public class ChessLogic implements Serializable{
 
 		ArrayList<Piece> checking = new ArrayList<Piece>();
 		
+		System.out.println("Start of checkCheck");
+		System.out.println(color + "King coordinates: " + king);
+		
 		//run through every element in the board
 		for (int x = 0; x < ChessGame.SIZE; x++) {
 			for (int y = 0; y < ChessGame.SIZE; y++) {
@@ -707,6 +711,16 @@ public class ChessLogic implements Serializable{
 				
 			}
 		}
+		if (check){
+			System.out.print("Being checked by : ");
+			for (Piece piece: checking){
+				System.out.print(piece.getType() + " from " + piece.getCoordinates() + ", ");
+			}
+			System.out.println();
+		}
+		
+		System.out.println("end of checkCheck");
+		
 		return check;
 	}
 	
@@ -728,6 +742,7 @@ public class ChessLogic implements Serializable{
 		updateCheck(player, false);
 		
 		if(player.isInCheck()){
+			System.out.println("Checking if player can leave check");
 			if(!checkAllMoves(player)){
 				player.setLost(true);
 				ChessGame.gameMsg(player.getColor() + " is in checkmate!", true);
@@ -741,6 +756,7 @@ public class ChessLogic implements Serializable{
 	 * TODO: explain what aux is
 	 */
 	private void updateCheck(Player player, boolean aux) {
+		System.out.println("start of updateCheck for " + player.getType());
 		if (checkCheck(player.getKingCoor(), player.getColor(), aux)) {
 			player.setInCheck(true);
 		}
@@ -748,6 +764,9 @@ public class ChessLogic implements Serializable{
 			player.setInCheck(false);
 			player.setLost(false);
 		}
+		
+		System.out.println("");
+		System.out.println("end of updateCheck");
 	}
 	
 	/**
@@ -755,27 +774,30 @@ public class ChessLogic implements Serializable{
 	 * @param p The player to check.
 	 * @return True if the player can leave check, false otherwise.
 	 */
-	private boolean checkAllMoves(Player p) {
+	private boolean checkAllMoves(Player player) {
+		System.out.println("start of checkAllMoves");
 		boolean canLeave = false;
 		
 		//check every element in the board
 		for (int x = 0; x < ChessGame.SIZE; x++)
 			for (int y = 0; y < ChessGame.SIZE; y++) {
 				//if there's a piece belonging to the player at the index
-				
-					if (getColor(x, y) == p.getColor()) {
-						Coordinates piece = new Coordinates(x,y);
-						ArrayList<Coordinates> moves = gameBoard[x][y].getPossibleMoves();
-						//run through all its moves for next move check
-						for (Coordinates move : moves) {
-							if (checkNextMoveCheck(piece, move, p)) {
-								canLeave = true;
-							}
+
+				if (getColor(x, y) == player.getColor()) {
+					Coordinates piece = new Coordinates(x,y);
+					ArrayList<Coordinates> moves = gameBoard[x][y].getPossibleMoves();
+					//run through all its moves for next move check
+					for (Coordinates move : moves) {
+						if (checkNextMoveCheck(piece, move, player)) {
+							canLeave = true;
 						}
-					
+					}
+
 				}
 			}
 		
+		
+		System.out.println("end of checkAllMoves");
 		return canLeave;
 	}
 	
@@ -788,13 +810,18 @@ public class ChessLogic implements Serializable{
 	 * @return True if the move would put the player out of check, false otherwise.
 	 */
 	private boolean checkNextMoveCheck(Coordinates init, Coordinates fin, Player player) {
+		System.out.println("start of checkNextMoveCheck");
+		System.out.println("from" + init + "to" + fin);
 		boolean leaveCheck = true;
 		ChessLogic nextMove = new ChessLogic(this);
-		Player testPlayer = new Player(player);
-
+		Player testPlayer = new Player(player, false); //creates fake player
+		
 		if(validFinAux(init, fin, testPlayer.getColor(), false)) {
-			if (nextMove.getType(init) == PieceType.King)
+			System.out.println(nextMove.getType(init));
+			if (nextMove.getType(init) == PieceType.King){
+				System.out.println("hallos");
 				testPlayer.setKingCoor(fin);
+			}
 			nextMove.makeTestMove(init, fin);
 		}
 		
@@ -803,6 +830,8 @@ public class ChessLogic implements Serializable{
 		if (testPlayer.isInCheck()) {
 			leaveCheck = false;
 		}
+		System.out.println("leaveCheck is : " + leaveCheck);
+		System.out.println("end of checkNextMoveCheck");
 		return leaveCheck;
 	}
 	
@@ -812,10 +841,12 @@ public class ChessLogic implements Serializable{
 	 * @param fin The final set of coordinates.
 	 */
 	public void makeTestMove(Coordinates init, Coordinates fin) {
+		System.out.println("start of makeTestMove");
 		Piece piece = gameBoard[init.getX()][init.getY()];
 		piece.move(fin);
 		gameBoard[init.getX()][init.getY()] = null;
 		gameBoard[fin.getX()][fin.getY()] = piece;
+		System.out.println("end of makeTestMove");
 	}
 	
 	/**
@@ -823,6 +854,8 @@ public class ChessLogic implements Serializable{
 	 * @param player The player to check.
 	 */
 	private void checkStalemate(Player player) {
+		
+		System.out.println("start of checkStalemate");
 		Player testPlayer = new Player(player);
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
 		player.getKingCoor();
@@ -854,6 +887,7 @@ public class ChessLogic implements Serializable{
 			}
 		}
 		
+		System.out.println("end of checkStalemate");
 		this.stalemate = stalemate;
 	}
 }

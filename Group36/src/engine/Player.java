@@ -20,6 +20,7 @@ public class Player implements Serializable{
 	private Coordinates kingCoor;
 	private boolean inCheck;
 	private boolean lost;
+	private boolean test;
 	 
 	/**
 	 * Constructor for the Player class.
@@ -34,6 +35,17 @@ public class Player implements Serializable{
 		myTurn = first;
 		setInCheck(false);
 		setLost(false);
+		this.test = true;
+		setKingCoor(new Coordinates(king.getX(), king.getY()));
+	}
+	
+	public Player(PieceColor color, PlayerType type, boolean first, Coordinates king, boolean test) {
+		this.color = color;
+		this.type = type;
+		myTurn = first;
+		setInCheck(false);
+		setLost(false);
+		this.test = test;
 		setKingCoor(new Coordinates(king.getX(), king.getY()));
 	}
 	
@@ -43,6 +55,10 @@ public class Player implements Serializable{
 	 */
 	public Player(Player player) {
 		this(player.color, player.type, player.myTurn, player.kingCoor);
+	}
+	
+	public Player(Player player, boolean test) {
+		this(player.color, PlayerType.Test, player.myTurn, player.getKingCoor(), test);
 	}
 	
 	/**
@@ -111,7 +127,7 @@ public class Player implements Serializable{
 	 * @return The king piece's coordinates.
 	 */
 	public Coordinates getKingCoor() {
-		/*System.out.println(getColor() + " King Coordinates is :" + kingCoor);*/
+		System.out.println(test + " " + getColor() + " King Coordinates is :" + kingCoor);
 		return new Coordinates(kingCoor.getX(), kingCoor.getY());
 	}
 
@@ -120,7 +136,7 @@ public class Player implements Serializable{
 	 * @param kingCoor The new coordinates for the king piece.
 	 */
 	public void setKingCoor(Coordinates kingCoor) {
-		/*System.out.println(getColor() + " King Coordinates set to :" + kingCoor);*/
+		System.out.println(test + " " + getColor() + " King Coordinates set to :" + kingCoor);
 		this.kingCoor = new Coordinates(kingCoor.getX(), kingCoor.getY());
 	}
 

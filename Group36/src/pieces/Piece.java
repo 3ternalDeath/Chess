@@ -127,6 +127,14 @@ public abstract class Piece implements Serializable{
 	public boolean validMove(Coordinates newCoor) {
 		ArrayList<Coordinates> posMoves = getPossibleMoves();
 		
+		/*System.out.println(getColor() + " " + getType() + " at " + getCoordinates());
+		for (Coordinates coor : posMoves){
+			System.out.print(coor + ", ");
+		}
+		System.out.println();
+		*/
+		
+		
 		if (posMoves != null) {
 			for (int index = 0; index < posMoves.size(); index++) {
 				if (newCoor.equals(posMoves.get(index))) {
