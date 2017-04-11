@@ -47,6 +47,10 @@ public class Button extends JButton {
 		piece = Piece.createPiece(coor, type, color,true);
 	}
 	
+	/**
+	 * Constructs a button that contains a given Piece object.
+	 * @param piece The Piece object for the button to hold.
+	 */
 	public Button(Piece piece) {
 		super();
 		

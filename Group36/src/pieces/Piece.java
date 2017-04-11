@@ -37,6 +37,7 @@ public abstract class Piece implements Serializable{
 	 * @param coor The starting coordinates of the piece.
 	 * @param type The type of the piece.
 	 * @param color The color of the piece.
+	 * @param isFirstMove The first move status of the piece.
 	 */
 	public Piece(Coordinates coor, PieceType type, PieceColor color, boolean isFirstMove) {
 		this.type = type;
@@ -75,6 +76,7 @@ public abstract class Piece implements Serializable{
 	 * @param coor The coordinates of the new piece.
 	 * @param type The type of the new piece.
 	 * @param color The color of the new piece.
+	 * @param isFirstMove The first move status of the new piece.
 	 * @return The generated piece.
 	 */
 	public static Piece createPiece(Coordinates coor, PieceType type, PieceColor color, boolean isFirstMove) {

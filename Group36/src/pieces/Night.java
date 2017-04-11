@@ -13,11 +13,11 @@ public class Night extends Piece {
 	/**
 	 * Constructor for the Knight class.
 	 * @param coor The starting coordinates of the knight.
-	 * @param Color The color of the knight.
-	 * @param isFirstMove 
+	 * @param color The color of the knight.
+	 * @param isFirstMove The first move status of the knight.
 	 */
-	public Night(Coordinates coor, PieceColor Color, boolean isFirstMove) {
-		super(coor, PieceType.Night, Color, isFirstMove);
+	public Night(Coordinates coor, PieceColor color, boolean isFirstMove) {
+		super(coor, PieceType.Night, color, isFirstMove);
 	}
 
 	public ArrayList<Coordinates> getPossibleMoves() {

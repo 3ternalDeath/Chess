@@ -39,6 +39,14 @@ public class Player implements Serializable{
 		setKingCoor(new Coordinates(king.getX(), king.getY()));
 	}
 	
+	/**
+	 * Constructor for a hypothetical Player object.
+	 * @param color The color of the player.
+	 * @param type The type of the player.
+	 * @param first The player's turn status.
+	 * @param king The coordinates of the player's king piece.
+	 * @param test Must be set to true for a hypothetical Player object.
+	 */
 	public Player(PieceColor color, PlayerType type, boolean first, Coordinates king, boolean test) {
 		this.color = color;
 		this.type = type;
@@ -57,6 +65,11 @@ public class Player implements Serializable{
 		this(player.color, player.type, player.myTurn, player.kingCoor);
 	}
 	
+	/**
+	 * Copy constructor for a hypothetical Player object.
+	 * @param player The Player object to copy.
+	 * @param test Must be set to true for a hypothetical Player object.
+	 */
 	public Player(Player player, boolean test) {
 		this(player.color, PlayerType.Test, player.myTurn, player.getKingCoor(), test);
 	}

@@ -13,11 +13,11 @@ public class Pawn extends Piece {
 	/**
 	 * Constructor for the Pawn class.
 	 * @param coor The starting coordinates of the pawn.
-	 * @param Color The color of the pawn.
-	 * @param isFirstMove 
+	 * @param color The color of the pawn.
+	 * @param isFirstMove The first move status of the pawn.
 	 */
-	public Pawn(Coordinates coor, PieceColor Color, boolean isFirstMove) {
-		super(coor, PieceType.Pawn, Color, isFirstMove);
+	public Pawn(Coordinates coor, PieceColor color, boolean isFirstMove) {
+		super(coor, PieceType.Pawn, color, isFirstMove);
 	}
 
 	public ArrayList<Coordinates> getPossibleMoves() {

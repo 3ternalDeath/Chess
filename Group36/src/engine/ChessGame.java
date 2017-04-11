@@ -40,7 +40,6 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 
 	/**
 	 * Constructor for the ChessGame class.
-	 * @throws FileNotFoundException if chessboard arrangement is missing.
 	 */
 	public ChessGame() {
 		mainMenu();
@@ -49,92 +48,11 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		undo.addActionListener(this);
 		saveGame = new JButton("Save Game");
 		saveGame.addActionListener(this);
-		
 	}
 	
-	private void newGameSP(){
-		newGame(PlayerType.Computer);
-	}
-	
-	private void newGame2P(){
-		newGame(PlayerType.User);
-	}
-	
-	private void newGame(PlayerType type){
-		try{
-			handler = new LogicHandler(type);
-		}
-		catch(FileNotFoundException fnfe){
-			msgDisplay.setText("Missing critical file");
-		}
-		catch(IOException ioe){
-			msgDisplay.setText("Something went wrong");
-			ioe.printStackTrace();
-		}
-		
-		msgDisplay.setText("Make a move, Player 1!");
-		refresh();
-	}
-	
-	private void newGameMenu(){
-		removeAll();
-		repaint();
-		msgDisplay.setText("What type?");
-		add(msgDisplay);
-		JButton temp = new JButton("Single Player");
-		temp.addActionListener(this);
-		add(temp);
-		temp = new JButton("2 Player");
-		temp.addActionListener(this);
-		add(temp);
-		validate();
-	}
-	
-	private void mainMenu(){
-		msgDisplay.setText("Play Some EPIK Chess bro");
-		add(msgDisplay);
-		JButton temp = new JButton("New Game");
-		temp.addActionListener(this);
-		add(temp);
-		temp = new JButton("Load Game");
-		temp.addActionListener(this);
-		add(temp);
-	}
-	
-	private void loadMenu(){
-		String file = JOptionPane.showInputDialog("Enter Name of File To Load From: ", "Right Here");
-		try{
-			handler = new LogicHandler(file);
-		}
-		catch(FileNotFoundException fnfe){
-			msgDisplay.setText("File is not there");
-		}
-		catch(IOException ioe){
-			msgDisplay.setText("Something else went wrong");
-			ioe.printStackTrace();
-		}
-		catch(ClassNotFoundException cne){
-			msgDisplay.setText("That is not a Chess save file");
-		}
-		
-		msgDisplay.setText("Make a move, Player 1!");
-		refresh();
-	}
-	
-	private void saveGame(){
-		String file = JOptionPane.showInputDialog("Enter Name of File To Save To: ", "Right Here");
-		try{
-			handler.writeLogic(file);
-		}
-		catch(FileNotFoundException fnfe){
-			msgDisplay.setText("The File is not there... even after I just created it");
-		}
-		catch(IOException ioe){
-			msgDisplay.setText("Something went wrong while saving");
-			ioe.printStackTrace();
-		}
-	}
-	
+	/**
+	 * Fills window with 2d array of chessboard buttons and displays game-related messages.
+	 */
 	public void populateWindow() {
 		for (int y = SIZE - 1; y >= 0; y--) {
 			for (int x = 0; x < SIZE; x++) {
@@ -162,8 +80,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			}
 		}
 		
-		
-		
+		//add game message JLabel
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridwidth = SIZE;
 		gbc.gridx = 0;
@@ -172,51 +89,79 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		msgDisplay.setVisible(true);
 		add(msgDisplay, gbc);
 		
+		//add buttons
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.gridwidth = 4;
 		gbc.ipady = 0;
 		gbc.gridy = SIZE + 2;
-		
 		gbc.gridx = 0;
 		add(undo, gbc);
-		
 		gbc.gridx = 4;
 		add(saveGame, gbc);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		if(cmd.length() == 2){
+		if (cmd.length() == 2) {
 			actionMove(cmd);
 		}
 		
-		else if(cmd.equals("New Game")){
-			newGameMenu();
+		else if (cmd.equals("New Game")) {
+			newGame();
 		}
 		
-		else if(cmd.equals("Load Game")){
+		else if (cmd.equals("Load Game")) {
 			loadMenu();
 		}
 		
-		else if(cmd.equals("Single Player")){
-			newGameSP();
-		}
-		
-		else if(cmd.equals("2 Player")){
-			newGame2P();
-		}
-		
-		else if(cmd.equals("Undo")){
+		else if (cmd.equals("Undo")) {
 			handler.undo();
 			refresh();
 		}
 		
-		else if(cmd.equals("Save Game")){
+		else if (cmd.equals("Save Game")) {
 			saveGame();
 		}
 	}
 	
-	private void actionMove(String move){
+	/**
+	 * Adjusts the icons on every button in the chessboard.
+	 */
+	public void updateIcons() {
+		for (Button[] x: button) {
+			for (Button y : x) {
+				y.updateIcon();
+			}
+		}
+	}
+	
+	/**
+	 * Displays a debugging message, if the debug switch is turned on.
+	 * @param msg The message to display.
+	 */
+	public static void debugMsg(String msg) {
+		if (debug) {
+			System.out.println(msg);
+		}
+	}
+	
+	
+	/**
+	 * Displays a game-related message to the user.
+	 * @param message The message to display.
+	 * @param realMessage Whether or not this message concerns a real action or a hypothetical one.
+	 */
+	public static void gameMsg(String message, boolean realMessage) {
+		if (realMessage) {
+			msgDisplay.setText(message);
+		}
+	}
+	
+	/**
+	 * Actuates a move based on user's actions.
+	 * @param move A two-character string containing the user's coordinates.
+	 */
+	private void actionMove(String move) {
 		int x = move.charAt(0) - '0';
 		int y = move.charAt(1) - '0';
 
@@ -242,41 +187,82 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			valid = false;
 		}
 		
-		if(handler.gameOver()) {
+		if (handler.gameOver()) {
 			stop();
 		}
 	}
 	
 	/**
-	 * Adjusts the icons on every button in the chessboard.
+	 * Starts a new game of chess.
 	 */
-	public void updateIcons() {
-		for (Button[] x: button) {
-			for (Button y : x) {
-				y.updateIcon();
-			}
+	private void newGame() {
+		try {
+			handler = new LogicHandler();
 		}
+		catch (FileNotFoundException fnfe) {
+			msgDisplay.setText("Missing critical file.");
+		}
+		catch (IOException ioe) {
+			msgDisplay.setText("Unknown error. Contact system administrator.");
+			ioe.printStackTrace();
+		}
+		
+		msgDisplay.setText("Make a move, Player 1!");
+		refresh();
 	}
 	
 	/**
-	 * Displays a debugging message, if the debug switch is turned on.
-	 * @param msg The message to display.
+	 * Displays the game's start menu.
 	 */
-	public static void debugMsg(String msg) {
-		if(debug)
-			System.out.println(msg);
+	private void mainMenu() {
+		gbc.anchor = GridBagConstraints.CENTER;
+		msgDisplay.setText("Let's play chess!");
+		add(msgDisplay, gbc);
+		JButton temp = new JButton("New Game");
+		temp.addActionListener(this);
+		add(temp, gbc);
+		temp = new JButton("Load Game");
+		temp.addActionListener(this);
+		add(temp, gbc);
 	}
 	
+	/**
+	 * Displays the game's load menu.
+	 */
+	private void loadMenu() {
+		String file = JOptionPane.showInputDialog("Enter save filename: ", "*.dat");
+		try {
+			handler = new LogicHandler(file);
+		}
+		catch (FileNotFoundException fnfe) {
+			msgDisplay.setText("File is not there.");
+		}
+		catch (IOException ioe) {
+			msgDisplay.setText("Unknown error. Contact system administrator.");
+			ioe.printStackTrace();
+		}
+		catch (ClassNotFoundException cne) {
+			msgDisplay.setText("That is not a Chess save file.");
+		}
+		
+		msgDisplay.setText("Make a move, Player 1!");
+		refresh();
+	}
 	
 	/**
-	 * Displays a game-related message to the user.
-	 * @param message The message to display.
-	 * @param color The color of the player it concerns--must be white for message to display.
-	 * @param realMessage Whether or not this message concerns a real action or a hypothetical one.
+	 * Displays the game's save menu.
 	 */
-	public static void gameMsg(String message, boolean realMessage) {
-		if(realMessage) {
-			msgDisplay.setText(message);
+	private void saveGame() {
+		String file = JOptionPane.showInputDialog("Enter new save filename: ", "*.dat");
+		try {
+			handler.writeLogic(file);
+		}
+		catch (FileNotFoundException fnfe) {
+			msgDisplay.setText("File could not be saved.");
+		}
+		catch (IOException ioe) {
+			msgDisplay.setText("Unknown error. Contact system administrator.");
+			ioe.printStackTrace();
 		}
 	}
 	
@@ -284,14 +270,16 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 * Shuts off all functionality to the game.
 	 */
 	private void stop() {
-		for (int y = SIZE - 1; y >= 0; y--)
-			for (int x = 0; x < SIZE; x++) 
+		for (int y = SIZE - 1; y >= 0; y--) {
+			for (int x = 0; x < SIZE; x++) {
 				button[x][y].removeActionListener(this);
+			}
+		}
 	}
 	
 	/**
 	 * Moves the object from the initial coordinate to the final coordinate
-	 * after performing error checking.
+	 * after performing error checking, then runs computer move.
 	 * @param init The coordinate to start at.
 	 * @param fin The coordinate to end at.
 	 */
@@ -299,7 +287,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		try {
 			handler.makeMove(init, fin);
 		} catch (ClassNotFoundException | IOException e) {
-			msgDisplay.setText("Something went wrong with secret.dat");
+			msgDisplay.setText("Unknown error with standard save file. Contact system administrator.");
 			e.printStackTrace();
 		}
 		refresh();
@@ -307,7 +295,10 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		refresh();
 	}
 	
-	private void refresh(){
+	/**
+	 * Repaints game screen.
+	 */
+	private void refresh() {
 		button = handler.updateButtons();
 		removeAll();
 		repaint();
@@ -315,5 +306,4 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		populateWindow();
 		validate();
 	}
-
 }
