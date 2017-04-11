@@ -6,6 +6,7 @@ import java.io.IOException;
 public class LogicHandler{
 	private ChessLogic logic;
 	private Player currentPlayer;
+	private static final String CONSTANT_USE_FILE = "/bin/secret.dat";
 	
 	public LogicHandler(PlayerType gameType) throws FileNotFoundException,  IOException{
 		logic = new ChessLogic(gameType);
@@ -51,8 +52,10 @@ public class LogicHandler{
 	 * @param init The coordinates of the piece that is moving.
 	 * @param fin The coordinates that the piece is moving to.
 	 */
-	public void makeMove(Coordinates init, Coordinates fin) {
+	public void makeMove(Coordinates init, Coordinates fin) throws FileNotFoundException, IOException, ClassNotFoundException{
 		logic.movePiece(init, fin);
+		FileIOHelper.writeObject(CONSTANT_USE_FILE, logic);
+		logic = (ChessLogic)FileIOHelper.readObject(CONSTANT_USE_FILE);
 	}
 	
 	public void nextTurn(){
@@ -60,7 +63,7 @@ public class LogicHandler{
 	}
 	
 	public boolean gameOver() {
-		return logic.p1Lost() || logic.p2Lost() || logic.stalemate();
+		return logic.p1Lost() || logic.p2Lost() || logic.stalemate() || logic.draw();
 	}
 	
 	public Player getCurrentPlayer() {

@@ -19,12 +19,13 @@ import pieces.PieceType;
  */
 public class ChessLogic implements Serializable{
 	private static final long serialVersionUID = 211L;
-	private final String FILE_NAME = "standard1.txt";
+	private final String FILE_NAME = "standard.txt";
 	private Stack<Coordinates[]> moves;
 	private Stack<Piece> deadPieces;
 	private Stack<Boolean> firstMoveMoved;
 	private Stack<Boolean> promoted;
 	private boolean stalemate = false;
+	private boolean draw = false;
 	Piece[][] gameBoard;
 	private Player player1, player2;
 	
@@ -398,6 +399,10 @@ public class ChessLogic implements Serializable{
 	 */
 	public boolean stalemate() {
 		return stalemate;
+	}
+	
+	public boolean draw() {
+		return draw;
 	}
 	
 	/**
@@ -905,4 +910,40 @@ public class ChessLogic implements Serializable{
 		System.out.println("end of checkStalemate");
 		this.stalemate = stalemate;
 	}
+	
+	
+	private void checkDraw(){
+		
+		ArrayList<Piece> pieces = new ArrayList<Piece>();
+		boolean draw = false;
+		
+		for (int x = 0; x < ChessGame.SIZE;x++){
+			for(int y = 0; y < ChessGame.SIZE; y++){
+				if (gameBoard[x][y] != null && gameBoard[x][y].getType()!= PieceType.King) {
+					pieces.add(gameBoard[x][y]);
+				}
+			}
+		}
+		
+		if (pieces.isEmpty()){
+			draw = true;
+		}
+		else if (pieces.size() == 1){
+			if(pieces.get(0).getType() == PieceType.Bishop){
+				draw = true;
+			}
+			if(pieces.get(0).getType() == PieceType.Night){
+				draw = true;
+			}
+		}
+		else if (pieces.size() == 2){
+			if(pieces.get(0).getType() == PieceType.Night && pieces.get(1).getType() == PieceType.Night){
+				draw = true;
+			}
+		}
+		
+		this.draw = draw;
+	}
+	
+	
 }

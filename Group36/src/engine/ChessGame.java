@@ -296,7 +296,12 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 * @param fin The coordinate to end at.
 	 */
 	private void moveStuff(Coordinates init, Coordinates fin) {
-		handler.makeMove(init, fin);
+		try {
+			handler.makeMove(init, fin);
+		} catch (ClassNotFoundException | IOException e) {
+			msgDisplay.setText("Something went wrong with secret.dat");
+			e.printStackTrace();
+		}
 		refresh();
 		handler.nextTurn();
 		refresh();
