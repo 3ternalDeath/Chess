@@ -35,6 +35,7 @@ public class ChessLogic implements Serializable{
 	/**
 	 * Default constructor for the ChessLogic class.
 	 * @throws FileNotFoundException if chessboard arrangement file is missing.
+	 * ONLY USED FOR TESTING, OBJECT LOADED DIRECTLY FROM FILE
 	 */
 	public ChessLogic() throws FileNotFoundException {
 		gameBoard = new Piece[ChessGame.SIZE][ChessGame.SIZE];

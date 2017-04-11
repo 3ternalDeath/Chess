@@ -155,9 +155,9 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		catch (FileNotFoundException fnfe) {
 			msgDisplay.setText("Missing critical file.");
 		}
-		catch (IOException ioe) {
+		catch (IOException | ClassNotFoundException iocnfe) {
 			msgDisplay.setText("Unknown error. Contact system administrator.");
-			ioe.printStackTrace();
+			iocnfe.printStackTrace();
 		}
 		
 		msgDisplay.setText("Make a move, Player 1!");

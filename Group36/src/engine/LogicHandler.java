@@ -13,14 +13,16 @@ public class LogicHandler {
 	private Player currentPlayer;
 	
 	private static final String CONSTANT_USE_FILE = "/bin/secret.dat";
+	private static final String START_FILE_NAME = "/src/engin/standard.dat";
 	
 	/**
 	 * Default constructor for LogicHandler class.
 	 * @throws FileNotFoundException if chessboard arrangement is missing.
 	 * @throws IOException in case of an unknown error with scanning arrangement file.
+	 * @throws ClassNotFoundException 
 	 */
-	public LogicHandler() throws FileNotFoundException, IOException {
-		logic = new ChessLogic();
+	public LogicHandler() throws FileNotFoundException, IOException, ClassNotFoundException {
+		logic = (ChessLogic) FileIOHelper.readObject(START_FILE_NAME);;
 		currentPlayer = logic.getCurrentPlayer();
 	}
 	
