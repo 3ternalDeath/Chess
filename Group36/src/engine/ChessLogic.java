@@ -19,10 +19,11 @@ import pieces.PieceType;
  */
 public class ChessLogic implements Serializable{
 	private static final long serialVersionUID = 211L;
-	private final String FILE_NAME = "standard";
+	private final String FILE_NAME = "standard1.txt";
 	private Stack<Coordinates[]> moves;
 	private Stack<Piece> deadPieces;
 	private Stack<Boolean> firstMoveMoved;
+	private Stack<Boolean> promoted;
 	private boolean stalemate = false;
 	Piece[][] gameBoard;
 	private Player player1, player2;
@@ -36,8 +37,9 @@ public class ChessLogic implements Serializable{
 		moves = new Stack<Coordinates[]>();
 		deadPieces = new Stack<Piece>();
 		firstMoveMoved  = new Stack<Boolean>();
+		promoted = new Stack<Boolean>();
 		
-		Scanner file = new Scanner(new File("src/engine/" + FILE_NAME + ".txt"));
+		Scanner file = new Scanner(new File("src/engine/" + FILE_NAME));
 		
 		for (int y = ChessGame.SIZE - 1; y >= 0; y--) {
 			for (int x = 0; x < ChessGame.SIZE; x++) {
@@ -103,6 +105,16 @@ public class ChessLogic implements Serializable{
 		
 		setPieceAt(init, null);
 		setPieceAt(fin, piece);
+		
+		boolean promo = false;
+		if (getType(fin) == PieceType.Pawn){
+			if (fin.getY() == 0 || fin.getY() == 7){
+				gameBoard[fin.getX()][fin.getY()] = Piece.createPiece(fin, PieceType.Queen, getColor(fin), false);
+				promo = true;
+			}
+		}
+		
+		promoted.add(promo);
 		
 		updateCheckMate(player1, player2);
 		
@@ -225,6 +237,9 @@ public class ChessLogic implements Serializable{
 		
 			if(firstMoveMoved.pop()){
 				piece = Piece.createPiece(fin, piece.getType(), piece.getColor(), true);
+			}
+			if(promoted.pop()){
+				piece = Piece.createPiece(fin, PieceType.Pawn, piece.getColor(), false);
 			}
 		
 			if(move.length == 2)
