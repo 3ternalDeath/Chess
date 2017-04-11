@@ -1,0 +1,10 @@
+public boolean promotion(Coordinates init, Coordinates fin){
+		boolean promo = false;
+		if (getType(init) == PieceType.Pawn){
+			if (fin.getY() == 0 || fin.getY() == 7){
+				gameBoard[init.getX()][init.getY()] = Piece.createPiece(init, PieceType.Queen, getColor(init), false);
+				promo = true;
+			}
+		}
+		return promo;
+	}
