@@ -20,7 +20,6 @@ public class King extends Piece {
 		super(coor, PieceType.King, color, isFirstMove);
 	}
 	
-
 	/**
 	 * Updates the list of possible moves for King.
 	 * @return All moves the piece can theoretically make from its current location.

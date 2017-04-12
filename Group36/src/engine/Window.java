@@ -10,6 +10,7 @@ public class Window {
 		f.setSize(ChessGame.WINDOW - 36, ChessGame.WINDOW);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
+		
 		f.add(game);
 	}
 }
