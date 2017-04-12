@@ -15,7 +15,7 @@ import pieces.PieceColor;
 public class Button extends JButton {
 	private static final long serialVersionUID = 2530095940327637907L;
 	
-	private Piece piece;
+	private Piece piece = null;
 	
 	/**
 	 * Constructor for the Button class from initial boardlayout.
@@ -34,8 +34,8 @@ public class Button extends JButton {
 	public Button(Piece piece) {
 		super();
 		
-		if (piece != null) this.piece = piece;
-		else			   this.piece = null;
+		if (piece != null)
+			this.piece = piece;
 	}
 	
 	/**
@@ -44,9 +44,11 @@ public class Button extends JButton {
 	 * @return The piece's image.
 	 */
 	public ImageIcon getImage() {
-		
 		ImageIcon img = null;
-		if (piece != null) img = piece.getImage();
+		
+		if (piece != null)
+			img = piece.getImage();
+		
 		return img;
 	}
 	

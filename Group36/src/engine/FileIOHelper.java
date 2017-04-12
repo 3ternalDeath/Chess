@@ -19,12 +19,14 @@ public class FileIOHelper {
 	 * @throws ClassNotFoundException if the class cannot be loaded properly.
 	 */
 	public static Object readObject(String file) throws FileNotFoundException, IOException, ClassNotFoundException {
+		//Read from file
 		FileInputStream in = new FileInputStream(file);
 		ObjectInputStream objIn = new ObjectInputStream(in);
 		
 		Object obj = objIn.readObject();
 		
 		objIn.close();
+		
 		return obj;
 	}
 	
@@ -36,16 +38,16 @@ public class FileIOHelper {
 	 * @throws IOException in case of an unknown error while writing the object.
 	 */
 	public static void writeObject(String file, Object obj) throws FileNotFoundException, IOException {
-		File creat = new File(file);
+		File create = new File(file);
 		
-		if(!creat.exists())
-			creat.createNewFile();
+		if(!create.exists())
+			create.createNewFile();
 		
+		//Write to file
 		FileOutputStream out = new FileOutputStream(file);
 		ObjectOutputStream objOut = new ObjectOutputStream(out);
 		
 		objOut.writeObject(obj);
-		
 		objOut.close();
 	}
 }

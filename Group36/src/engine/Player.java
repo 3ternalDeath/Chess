@@ -1,10 +1,7 @@
 package engine;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Random;
 
-import pieces.Piece;
 import pieces.PieceColor;
 
 /**
@@ -16,10 +13,11 @@ public class Player implements Serializable{
 	private static final long serialVersionUID = 311L;
 	private PieceColor color;
 	private PlayerType type;
-	private boolean myTurn;
 	private Coordinates kingCoor;
+	private boolean myTurn;
 	private boolean inCheck;
 	private boolean lost;
+	
 	 
 	/**
 	 * Constructor for the Player class.
@@ -54,56 +52,11 @@ public class Player implements Serializable{
 	}
 	
 	/**
-	 * Chooses a random move for a given piece to make.
-	 * @param piece The coordinates of the piece to move.
-	 * @param board The current configuration of the chessboard.
-	 * @return The coordinates corresponding to the chosen move.
-	 */
-	public Coordinates pickMove(Coordinates piece, Piece[][] board) {
-		ArrayList<Coordinates> moves = board[piece.getX()][piece.getY()].getPossibleMoves();
-		Coordinates move = piece;
-		if (moves.size() != 0) {
-			for(Coordinates c : moves) {
-				if(board[c.getX()][c.getY()] != null) {
-					if(board[c.getX()][c.getY()].getColor() != board[piece.getX()][piece.getY()].getColor()) {
-						move = c;
-					}
-				}
-			}
-			
-			if (move.equals(piece)) {
-				int index = new Random().nextInt(moves.size());
-				return moves.get(index);
-			}
-		}
-		
-		return move;
-	}
-	
-	/**
 	 * Returns the player's type.
 	 * @return The player's type.
 	 */
 	public PlayerType getType() {
 		return type;
-	}
-	
-	/**
-	 * Returns whether or not it is the player's turn.
-	 * @return True if it is the player's turn, false otherwise.
-	 */
-	public boolean isMyTurn() {
-		return myTurn;
-	}
-	
-	/**
-	 * Switches whether or not it is the player's turn.
-	 */
-	public void switchTurn() {
-		if (myTurn)
-			myTurn = false;
-		else
-			myTurn = true;
 	}
 
 	/**
@@ -113,13 +66,13 @@ public class Player implements Serializable{
 	public Coordinates getKingCoor() {
 		return new Coordinates(kingCoor.getX(), kingCoor.getY());
 	}
-
+	
 	/**
-	 * Sets the coordinates of the player's king piece to the given coordinates.
-	 * @param kingCoor The new coordinates for the king piece.
+	 * Returns whether or not it is the player's turn.
+	 * @return True if it is the player's turn, false otherwise.
 	 */
-	public void setKingCoor(Coordinates kingCoor) {
-		this.kingCoor = new Coordinates(kingCoor.getX(), kingCoor.getY());
+	public boolean isMyTurn() {
+		return myTurn;
 	}
 
 	/**
@@ -131,19 +84,37 @@ public class Player implements Serializable{
 	}
 
 	/**
-	 * Sets whether or not the player is in check.
-	 * @param inCheck The new check status.
-	 */
-	public void setInCheck(boolean inCheck) {
-		this.inCheck = inCheck;
-	}
-
-	/**
 	 * Returns whether or not the player has lost.
 	 * @return True if the player has lost, false otherwise.
 	 */
 	public boolean isLost() {
 		return lost;
+	}
+
+	/**
+	 * Sets the coordinates of the player's king piece to the given coordinates.
+	 * @param kingCoor The new coordinates for the king piece.
+	 */
+	public void setKingCoor(Coordinates kingCoor) {
+		this.kingCoor = new Coordinates(kingCoor.getX(), kingCoor.getY());
+	}
+	
+	/**
+	 * Switches whether or not it is the player's turn.
+	 */
+	public void switchTurn() {
+		if (myTurn)
+			myTurn = false;
+		else
+			myTurn = true;
+	}
+	
+	/**
+	 * Sets whether or not the player is in check.
+	 * @param inCheck The new check status.
+	 */
+	public void setInCheck(boolean inCheck) {
+		this.inCheck = inCheck;
 	}
 
 	/**

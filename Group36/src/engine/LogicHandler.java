@@ -42,7 +42,7 @@ public class LogicHandler {
 	 * @return True if the coordinates are a valid initial location, false otherwise.
 	 */
 	public boolean validInit(Coordinates init) {
-		return getLogic().validInit(init, getLogic().getUser().getColor());
+		return logic.validInit(init, logic.getUser().getColor());
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class LogicHandler {
 	 * @return True if the coordinates create a valid move, false otherwise.
 	 */
 	public boolean validFin(Coordinates init, Coordinates fin) {
-		return getLogic().validFin(init, fin, getLogic().getUser(), true);
+		return logic.validFin(init, fin, logic.getUser(), true);
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class LogicHandler {
 		
 		for (int x = 0; x < ChessGame.SIZE; x++)
 			for (int y = 0; y < ChessGame.SIZE; y++)
-				buttons[x][y] = new Button(getLogic().getPieceAt(new Coordinates(x, y)));
+				buttons[x][y] = new Button(logic.getPieceAt(new Coordinates(x, y)));
 		
 		return buttons;
 	}
@@ -91,7 +91,7 @@ public class LogicHandler {
 	 * @throws ClassNotFoundException if FileIOHelper cannot load the class properly.
 	 */
 	public void makeMove(Coordinates init, Coordinates fin) throws FileNotFoundException, IOException, ClassNotFoundException {
-		getLogic().movePiece(init, fin);
+		logic.movePiece(init, fin);
 		FileIOHelper.writeObject(CONSTANT_USE_FILE, logic);
 		logic = (ChessLogic)FileIOHelper.readObject(CONSTANT_USE_FILE);
 	}
@@ -100,23 +100,15 @@ public class LogicHandler {
 	 * Undoes the entire last turn of the chess game.
 	 */
 	public void undo() {
-		getLogic().undoMove();
-		getLogic().undoMove();
+		logic.undoMove();
+		logic.undoMove();
 	}
 	
 	/**
 	 * Switches the turn over within internal logic object.
 	 */
 	public void nextTurn() {
-		getLogic().nextTurn();
-	}
-	
-	public ChessLogic getLogic(){
-		return logic;
-	}
-	
-	public void setLogic(ChessLogic logic){
-		this.logic = logic;
+		logic.nextTurn();
 	}
 	
 	/**
@@ -124,6 +116,6 @@ public class LogicHandler {
 	 * @return The game over status.
 	 */
 	public boolean gameOver() {
-		return getLogic().gameOver();
+		return logic.gameOver();
 	}
 }

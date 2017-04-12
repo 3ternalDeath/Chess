@@ -53,12 +53,13 @@ public class ChessLogic implements Serializable{
 				String piece = file.next();
 				gameBoard[x][y] = Piece.createPiece(coor, piece);
 				
+				//Finds the king and creates players 
 				if (getPieceAt(coor) != null) {
 					if (getType(coor) == PieceType.King) {
 						if (getColor(coor) == PieceColor.White)
-							setUser(new Player(PieceColor.White, PlayerType.User, true, coor));
+							user = new Player(PieceColor.White, PlayerType.User, true, coor);
 						else if (getColor(coor) == PieceColor.Black)
-							setComputer(new Player(PieceColor.Black, PlayerType.Computer, false, coor));
+							computer = new Player(PieceColor.Black, PlayerType.Computer, false, coor);
 					}
 				}
 			}
@@ -79,6 +80,55 @@ public class ChessLogic implements Serializable{
 	}
 	
 	/**
+	 * Returns the type of the piece at a given set of coordinates.
+	 * @param x The x coordinate to check.
+	 * @param y The y coordinate to check.
+	 * @return The type of the piece.
+	 */
+	private PieceType getType(int x, int y) {
+		PieceType type = null;
+		
+		if (gameBoard[x][y] != null)
+			type = gameBoard[x][y].getType();
+		
+		return type;
+	}
+	
+	/**
+	 * Returns the type of the piece at a given set of coordinates.
+	 * @param coor The set of coordinates to check.
+	 * @return The type of the piece.
+	 */
+	public PieceType getType(Coordinates coor) {
+		return getType(coor.getX(), coor.getY());
+	}
+	
+	
+	/**
+	 * Returns the color of the piece at a given set of coordinates.
+	 * @param coor The set of coordinates to check.
+	 * @return The color of the piece.
+	 */
+	public PieceColor getColor(Coordinates coor) {
+		return getColor(coor.getX(), coor.getY());
+	}
+	
+	/**
+	 * Returns the color of the piece at a given set of coordinates.
+	 * @param x The x coordinate to check.
+	 * @param y The y coordinate to check.
+	 * @return The color of the piece.
+	 */
+	private PieceColor getColor(int x, int y) {
+		PieceColor color = null;
+		
+		if (gameBoard[x][y] != null)
+			color = gameBoard[x][y].getColor();
+		
+		return color;
+	}
+	
+	/**
 	 * Returns a copy of the piece on the board at a given location.
 	 * @param location The coordinates to copy.
 	 * @return The copied piece (or null pointer) at the given location.
@@ -95,37 +145,54 @@ public class ChessLogic implements Serializable{
 	}
 	
 	/**
-	 * Returns the type of the piece at a given set of coordinates.
-	 * @param coor The set of coordinates to check.
-	 * @return The type of the piece.
+	 * Returns the reference to a piece at a given location on the chessboard.
+	 * @param x The x coordinates on the chessboard to return.
+	 * @param y The y coordinates on the chessboard to return.
+	 * @return The reference to the specific piece (or null pointer) at the given location.
 	 */
-	public PieceType getType(Coordinates coor) {
-		return getType(coor.getX(), coor.getY());
+	private Piece getPieceRef(int x, int y) {
+		return gameBoard[x][y];
 	}
 	
 	/**
-	 * Returns the color of the piece at a given set of coordinates.
-	 * @param coor The set of coordinates to check.
-	 * @return The color of the piece.
+	 * Returns the reference to a piece at a given location on the chessboard.
+	 * @param coor The coordinates on the chessboard to return.
+	 * @return The reference to the specific piece (or null pointer) at the given location.
 	 */
-	public PieceColor getColor(Coordinates coor) {
-		return getColor(coor.getX(), coor.getY());
+	private Piece getPieceRef(Coordinates coor) {
+		return getPieceRef(coor.getX(), coor.getY());
 	}
 	
 	/**
-	 * Returns the player user.
-	 * @return The player object.
+	 * Returns the reference to a player of a given color.
+	 * @param color The player's color.
+	 * @return The reference to the player or null pointer.
 	 */
-	public Player getUser() {
-		return user;
+	private Player getPlayerRef(PieceColor color) {
+		Player player = null;
+		
+		if (user.getColor() == color)
+			player = user;
+		else if (computer.getColor() == color)
+			player = computer;
+		
+		return player;
 	}
 	
 	/**
-	 * Returns the player computer.
-	 * @return The player object.
+	 * Returns a copy of the player user.
+	 * @return The new player object.
+	 */
+	public Player getUser(){
+		return new Player(user);
+	}
+	
+	/**
+	 * Returns a copy of the  player computer.
+	 * @return The new player object.
 	 */
 	public Player getComputer() {
-		return computer;
+		return new Player(computer);
 	}
 	
 	/**
@@ -138,7 +205,7 @@ public class ChessLogic implements Serializable{
 	
 	/**
 	 * Returns the state of stalemate.
-	 * @return the state of stalemate.
+	 * @return The state of stalemate.
 	 */
 	public boolean getStalemate() {
 		return stalemate;
@@ -155,24 +222,8 @@ public class ChessLogic implements Serializable{
 	}
 	
 	/**
-	 * Changes the user to the desired player.
-	 * @param user player to be changed to.
-	 */
-	private void setUser(Player user) {
-		this.user = user;
-	}
-	
-	/**
-	 * Changes the computer to the desired player.
-	 * @param computer player to be changed to.
-	 */
-	private void setComputer(Player computer) {
-		this.computer = computer;
-	}
-	
-	/**
 	 * Changes the state of draw.
-	 * @param draw the state of draw to be changed to.
+	 * @param draw The state of draw to be changed to.
 	 */
 	public void setDraw(boolean draw){
 		this.draw = draw;
@@ -180,19 +231,10 @@ public class ChessLogic implements Serializable{
 	
 	/**
 	 * Changes the state of stalemate.
-	 * @param stalemate the state of stalemate to be changed to.
+	 * @param stalemate The state of stalemate to be changed to.
 	 */
 	public void setStalemate(boolean stalemate){
 		this.stalemate = stalemate;
-	}
-	
-	/**
-	 * Returns the end state of the game.
-	 * @return True if the game ended, false otherwise.
-	 */
-	public boolean gameOver(){
-		
-		return getUser().isLost() || getComputer().isLost() || getStalemate() || getDraw();
 	}
 	
 	/**
@@ -204,7 +246,7 @@ public class ChessLogic implements Serializable{
 	public void movePiece(Coordinates init, Coordinates fin) {
 		//Set king coordinates for current player
 		if (getType(init) == PieceType.King) {
-			if (getUser().isMyTurn()) user.setKingCoor(fin);
+			if (user.isMyTurn()) user.setKingCoor(fin);
 			else                  computer.setKingCoor(fin);
 		}
 		
@@ -215,6 +257,7 @@ public class ChessLogic implements Serializable{
 			moves.add(new Coordinates[]{new Coordinates(init), new Coordinates(fin)});
 			deadPieces.add(getPieceAt(fin));
 		}
+		
 		//Moving piece
 		Piece piece = getPieceRef(init);
 		firstMoveMoved.add(piece.isFirstMove());
@@ -226,88 +269,21 @@ public class ChessLogic implements Serializable{
 		promoted.add(promotion(fin));
 		
 		//Checking endgame conditions
-		updateCheckmate(getUser(), computer);
+		updateCheckmate(user, computer);
 		updateStalemate();
 		checkDraw();
 		
 		//Displaying game message
 		StringBuffer msg = new StringBuffer();
-		if (getUser().isInCheck()) msg.append("You are in check! ");
-		if (getStalemate())        msg.append("Gameover. Stalemate! ");
-		if (getDraw())             msg.append("Gameover. It's a draw! ");
-		if (!getUser().isLost() && !getComputer().isLost()) msg.append("Make a move!");
+		if (user.isLost())			msg.append("Gameover! You lost!");
+		else if (computer.isLost())	msg.append("Congratulations! You won!");
+		else if (getStalemate())	msg.append("Gameover! Stalemate!");
+		else if (getDraw())			msg.append("Gameover! It's a draw!");
+		else{
+			if (user.isInCheck())	msg.append("You are in check! ");
+			msg.append("Make a move!");
+		}
 		ChessGame.gameMsg(msg.toString(), true);
-	}
-
-	public boolean promotion(Coordinates fin){
-		boolean promo = false;
-		if (getType(fin) == PieceType.Pawn) {
-			if (fin.getY() == 0 || fin.getY() == 7) {
-				gameBoard[fin.getX()][fin.getY()] = Piece.createPiece(fin, PieceType.Queen, getColor(fin), false);
-				promo = true;
-			}
-		}
-		return promo;
-	}
-	
-	/**
-	 * Undoes one move. Must be called twice to undo an entire turn.
-	 */
-	public void undoMove() {
-		//Start of game
-		if (moves.size() == 0)
-			ChessGame.gameMsg("No moves to undo!", true);
-		else {
-			Coordinates[] move = moves.pop();
-		
-			//Undo castling
-			if (move.length == 4) {
-				Coordinates init = move[3];
-				Coordinates fin = move[2];
-				Piece piece = getPieceRef(init);
-				piece.move(fin);
-			
-				setPieceAt(init, null);
-				setPieceAt(fin, piece);
-			}
-			
-			//Undo move
-			Coordinates init = move[1];
-			Coordinates fin = move[0];
-			Piece piece = getPieceRef(init);
-			piece.move(fin);
-		
-			//Undo firstMove
-			if (firstMoveMoved.pop())
-				piece = Piece.createPiece(fin, piece.getType(), piece.getColor(), true);
-			
-			//Undo promotion
-			if (promoted.pop())
-				piece = Piece.createPiece(fin, PieceType.Pawn, piece.getColor(), false);
-		
-			if (move.length == 2)
-				setPieceAt(init, deadPieces.pop());
-			else
-				setPieceAt(init, null);
-		
-			setPieceAt(fin, piece);
-		}
-	}
-	
-	/**
-	 * Rolls game progression over to the next turn.
-	 */
-	public void nextTurn() {
-		
-		//Switch turns
-		getUser().switchTurn();
-		computer.switchTurn();
-
-		//Computer turn
-		if (computer.isMyTurn() && !computer.isLost()) {
-			compMove(computer.getColor());
-			nextTurn();
-		}
 	}
 	
 	/**
@@ -389,8 +365,7 @@ public class ChessLogic implements Serializable{
 			ChessGame.gameMsg("There's something in the way.", inReality);
 			valid = false;
 		}
-		
-		if (getType(init) == PieceType.Pawn) {
+		else if (getType(init) == PieceType.Pawn) {
 			//attempting diagonal movement to an empty space
 			if (gameBoard[fin.getX()][fin.getY()] == null && Math.abs(fin.getX() - init.getX()) == 1) {
 				ChessGame.gameMsg("The pawn can only kill like that.", inReality);
@@ -402,8 +377,7 @@ public class ChessLogic implements Serializable{
 				valid = false;
 			}
 		}
-		
-		if (valid && getType(init) == PieceType.King) {
+		else if (valid && getType(init) == PieceType.King) {
 			if (Math.abs(init.getX() - fin.getX()) > 1) {
 				if (!moveIsCastle(init, fin)) {
 					valid = false;
@@ -411,9 +385,58 @@ public class ChessLogic implements Serializable{
 			}
 		}
 		
-		if (valid) ChessGame.gameMsg("Make a move, Player 1!", inReality);
+		if (valid) ChessGame.gameMsg("Make a move!", inReality);
 		
 		return valid;
+	}
+
+	/**
+	 * Checks whether or not the path from one set of coordinates to another is open.
+	 * @param init The coordinates to start from.
+	 * @param fin The coordinates to end on.
+	 * @return True if the path is open, false otherwise.
+	 */
+	private boolean collisionDetect(Coordinates init, Coordinates fin) {
+		boolean pathOpen = true;
+		
+		int xDifference = fin.getX() - init.getX();
+		int yDifference = fin.getY() - init.getY();
+		
+		//shifts x and y towards zero 
+		xDifference = shift(xDifference);
+		yDifference = shift(yDifference);
+
+		//if piece is a knight, then simply let it through
+		if (gameBoard[init.getX()][init.getY()].getType() == PieceType.Night) {}
+		else {
+			//while x and y aren't both zero
+			while (xDifference != 0 || yDifference != 0) {
+				//if there is a piece in the way
+				if (gameBoard[init.getX() + xDifference][init.getY() + yDifference] != null) {
+					pathOpen = false;
+				}
+				
+				//shifts x and y towards zero 
+				xDifference = shift(xDifference);
+				yDifference = shift(yDifference);
+				
+			}
+		}
+		return pathOpen;
+	}
+	
+	/**
+	 * Shifts a given number towards zero.
+	 * @param num The number to shift.
+	 * @return The number after shifting.
+	 */
+	private int shift(int num) {
+		
+		//Shifts number towards zero.
+		if 		(num < 0) num++;
+		else if (num > 0) num--;
+		
+		return num;
 	}
 	
 	/**
@@ -505,8 +528,11 @@ public class ChessLogic implements Serializable{
 			//Removes piece from movable pieces;
 			pieces.remove(piece);
 		}
-		
-		if (!goodMove) stalemate = true;
+		 
+		if (!goodMove){
+			setStalemate(true);
+			fin = init;
+		}
 		
 		//coordinates into array
 		movement[0] = init;
@@ -514,100 +540,7 @@ public class ChessLogic implements Serializable{
 		
 		return movement;
 	}
-	
-	/**
-	 * Checks whether or not a king of a given color is in check.
-	 * @param king The coordinates of the king.
-	 * @param color The color of the king.
-	 * @param aux Switches whether to call validFin or validFinAux.
-	 * @return True if the king is in check, false otherwise.
-	 */
-	public boolean checkCheck(Coordinates king, PieceColor color, boolean aux) {
-		boolean check = false;
 
-		ArrayList<Piece> checking = new ArrayList<Piece>();
-		
-		//run through every element in the board
-		for (int x = 0; x < ChessGame.SIZE; x++) {
-			for (int y = 0; y < ChessGame.SIZE; y++) {
-				//if there's a piece belonging to the other player at the index
-				if (getColor(x, y) != null && getColor(x, y) != color) {
-					if (!aux) {
-						if (validFin(new Coordinates(x, y), new Coordinates(king), getPlayerRef(getColor(x, y)), false)) {
-							check = true;
-							checking.add(gameBoard[x][y]);
-						}
-					}
-					else {
-						if (validFinAux(new Coordinates(x, y), new Coordinates(king), getColor(x, y), false)) {
-							check = true;
-							checking.add(gameBoard[x][y]);
-						}
-					}
-				}
-				
-			}
-		}
-		return check;
-	}
-	
-	/**
-	 * Tests a particular move (in terms of a group of coordinates) without directly affecting the chessboard.
-	 * @param init The initial set of coordinates.
-	 * @param fin The final set of coordinates.
-	 */
-	public void makeTestMove(Coordinates init, Coordinates fin) {
-		Piece piece = gameBoard[init.getX()][init.getY()];
-		piece.move(fin);
-		gameBoard[init.getX()][init.getY()] = null;
-		gameBoard[fin.getX()][fin.getY()] = piece;
-	}
-	
-	/**
-	 * Returns the color of the piece at a given set of coordinates.
-	 * @param x The x coordinate to check.
-	 * @param y The y coordinate to check.
-	 * @return The color of the piece.
-	 */
-	private PieceColor getColor(int x, int y) {
-		if (gameBoard[x][y] != null)
-			return gameBoard[x][y].getColor();
-		else
-			return null;
-	}
-	
-	/**
-	 * Returns the type of the piece at a given set of coordinates.
-	 * @param x The x coordinate to check.
-	 * @param y The y coordinate to check.
-	 * @return The type of the piece.
-	 */
-	private PieceType getType(int x, int y) {
-		if (gameBoard[x][y] != null)
-			return gameBoard[x][y].getType();
-		else
-			return null;
-	}
-	
-	/**
-	 * Returns the reference to a piece at a given location on the chessboard.
-	 * @param x The x coordinates on the chessboard to return.
-	 * @param y The y coordinates on the chessboard to return.
-	 * @return The reference to the specific piece (or null pointer) at the given location.
-	 */
-	private Piece getPieceRef(int x, int y) {
-		return gameBoard[x][y];
-	}
-	
-	/**
-	 * Returns the reference to a piece at a given location on the chessboard.
-	 * @param location The coordinates on the chessboard to return.
-	 * @return The reference to the specific piece (or null pointer) at the given location.
-	 */
-	private Piece getPieceRef(Coordinates location) {
-		return getPieceRef(location.getX(), location.getY());
-	}
-	
 	/**
 	 * Checks whether or not a given series of coordinates creates a valid castling move.
 	 * @param init The coordinates of the piece being moved.
@@ -619,16 +552,16 @@ public class ChessLogic implements Serializable{
 
 		if (getType(init) == PieceType.King) {
 			if (getPieceRef(init).isFirstMove()) {
+				//Moving right
 				if ((fin.getX() - init.getX()) == 2) {
-					// moving right
 					if (getType(fin.getX() + 1, fin.getY()) == PieceType.Rook) {
 						if (getPieceRef(fin.getX() + 1, fin.getY()).isFirstMove()) {
 							castle = true;
 						}
 					}
 				} 
+				//Moving left
 				else if ((fin.getX() - init.getX()) == -2) {
-					// moving left
 					if (getType(fin.getX() - 2, fin.getY()) == PieceType.Rook
 							&& getType(fin.getX() - 1, fin.getY()) == null) {
 						if (getPieceRef(fin.getX() - 2, fin.getY()).isFirstMove()) {
@@ -647,94 +580,170 @@ public class ChessLogic implements Serializable{
 	 * @param fin The coordinates to move to.
 	 */
 	private void makeCastleMove(Coordinates init, Coordinates fin) {
+		Coordinates rook, rookTo;
+		
 		if ((fin.getX() - init.getX()) == 2) {
-			//moving right
-			Coordinates rook = new Coordinates(fin.getX() + 1, fin.getY());
-			Coordinates rookTo = new Coordinates(fin.getX() - 1, fin.getY());
-			Piece piece = getPieceRef(rook);
-			moves.add(new Coordinates[]{new Coordinates(init), new Coordinates(fin), rook, rookTo});
+			//Moving right
+			rook = new Coordinates(fin.getX() + 1, fin.getY());
+			rookTo = new Coordinates(fin.getX() - 1, fin.getY());
 			
-			piece.move(rookTo);
-			setPieceAt(rook, null);
-			setPieceAt(rookTo, piece);
 		}
-		else if ((fin.getX() - init.getX()) == -2) {
+		else {
 			//moving left
-			Coordinates rook = new Coordinates(fin.getX() - 2, fin.getY());
-			Coordinates rookTo = new Coordinates(fin.getX() + 1, fin.getY());
-			Piece piece = getPieceRef(rook);
-			moves.add(new Coordinates[]{new Coordinates(init), new Coordinates(fin), rook, rookTo});
-			
-			piece.move(rookTo);
-			setPieceAt(rook, null);
-			setPieceAt(rookTo, piece);
+			rook = new Coordinates(fin.getX() - 2, fin.getY());
+			rookTo = new Coordinates(fin.getX() + 1, fin.getY());
 		}
+		
+		//Rook Movement
+		Piece piece = getPieceRef(rook);
+		moves.add(new Coordinates[]{new Coordinates(init), new Coordinates(fin), rook, rookTo});
+		piece.move(rookTo);
+		setPieceAt(rook, null);
+		setPieceAt(rookTo, piece);
 	}
 
-	
 	/**
-	 * Checks whether or not the path from one set of coordinates to another is open.
-	 * @param init The coordinates to start from.
-	 * @param fin The coordinates to end on.
-	 * @return True if the path is open, false otherwise.
+	 * Checks to see if a pawn has reached the end. If so, promotion!
+	 * @param coor the coordinate to check for promotion.
+	 * @return true if promotion has happened.
 	 */
-	private boolean collisionDetect(Coordinates init, Coordinates fin) {
-		boolean pathOpen = true;
+	public boolean promotion(Coordinates coor){
+		boolean promo = false;
 		
-		int xDifference = fin.getX() - init.getX();
-		int yDifference = fin.getY() - init.getY();
-		
-		//shifts x and y towards zero 
-		xDifference = shift(xDifference);
-		yDifference = shift(yDifference);
-
-		//if piece is a knight, then simply let it through
-		if (gameBoard[init.getX()][init.getY()].getType() == PieceType.Night) {}
-		else {
-			//while x and y aren't both zero
-			while (xDifference != 0 || yDifference != 0) {
-				//if there is a piece in the way
-				if (gameBoard[init.getX() + xDifference][init.getY() + yDifference] != null) {
-					pathOpen = false;
-				}
+		if (getType(coor) == PieceType.Pawn) {
+			if (coor.getY() == 0 || coor.getY() == 7) {
 				
-				//shifts x and y towards zero 
-				xDifference = shift(xDifference);
-				yDifference = shift(yDifference);
-				
+				//Change piece to Queen
+				gameBoard[coor.getX()][coor.getY()] = Piece.createPiece(coor, PieceType.Queen, getColor(coor), false);
+				promo = true;
 			}
 		}
-		return pathOpen;
+		return promo;
 	}
 	
 	/**
-	 * Shifts a given number towards zero.
-	 * @param num The number to shift.
-	 * @return The number after shifting.
+	 * Rolls game progression over to the next turn.
 	 */
-	private int shift(int num) {
+	public void nextTurn() {
 		
-		//Shifts number towards zero.
-		if 		(num < 0) num++;
-		else if (num > 0) num--;
-		
-		return num;
+		//Switch turns
+		user.switchTurn();
+		computer.switchTurn();
+
+		//Computer turn
+		if (computer.isMyTurn() && !computer.isLost()) {
+			compMove(computer.getColor());
+			nextTurn();
+		}
 	}
 	
 	/**
-	 * Returns the reference to a player of a given color.
-	 * @param color The player's color.
-	 * @return The reference to the player or null pointer.
+	 * Undoes one move. Must be called twice to undo an entire turn.
 	 */
-	private Player getPlayerRef(PieceColor color) {
+	public void undoMove() {
+		//Start of game
+		if (moves.size() == 0)
+			ChessGame.gameMsg("No moves to undo!", true);
+		else {
+			Coordinates[] move = moves.pop();
 		
-		Player player;
+			//Undo castling
+			if (move.length == 4) {
+				Coordinates init = move[3];
+				Coordinates fin = move[2];
+				Piece piece = getPieceRef(init);
+				piece.move(fin);
+			
+				setPieceAt(init, null);
+				setPieceAt(fin, piece);
+			}
+			
+			//Undo move
+			Coordinates init = move[1];
+			Coordinates fin = move[0];
+			Piece piece = getPieceRef(init);
+			piece.move(fin);
+		
+			//Undo firstMove
+			if (firstMoveMoved.pop())
+				piece = Piece.createPiece(fin, piece.getType(), piece.getColor(), true);
+			
+			//Undo promotion
+			if (promoted.pop())
+				piece = Piece.createPiece(fin, PieceType.Pawn, piece.getColor(), false);
+		
+			if (move.length == 2)
+				setPieceAt(init, deadPieces.pop());
+			else
+				setPieceAt(init, null);
+		
+			setPieceAt(fin, piece);
+		}
+	}
 	
-		if (getUser().getColor() == color)	    	player = getUser();
-		else if (computer.getColor() == color)	player = computer;
-		else									player = null;
+	/**
+	 * Checks whether or not a king of a given color is in check.
+	 * @param king The coordinates of the king.
+	 * @param color The color of the king.
+	 * @param inReality Switches whether to call validFin or validFinAux.
+	 * @return True if the king is in check, false otherwise.
+	 */
+	public boolean checkCheck(Coordinates king, PieceColor color, boolean inReality) {
+		boolean check = false;
+
+		ArrayList<Piece> checking = new ArrayList<Piece>();
 		
-		return player;
+		//run through every element in the board
+		for (int x = 0; x < ChessGame.SIZE; x++) {
+			for (int y = 0; y < ChessGame.SIZE; y++) {
+				//if there's a piece belonging to the other player at the index
+				if (getColor(x, y) != null && getColor(x, y) != color) {
+					if (inReality) {
+						if (validFin(new Coordinates(x, y), new Coordinates(king), getPlayerRef(getColor(x, y)), false)) {
+							check = true;
+							checking.add(gameBoard[x][y]);
+						}
+					}
+					else {
+						if (validFinAux(new Coordinates(x, y), new Coordinates(king), getColor(x, y), false)) {
+							check = true;
+							checking.add(gameBoard[x][y]);
+						}
+					}
+				}
+			}
+		}
+		return check;
+	}
+	
+	/**
+	 * Tests a particular move (in terms of a group of coordinates) without directly affecting the chessboard.
+	 * @param init The initial set of coordinates.
+	 * @param fin The final set of coordinates.
+	 */
+	public void makeTestMove(Coordinates init, Coordinates fin) {
+		Piece piece = gameBoard[init.getX()][init.getY()];
+		piece.move(fin);
+		gameBoard[init.getX()][init.getY()] = null;
+		gameBoard[fin.getX()][fin.getY()] = piece;
+	}
+	
+	/**
+	 * Checks whether a given player is in check and adjusts the player's check status accordingly.
+	 * @param player The player to check.
+	 * @param inReality Switch for whether checking check in reality or not.
+	 */
+	private void updateCheck(Player player, boolean inReality) {
+		
+		if (checkCheck(player.getKingCoor(), player.getColor(), inReality)) {
+			//player is in check
+			player.setInCheck(true);
+		}
+		else {
+			//player is not in check
+			player.setInCheck(false);
+			player.setLost(false);
+		}
 	}
 	
 	/**
@@ -752,32 +761,13 @@ public class ChessLogic implements Serializable{
 	 * @param player The player to check.
 	 */
 	private void updateCheckmate(Player player) {
-		updateCheck(player, false);
+		updateCheck(player, true);
 		
 		//checks for checkmate
 		if (player.isInCheck()) {
 			if (!checkAllMoves(player)) {
 				player.setLost(true);
-				ChessGame.gameMsg(player.getColor() + " is in checkmate!", true);
 			}
-		}
-	}
-	
-	/**
-	 * Checks whether a given player is in check and adjusts the player's check status accordingly.
-	 * @param player The player to check.
-	 * @param aux Switch for whether to call validFin or validFinAux.
-	 */
-	private void updateCheck(Player player, boolean aux) {
-		
-		if (checkCheck(player.getKingCoor(), player.getColor(), aux)) {
-			//player is in check
-			player.setInCheck(true);
-		}
-		else {
-			//player is not in check
-			player.setInCheck(false);
-			player.setLost(false);
 		}
 	}
 	
@@ -802,7 +792,6 @@ public class ChessLogic implements Serializable{
 							canLeave = true;
 						}
 					}
-
 				}
 			}
 		return canLeave;
@@ -831,7 +820,7 @@ public class ChessLogic implements Serializable{
 			nextMove.makeTestMove(init, fin);
 		}
 		
-		nextMove.updateCheck(testPlayer, true);
+		nextMove.updateCheck(testPlayer, false);
 
 		if (testPlayer.isInCheck()) {
 			leaveCheck = false;
@@ -839,9 +828,15 @@ public class ChessLogic implements Serializable{
 		
 		return leaveCheck;
 	}
+	
+	/**
+	 * Updates the stalemate status based on which player's turn.
+	 */
 	private void updateStalemate() {
-		if (getUser().isMyTurn()) checkStalemate(getUser());
-		else 	       			  checkStalemate(getComputer());
+		if (user.isMyTurn())
+			checkStalemate(user);
+		else
+			checkStalemate(computer);
 	}
 	
 	/**
@@ -849,7 +844,6 @@ public class ChessLogic implements Serializable{
 	 * @param player The player to check.
 	 */
 	private void checkStalemate(Player player) {
-		boolean stalemate = true;
 		
 		ArrayList<Piece> pieces = new ArrayList<Piece>();
 		Coordinates init = new Coordinates();
@@ -872,12 +866,12 @@ public class ChessLogic implements Serializable{
 				init = piece.getCoordinates();
 				for (Coordinates coor : gameBoard[init.getX()][init.getY()].getPossibleMoves()) {
 					if (validFin(init, coor, getPlayerRef(color), false)) {
-						stalemate = false;
+						setStalemate(false);
 					}
 				}
 			}
 		}
-		setStalemate(stalemate);
+		
 	}
 	
 	/**
@@ -921,7 +915,12 @@ public class ChessLogic implements Serializable{
 		setDraw(draw);
 	}
 	
-	
-	
-
+	/**
+	 * Returns the end state of the game.
+	 * @return True if the game ended, false otherwise.
+	 */
+	public boolean gameOver(){
+		
+		return user.isLost() || computer.isLost() || getStalemate() || getDraw();
+	}
 }

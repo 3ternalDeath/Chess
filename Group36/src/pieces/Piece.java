@@ -82,7 +82,7 @@ public abstract class Piece implements Serializable{
 	/**
 	 * Generates a new piece from original input file.
 	 * @param coor The coordinates of the new piece.
-	 * @param creation 
+	 * @param piece The attributes of the piece.
 	 * @return The generated piece.
 	 */
 	public static Piece createPiece(Coordinates coor, String piece) {

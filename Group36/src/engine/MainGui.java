@@ -1,5 +1,9 @@
 package engine;
 
+/**
+ * Initializes the Program
+ * @author Group 36
+ */
 public class MainGui {
 	public static void main(String[] args) {
 		//Creates instance of the game

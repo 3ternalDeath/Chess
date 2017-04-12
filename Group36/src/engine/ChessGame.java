@@ -33,7 +33,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	GridBagConstraints gbc = new GridBagConstraints();
 	Button[][] button = new Button[SIZE][SIZE];
 	JButton undo, saveGame;
-	static JLabel msgDisplay = new JLabel("Make a move!", JLabel.CENTER);
+	static JLabel msgDisplay = new JLabel("", JLabel.CENTER);
 	
 	/**
 	 * Constructor for the ChessGame class.
@@ -100,7 +100,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		//Converts action input to integer coordinates
 		int x = move.charAt(0) - '0';
 		int y = move.charAt(1) - '0';
-
+		
 		//Button click is to choose a piece
 		if (firstSec) {
 			init = new Coordinates(x, y);
@@ -142,6 +142,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			msgDisplay.setText("Unknown error with standard save file. Contact system administrator.");
 			e.printStackTrace();
 		}
+		
 		handler.nextTurn();
 		refresh();
 	}

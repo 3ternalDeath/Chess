@@ -2,6 +2,10 @@ package engine;
 
 import javax.swing.JFrame;
 
+/**
+ * A general window frame for the program.
+ * @author Group 36
+ */
 public class Window {
 	public Window(ChessGame game) {
 		JFrame f = new JFrame();

@@ -24,7 +24,7 @@ public class Coordinates implements Serializable{
 	}
 	
 	/**
-	 * Default Constructor
+	 * Default constructor and sets x and y to be 0.
 	 */
 	public Coordinates() {
 		this(0, 0);
@@ -99,7 +99,7 @@ public class Coordinates implements Serializable{
 	}
 	
 	/**
-	 * Prints data from the coordinates
+	 * Generates and returns a string to represent the Coordinate.
 	 */
 	public String toString() {
 		return("(" + x + "," + y + ")");
