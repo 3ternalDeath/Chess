@@ -113,19 +113,19 @@ public class ChessLogic implements Serializable{
 	}
 	
 	/**
-	 * Returns a copy of the player user.
-	 * @return The new player object.
+	 * Returns the player user.
+	 * @return The player object.
 	 */
 	public Player getUser() {
-		return new Player(user);
+		return user;
 	}
 	
 	/**
-	 * Returns a copy of the player computer.
-	 * @return The new player object.
+	 * Returns the player computer.
+	 * @return The player object.
 	 */
 	public Player getComputer() {
-		return new Player(computer);
+		return computer;
 	}
 	
 	/**
@@ -204,8 +204,8 @@ public class ChessLogic implements Serializable{
 	public void movePiece(Coordinates init, Coordinates fin) {
 		//Set king coordinates for current player
 		if (getType(init) == PieceType.King) {
-			if (getUser().isMyTurn()) getUser().setKingCoor(fin);
-			else                 computer.setKingCoor(fin);
+			if (getUser().isMyTurn()) user.setKingCoor(fin);
+			else                  computer.setKingCoor(fin);
 		}
 		
 		//Castling
@@ -309,8 +309,6 @@ public class ChessLogic implements Serializable{
 			nextTurn();
 		}
 	}
-	
-
 	
 	/**
 	 * Checks whether a set of coordinates function as the first half of a full move.
@@ -499,10 +497,9 @@ public class ChessLogic implements Serializable{
 			}
 
 			//If there is a good move, pick a random one
-			while (goodMove){
+			if(goodMove){
 				Coordinates coor = coors.get(num.nextInt(coors.size()));
 				fin = new Coordinates(coor);
-				coors.remove(coor);
 			}
 
 			//Removes piece from movable pieces;
@@ -844,7 +841,7 @@ public class ChessLogic implements Serializable{
 	}
 	private void updateStalemate() {
 		if (getUser().isMyTurn()) checkStalemate(getUser());
-		else 				 checkStalemate(computer);
+		else 	       			  checkStalemate(getComputer());
 	}
 	
 	/**

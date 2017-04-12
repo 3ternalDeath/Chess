@@ -15,8 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import pieces.PieceColor;
-
 /**
  * Handles the main functionality of the chess game.
  * @author Group 36
@@ -163,7 +161,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			iocnfe.printStackTrace();
 		}
 		
-		msgDisplay.setText("Make a move, Player 1!");
+		msgDisplay.setText("Make a move!");
 		refresh();
 	}
 	
@@ -187,7 +185,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			msgDisplay.setText("That is not a Chess save file.");
 		}
 		
-		msgDisplay.setText("Make a move, Player 1!");
+		msgDisplay.setText("Make a move!");
 		refresh();
 	}
 	
