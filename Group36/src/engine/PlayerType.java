@@ -2,6 +2,5 @@ package engine;
 
 public enum PlayerType {
 	User,
-	Computer,
-	Test
+	Computer
 }

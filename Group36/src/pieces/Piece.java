@@ -48,8 +48,17 @@ public abstract class Piece implements Serializable{
 		this.type = type;
 		this.color = color;
 		this.firstMove = isFirstMove;
+		
+		String img = "";
+		img += Character.toLowerCase(color.toString().charAt(0));
+		img += Character.toLowerCase(type.toString().charAt(0));
 		if (type!=null)
-			img = new ImageIcon("src/Images/"+ Character.toLowerCase(color.toString().charAt(0)) + "" + Character.toLowerCase(type.toString().charAt(0)) +".png");
+			/*
+			 * The following images for pieces was acquired from:
+			 * https://www.chess.com/play/computer
+			 */
+			this.img = new ImageIcon("src/Images/"+ img +".png");
+		
 	}
 	
 	/**
