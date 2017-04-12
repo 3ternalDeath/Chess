@@ -20,58 +20,29 @@ public class Player implements Serializable{
 	private Coordinates kingCoor;
 	private boolean inCheck;
 	private boolean lost;
-	private boolean test;
 	 
 	/**
 	 * Constructor for the Player class.
 	 * @param color The color of the player.
 	 * @param type The type of the player.
-	 * @param first The player's turn status.
+	 * @param turn The player's turn status.
 	 * @param king The coordinates of the player's king piece.
 	 */
-	public Player(PieceColor color, PlayerType type, boolean first, Coordinates king) {
+	public Player(PieceColor color, PlayerType type, boolean turn, Coordinates king) {
 		this.color = color;
 		this.type = type;
-		myTurn = first;
+		myTurn = turn;
 		setInCheck(false);
 		setLost(false);
-		this.test = true;
 		setKingCoor(new Coordinates(king.getX(), king.getY()));
 	}
-	
-	/**
-	 * Constructor for a hypothetical Player object.
-	 * @param color The color of the player.
-	 * @param type The type of the player.
-	 * @param first The player's turn status.
-	 * @param king The coordinates of the player's king piece.
-	 * @param test Must be set to true for a hypothetical Player object.
-	 */
-	public Player(PieceColor color, PlayerType type, boolean first, Coordinates king, boolean test) {
-		this.color = color;
-		this.type = type;
-		myTurn = first;
-		setInCheck(false);
-		setLost(false);
-		this.test = test;
-		setKingCoor(new Coordinates(king.getX(), king.getY()));
-	}
-	
+		
 	/**
 	 * Copy constructor for the Player class.
 	 * @param player The Player object to copy.
 	 */
 	public Player(Player player) {
 		this(player.color, player.type, player.myTurn, player.kingCoor);
-	}
-	
-	/**
-	 * Copy constructor for a hypothetical Player object.
-	 * @param player The Player object to copy.
-	 * @param test Must be set to true for a hypothetical Player object.
-	 */
-	public Player(Player player, boolean test) {
-		this(player.color, PlayerType.Test, player.myTurn, player.getKingCoor(), test);
 	}
 	
 	/**
@@ -140,7 +111,6 @@ public class Player implements Serializable{
 	 * @return The king piece's coordinates.
 	 */
 	public Coordinates getKingCoor() {
-		System.out.println(test + " " + getColor() + " King Coordinates is :" + kingCoor);
 		return new Coordinates(kingCoor.getX(), kingCoor.getY());
 	}
 
@@ -149,7 +119,6 @@ public class Player implements Serializable{
 	 * @param kingCoor The new coordinates for the king piece.
 	 */
 	public void setKingCoor(Coordinates kingCoor) {
-		System.out.println(test + " " + getColor() + " King Coordinates set to :" + kingCoor);
 		this.kingCoor = new Coordinates(kingCoor.getX(), kingCoor.getY());
 	}
 

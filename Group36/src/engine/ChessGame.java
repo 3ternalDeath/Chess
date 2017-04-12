@@ -74,8 +74,9 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
+		
 		if (cmd.length() == 2) {
-			actionMove(cmd);
+			actionMove(cmd); //action is a movement
 		}
 		else if (cmd.equals("New Game")) {
 			newGame();
@@ -97,18 +98,19 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 * @param move A two-character string containing the user's coordinates.
 	 */
 	private void actionMove(String move) {
+		//Converts action input to integer coordinates
 		int x = move.charAt(0) - '0';
 		int y = move.charAt(1) - '0';
 
-		//if button click is to choose a piece and neither player has lost
-		if (firstSec && !handler.gameOver()) {
+		//Button click is to choose a piece
+		if (firstSec) {
 			init = new Coordinates(x, y);
 			if (handler.validInit(init)) {
 				firstSec = false;	
 			}
 		}
-		//if button click is to move the chosen piece and neither player has lost
-		else if (!handler.gameOver()) {
+		//Button click is to move the chosen piece
+		else{
 			fin = new Coordinates(x, y);
 			firstSec = true;
 			if (handler.validFin(init, fin)) {
@@ -116,12 +118,13 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			}
 		}
 		
-		// move is valid
+		//Move is valid
 		if (valid) {
 			moveStuff(init, fin);
 			valid = false;
 		}
 		
+		//End game
 		if (handler.gameOver()) {
 			stop();
 		}
@@ -225,6 +228,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 				button[x][y].setActionCommand(x + "" + y);
 
 				// GridBag dimensions
+				gbc.gridwidth = 1;
 				gbc.gridx = x;
 				gbc.gridy = SIZE - y;
 

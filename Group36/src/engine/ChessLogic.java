@@ -823,7 +823,7 @@ public class ChessLogic implements Serializable{
 		ChessLogic nextMove = new ChessLogic(this);
 		
 		//creates fake player
-		Player testPlayer = new Player(player, false);
+		Player testPlayer = new Player(player);
 		
 		if (validFinAux(init, fin, testPlayer.getColor(), false)) {
 			if (nextMove.getType(init) == PieceType.King) {
