@@ -19,11 +19,15 @@ public class Rook extends Piece {
 	public Rook(Coordinates coor, PieceColor color, boolean isFirstMove) {
 		super(coor, PieceType.Rook, color, isFirstMove);
 	}
-
+	
+	/**
+	 * Updates the list of possible moves for Rook.
+	 * @return All moves the piece can theoretically make from its current location.
+	 */
 	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		//Vertical and horizontal moves.
+		//horizontal and vertical moves
 		for (int x = 0; x < SIZE; x++)
 			if (x != getX())
 				moves.add(new Coordinates(x, getY()));

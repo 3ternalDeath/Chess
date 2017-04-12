@@ -20,10 +20,14 @@ public class Queen extends Piece {
 		super(coor, PieceType.Queen, color, isFirstMove);
 	}
 	
+	/**
+	 * Updates the list of possible moves for Queen.
+	 * @return All moves the piece can make on an empty board from its current location.
+	 */
 	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		//Vertical and horizontal moves.
+		//Horizontal and vertical moves
 		for (int x = 0; x < SIZE; x++)
 			if (x != getX())
 				moves.add(new Coordinates(x, getY()));
@@ -31,7 +35,7 @@ public class Queen extends Piece {
 			if (y != getY())
 				moves.add(new Coordinates(getX(), y));
 		
-		//Diagonal Moves
+		//Diagonal moves
 		for (int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++)
 			moves.add(new Coordinates(getX() + h, getY() + h));
 		for (int h = 1; Coordinates.inBound(getX() + h, getY() - h); h++)

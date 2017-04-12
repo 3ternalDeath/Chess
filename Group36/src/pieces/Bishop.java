@@ -20,21 +20,22 @@ public class Bishop extends Piece {
 		super(coor, PieceType.Bishop, color, isFirstMove);
 	}
 
+	/**
+	 * Updates the list of possible moves for Bishop.
+	 * @return All moves the piece can theoretically make from its current location.
+	 */
 	public ArrayList<Coordinates> getPossibleMoves() {
 		ArrayList<Coordinates> moves = new ArrayList<Coordinates>();
 		
-		for (int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++) {
+		//Diagonal moves
+		for (int h = 1; Coordinates.inBound(getX() + h, getY() + h); h++)
 			moves.add(new Coordinates(getX() + h, getY() + h));
-		}
-		for (int h = 1; Coordinates.inBound(getX() + h, getY() - h); h++) {
+		for (int h = 1; Coordinates.inBound(getX() + h, getY() - h); h++)
 			moves.add(new Coordinates(getX() + h, getY() - h));
-		}
-		for (int h = 1; Coordinates.inBound(getX() - h, getY() + h); h++) {
+		for (int h = 1; Coordinates.inBound(getX() - h, getY() + h); h++)
 			moves.add(new Coordinates(getX() - h, getY() + h));
-		}
-		for (int h = 1; Coordinates.inBound(getX() - h, getY() - h); h++) {
+		for (int h = 1; Coordinates.inBound(getX() - h, getY() - h); h++)
 			moves.add(new Coordinates(getX() - h, getY() - h));
-		}
 		
 		return moves;
 	}

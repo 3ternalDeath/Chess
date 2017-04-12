@@ -8,8 +8,7 @@ import javax.swing.ImageIcon;
 import engine.Coordinates;
 
 /**
- * Handles all the attributes and actions of a generic
- * piece on the chessboard.
+ * Handles all the attributes and actions of a generic piece on the chessboard.
  * @author Group 36
  */
 public abstract class Piece implements Serializable{
@@ -22,18 +21,20 @@ public abstract class Piece implements Serializable{
 	private boolean firstMove;
 	private Coordinates coor;
 	private ImageIcon img;
-		
+	
 	/**
-	 * Initializes a piece with no type or color.
+	 * Initializes a piece with no type nor color.
 	 * @param coor The starting coordinates of the piece.
 	 */
 	public Piece(Coordinates coor) {
+		
+		this.coor = new Coordinates(coor.getX(), coor.getY());
 		type = null;
 		color = null;
-		this.coor = new Coordinates(coor.getX(), coor.getY());
 		firstMove = false;
 		img = null;
 	}
+	
 	/**
 	 * Constructor for the Piece class.
 	 * @param coor The starting coordinates of the piece.
@@ -42,35 +43,13 @@ public abstract class Piece implements Serializable{
 	 * @param isFirstMove The first move status of the piece.
 	 */
 	public Piece(Coordinates coor, PieceType type, PieceColor color, boolean isFirstMove) {
+		
+		this.coor = new Coordinates(coor.getX(), coor.getY());
 		this.type = type;
 		this.color = color;
-		this.coor = new Coordinates(coor.getX(), coor.getY());
 		this.firstMove = isFirstMove;
 		if (type!=null)
 			img = new ImageIcon("src/Images/"+ Character.toLowerCase(color.toString().charAt(0)) + "" + Character.toLowerCase(type.toString().charAt(0)) +".png");
-	}
-
-	/**
-	 * Moves piece to a given set of coordinates.
-	 * No error checking is done; user must ensure validity of move before calling.
-	 * @param newCoor The new coordinates of the piece.
-	 */
-	public void move(Coordinates newCoor) {
-		if (firstMove)
-			firstMove = false;
-		//moves the piece
-		coor.setX(newCoor.getX());
-		coor.setY(newCoor.getY());
-	}
-	
-	/**
-	 * Generates and returns a string to represent a piece, as long as it is not blank.
-	 */
-	public String toString() {
-		if (getColor() != null && getType() != null)
-			return ((getColor()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
-		else
-			return ("  ");
 	}
 	
 	/**
@@ -83,6 +62,7 @@ public abstract class Piece implements Serializable{
 	 */
 	public static Piece createPiece(Coordinates coor, PieceType type, PieceColor color, boolean isFirstMove) {
 		Piece piece;
+		
 		if (type != null)
 			switch(type) {
 			case King:   piece = new King   (coor, color, isFirstMove); break;
@@ -93,16 +73,31 @@ public abstract class Piece implements Serializable{
 			case Pawn: 	 piece = new Pawn   (coor, color, isFirstMove); break;
 			default:     piece = null;
 			}
-
 		else
 			piece = null;
 
 		return piece;
 	}
 	
-	public static Piece createPiece(Coordinates coor, String creation) {
+	/**
+	 * Generates a new piece from original input file.
+	 * @param coor The coordinates of the new piece.
+	 * @param creation 
+	 * @return The generated piece.
+	 */
+	public static Piece createPiece(Coordinates coor, String piece) {
+		
+		//Color of piece
+		PieceColor color;
+		switch(piece.charAt(0)) {
+		case 'b': color = PieceColor.Black; break;
+		case 'w': color = PieceColor.White; break;
+		default: color = null;
+		}
+		
+		//Type of piece
 		PieceType type;
-		switch(creation.charAt(1)) {
+		switch(piece.charAt(1)) {
 		case 'k': type = PieceType.King;    break;
 		case 'q': type = PieceType.Queen;   break;
 		case 'r': type = PieceType.Rook;    break;
@@ -112,14 +107,21 @@ public abstract class Piece implements Serializable{
 		default: type = null;
 		}
 		
-		PieceColor color;
-		switch(creation.charAt(0)) {
-		case 'b': color = PieceColor.Black; break;
-		case 'w': color = PieceColor.White; break;
-		default: color = null;
-		}
-		
 		return createPiece(coor, type, color, true);
+	}
+	
+	/**
+	 * Moves piece to a given set of coordinates.
+	 * No error checking is done; user must ensure validity of move before calling.
+	 * @param newCoor The new coordinates of the piece.
+	 */
+	public void move(Coordinates newCoor) {
+		
+		if (firstMove) firstMove = false;
+		
+		//moves the piece
+		coor.setX(newCoor.getX());
+		coor.setY(newCoor.getY());
 	}
 	
 	/**
@@ -130,14 +132,6 @@ public abstract class Piece implements Serializable{
 	 */
 	public boolean validMove(Coordinates newCoor) {
 		ArrayList<Coordinates> posMoves = getPossibleMoves();
-		
-		/*System.out.println(getColor() + " " + getType() + " at " + getCoordinates());
-		for (Coordinates coor : posMoves){
-			System.out.print(coor + ", ");
-		}
-		System.out.println();
-		*/
-		
 		
 		if (posMoves != null) {
 			for (int index = 0; index < posMoves.size(); index++) {
@@ -190,6 +184,14 @@ public abstract class Piece implements Serializable{
 	}
 	
 	/**
+	 * Returns an image representation of the piece.
+	 * @return The picture of the piece.
+	 */
+	public ImageIcon getImage() {
+		return img;
+	}
+	
+	/**
 	 * Updates the list of possible moves, based on the piece's type.
 	 * @return All moves the piece can theoretically make from its current location.
 	 */
@@ -204,10 +206,13 @@ public abstract class Piece implements Serializable{
 	}
 	
 	/**
-	 * Returns an image representation of the piece.
-	 * @return The picture of the piece.
+	 * Generates and returns a string to represent a piece, as long as it is not blank.
 	 */
-	public ImageIcon getImage() {
-		return img;
+	public String toString() {
+		if (getColor() != null && getType() != null)
+			return ((getColor()+"").charAt(0) + "") + ((getType()+"").charAt(0) + "") + "";
+		else
+			return ("  ");
 	}
+	
 }
