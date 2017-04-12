@@ -12,8 +12,8 @@ public class LogicHandler {
 	private ChessLogic logic;
 	private Player currentPlayer;
 	
-	private static final String CONSTANT_USE_FILE = "/bin/secret.dat";
-	private static final String START_FILE_NAME = "/Group36/src/engine/Standard.dat";
+	private static final String CONSTANT_USE_FILE = "bin/secret.dat";
+	private static final String START_FILE_NAME = "src/engine/Standard.dat";
 	
 	/**
 	 * Default constructor for LogicHandler class.
@@ -22,8 +22,8 @@ public class LogicHandler {
 	 * @throws ClassNotFoundException 
 	 */
 	public LogicHandler() throws FileNotFoundException, IOException, ClassNotFoundException {
-		//logic = (ChessLogic) FileIOHelper.readObject(START_FILE_NAME);
-		logic = new ChessLogic();     //TO UPDATE OUTDATED START FILE
+		logic = (ChessLogic) FileIOHelper.readObject(START_FILE_NAME);
+		//logic = new ChessLogic();     //TO UPDATE OUTDATED START FILE
 		currentPlayer = logic.getCurrentPlayer();
 	}
 	

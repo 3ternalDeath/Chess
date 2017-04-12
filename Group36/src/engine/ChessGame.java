@@ -140,7 +140,6 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 			msgDisplay.setText("Unknown error with standard save file. Contact system administrator.");
 			e.printStackTrace();
 		}
-		refresh();
 		handler.nextTurn();
 		refresh();
 	}
