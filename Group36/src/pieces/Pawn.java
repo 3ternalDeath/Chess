@@ -8,6 +8,7 @@ import engine.Coordinates;
  * A single Pawn piece.
  * @author Group 36
  */
+@SuppressWarnings("serial")
 public class Pawn extends Piece {
 	
 	/**

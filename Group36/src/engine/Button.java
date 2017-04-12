@@ -7,7 +7,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import pieces.Piece;
 import pieces.PieceColor;
-import pieces.PieceType;
 
 /**
  * A button representing a specific location on the chessboard.
@@ -19,32 +18,13 @@ public class Button extends JButton {
 	private Piece piece;
 	
 	/**
-	 * Constructor for the Button class.
+	 * Constructor for the Button class from initial boardlayout.
 	 * @param coor The coordinates of the button.
 	 * @param creation The attributes of its corresponding piece.
 	 */
-	public Button(Coordinates coor, String creation) {
+	public Button(Coordinates coor, String piece) {
 		super();
-		
-		PieceColor color;
-		PieceType type;
-		switch(creation.charAt(0)) {
-		case 'b': color = PieceColor.Black; break;
-		case 'w': color = PieceColor.White; break;
-		default: color = null;
-		}
-		
-		switch(creation.charAt(1)) {
-		case 'k': type = PieceType.King;    break;
-		case 'q': type = PieceType.Queen;   break;
-		case 'r': type = PieceType.Rook;    break;
-		case 'n': type = PieceType.Night;   break;
-		case 'b': type = PieceType.Bishop;  break;
-		case 'p': type = PieceType.Pawn;    break;
-		default: type = null;
-		}
-		
-		piece = Piece.createPiece(coor, type, color,true);
+		this.piece = Piece.createPiece(coor, piece);
 	}
 	
 	/**
@@ -54,19 +34,8 @@ public class Button extends JButton {
 	public Button(Piece piece) {
 		super();
 		
-		if (piece != null) {
-			this.piece = piece;
-		}
-		else
-			this.piece = null;
-	}
-
-	/**
-	 * Returns the button's coordinates.
-	 * @return The coordinates of the button.
-	 */
-	public Coordinates getCoor() {
-		return piece.getCoordinates();
+		if (piece != null) this.piece = piece;
+		else			   this.piece = null;
 	}
 	
 	/**
@@ -75,10 +44,10 @@ public class Button extends JButton {
 	 * @return The piece's image.
 	 */
 	public ImageIcon getImage() {
-		if (piece != null)
-			return piece.getImage();
-		else
-			return null;
+		
+		ImageIcon img = null;
+		if (piece != null) img = piece.getImage();
+		return img;
 	}
 	
 	/**
@@ -86,8 +55,11 @@ public class Button extends JButton {
 	 * @return The new piece.
 	 */
 	public Piece getPiece() {
-		//the following code pertaining to Class and Constructor was acquired from: http://stackoverflow.com/questions/6094575/creating-an-instance-using-the-class-name-and-calling-constructor
-		//and edited to meet the needs of this
+		/*
+		 * The following code pertaining to Class and Constructor was acquired from:
+		 * http://stackoverflow.com/questions/6094575/creating-an-instance-using-the-class-name-and-calling-constructor
+		 * and edited to meet the needs of this
+		 */
 		if (piece != null) {
 			Class<? extends Piece> clazz = piece.getClass();
 			Constructor<? extends Piece> ctor;
@@ -102,25 +74,6 @@ public class Button extends JButton {
 				System.err.println("It is done going wrong");
 			}
 		}
-
 		return null;
-	}
-	
-	/**
-	 * Sets the piece reference on the button to a new piece reference.
-	 * @param piece The piece reference to use.
-	 */
-	public void setPieceRef(Piece piece) {
-		this.piece = piece;
-	}
-	
-	/**
-	 * Updates the icon on the button, for when the piece reference is changed.
-	 */
-	public void updateIcon() {
-		if (piece != null)
-			setIcon(piece.getImage());
-		else
-			setIcon(null);
 	}
 }

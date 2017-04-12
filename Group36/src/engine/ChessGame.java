@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import pieces.PieceColor;
+
 /**
  * Handles the main functionality of the chess game.
  * @author Group 36
@@ -33,7 +35,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	GridBagConstraints gbc = new GridBagConstraints();
 	Button[][] button = new Button[SIZE][SIZE];
 	JButton undo, saveGame;
-	static JLabel msgDisplay = new JLabel("Make a move, Player 1!", JLabel.CENTER);
+	static JLabel msgDisplay = new JLabel("Make a move!", JLabel.CENTER);
 	
 	/**
 	 * Constructor for the ChessGame class.
@@ -46,7 +48,6 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		saveGame = new JButton("Save Game");
 		saveGame.addActionListener(this);
 	}
-	
 
 	/**
 	 * Displays the game's start menu.

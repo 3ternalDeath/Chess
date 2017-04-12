@@ -8,6 +8,7 @@ import engine.Coordinates;
  * A single Knight piece.
  * @author Group 36
  */
+@SuppressWarnings("serial")
 public class Night extends Piece {
 
 	/**

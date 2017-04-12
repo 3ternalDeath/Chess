@@ -10,7 +10,6 @@ import java.io.IOException;
 public class LogicHandler {
 	
 	private ChessLogic logic;
-	private Player currentPlayer;
 	
 	private static final String CONSTANT_USE_FILE = "bin/secret.dat";
 	private static final String START_FILE_NAME = "src/engine/Standard.dat";
@@ -24,7 +23,6 @@ public class LogicHandler {
 	public LogicHandler() throws FileNotFoundException, IOException, ClassNotFoundException {
 		logic = (ChessLogic) FileIOHelper.readObject(START_FILE_NAME);
 		//logic = new ChessLogic();     //TO UPDATE OUTDATED START FILE
-		currentPlayer = logic.getCurrentPlayer();
 	}
 	
 	/**
@@ -36,7 +34,6 @@ public class LogicHandler {
 	 */
 	public LogicHandler(String file) throws FileNotFoundException, IOException, ClassNotFoundException {
 		logic = (ChessLogic) FileIOHelper.readObject(file);
-		currentPlayer = logic.getCurrentPlayer();
 	}
 	
 	/**
@@ -45,7 +42,7 @@ public class LogicHandler {
 	 * @return True if the coordinates are a valid initial location, false otherwise.
 	 */
 	public boolean validInit(Coordinates init) {
-		return logic.validInit(init, currentPlayer.getColor());
+		return logic.validInit(init, logic.getUser().getColor());
 	}
 	
 	/**
@@ -55,7 +52,7 @@ public class LogicHandler {
 	 * @return True if the coordinates create a valid move, false otherwise.
 	 */
 	public boolean validFin(Coordinates init, Coordinates fin) {
-		return logic.validFin(init, fin, currentPlayer, true);
+		return logic.validFin(init, fin, logic.getUser(), true);
 	}
 	
 	/**
@@ -75,11 +72,11 @@ public class LogicHandler {
 	 */
 	public Button[][] updateButtons() {
 		Button[][] buttons = new Button[ChessGame.SIZE][ChessGame.SIZE];
-		for (int x = 0; x < ChessGame.SIZE; x++) {
-			for (int y = 0; y < ChessGame.SIZE; y++) {
+		
+		for (int x = 0; x < ChessGame.SIZE; x++)
+			for (int y = 0; y < ChessGame.SIZE; y++)
 				buttons[x][y] = new Button(logic.getPieceAt(new Coordinates(x, y)));
-			}
-		}
+		
 		return buttons;
 	}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              	/**
@@ -119,6 +116,6 @@ public class LogicHandler {
 	 * @return The game over status.
 	 */
 	public boolean gameOver() {
-		return logic.p1Lost() || logic.p2Lost() || logic.stalemate() || logic.draw();
+		return logic.gameOver();
 	}
 }

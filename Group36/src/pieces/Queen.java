@@ -8,6 +8,7 @@ import engine.Coordinates;
  * A single Queen piece.
  * @author Group 36
  */
+@SuppressWarnings("serial")
 public class Queen extends Piece {
 	
 	/**
