@@ -171,22 +171,26 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 */
 	private void loadMenu() {
 		String file = JOptionPane.showInputDialog("Enter save filename: ", "*.dat");
-		try {
-			handler = new LogicHandler(file);
+		if (file != null) {
+			try {
+				handler = new LogicHandler(file);
+			} 
+			catch (FileNotFoundException fnfe) {
+				msgDisplay.setText("File is not there.");
+			} 
+			catch (IOException ioe) {
+				msgDisplay.setText("Unknown error. Contact system administrator.");
+				ioe.printStackTrace();
+			} 
+			catch (ClassNotFoundException cne) {
+				msgDisplay.setText("That is not a Chess save file.");
+			}
+
+			msgDisplay.setText("Make a move!");
+			refresh();
+		} else {
+			msgDisplay.setText("You have canceled your load game request");
 		}
-		catch (FileNotFoundException fnfe) {
-			msgDisplay.setText("File is not there.");
-		}
-		catch (IOException ioe) {
-			msgDisplay.setText("Unknown error. Contact system administrator.");
-			ioe.printStackTrace();
-		}
-		catch (ClassNotFoundException cne) {
-			msgDisplay.setText("That is not a Chess save file.");
-		}
-		
-		msgDisplay.setText("Make a move!");
-		refresh();
 	}
 	
 	/**
@@ -194,15 +198,20 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	 */
 	private void saveGame() {
 		String file = JOptionPane.showInputDialog("Enter new save filename: ", "*.dat");
-		try {
-			handler.writeLogic(file);
-		}
-		catch (FileNotFoundException fnfe) {
-			msgDisplay.setText("File could not be saved.");
-		}
-		catch (IOException ioe) {
-			msgDisplay.setText("Unknown error. Contact system administrator.");
-			ioe.printStackTrace();
+		if (file != null) {
+			try {
+				handler.writeLogic(file);
+			} 
+			catch (FileNotFoundException fnfe) {
+				msgDisplay.setText("File could not be saved.");
+			} 
+			catch (IOException ioe) {
+				msgDisplay.setText("Unknown error. Contact system administrator.");
+				ioe.printStackTrace();
+			}
+		} 
+		else {
+			msgDisplay.setText("You have canceled your save game request");
 		}
 	}
 	
