@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -34,17 +35,22 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 	Button[][] button = new Button[SIZE][SIZE];
 	JButton undo, saveGame;
 	static JLabel msgDisplay = new JLabel("", JLabel.CENTER);
+	private Window frame;
 	
 	/**
 	 * Constructor for the ChessGame class.
 	 */
 	public ChessGame() {
+		
 		mainMenu();
 		
 		undo = new JButton("Undo");
 		undo.addActionListener(this);
 		saveGame = new JButton("Save Game");
 		saveGame.addActionListener(this);
+		
+		//Creates window for the game
+		frame = new Window(this);
 	}
 
 	/**
@@ -192,6 +198,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		} else {
 			msgDisplay.setText("You have canceled your load game request");
 		}
+		frame.pack();
 	}
 	
 	/**
@@ -240,6 +247,7 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 				gbc.gridwidth = 1;
 				gbc.gridx = x;
 				gbc.gridy = SIZE - y;
+				gbc.fill = gbc.BOTH;
 
 				// Add Button
 				add(button[x][y], gbc);
@@ -288,8 +296,10 @@ public class ChessGame extends JPanel implements ActionListener, Serializable {
 		repaint();
 		
 		setLayout(new GridBagLayout());
+		//frame.pack();
 		populateWindow();
 		validate();
+		frame.pack();
 	}
 
 	/**

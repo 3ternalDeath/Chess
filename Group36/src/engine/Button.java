@@ -48,6 +48,8 @@ public class Button extends JButton {
 		
 		if (piece != null)
 			img = piece.getImage();
+		else
+			img = new ImageIcon("src/Images/ee.png");
 		
 		return img;
 	}
